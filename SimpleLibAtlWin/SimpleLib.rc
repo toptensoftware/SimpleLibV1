@@ -1,0 +1,9 @@
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+#include "SimpleLibRes.h"
+
+IDB_SIMPLELIB_CHECKBITS			BITMAP  DISCARDABLE     "CheckBits.bmp"
+IDB_SIMPLELIB_SORTICONS			BITMAP  DISCARDABLE     "SortIcons.bmp"
