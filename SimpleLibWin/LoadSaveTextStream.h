@@ -25,7 +25,7 @@ namespace Simple
 
 
 template <class TString>
-HRESULT LoadTextStream(IStream* pStream, TString& str)
+HRESULT SIMPLEAPI LoadTextStream(IStream* pStream, TString& str)
 {
 	int iLen=(int)GetStreamLength(pStream);
 
@@ -63,7 +63,7 @@ HRESULT LoadTextStream(IStream* pStream, TString& str)
 }
 
 template <class TString>
-HRESULT SaveTextStream(IStream* pStream, const TString* psz)
+HRESULT SIMPLEAPI SaveTextStream(IStream* pStream, const TString* psz)
 {
 	// If unicode, write prefix character
 	if (sizeof(TString)==sizeof(wchar_t))
@@ -76,9 +76,9 @@ HRESULT SaveTextStream(IStream* pStream, const TString* psz)
 	return pStream->Write(psz, CString<TString>::len(psz) * sizeof(TString), NULL);
 }
 
-inline HRESULT SaveTextStream(IStream* pStream, const char* psz) 
+inline HRESULT SIMPLEAPI SaveTextStream(IStream* pStream, const char* psz) 
 	{ return SaveTextStream<char>(pStream, psz); };
-inline HRESULT SaveTextStream(IStream* pStream, const wchar_t* psz) 
+inline HRESULT SIMPLEAPI SaveTextStream(IStream* pStream, const wchar_t* psz) 
 	{ return SaveTextStream<wchar_t>(pStream, psz); };
 
 }	// namespace Simple

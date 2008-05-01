@@ -20,10 +20,10 @@
 namespace Simple
 {
 
-void CalculateCRCStart(unsigned __int32& dwCRC);
-void CalculateCRCContinue(unsigned __int32& dwCRC, const unsigned char* pbData, int cbData);
-void CalculateCRCFinish(unsigned __int32& dwCRC);
-unsigned __int32 CalculateCRC(const unsigned char* pbData, int cbData);
+void SIMPLEAPI CalculateCRCStart(unsigned __int32& dwCRC);
+void SIMPLEAPI CalculateCRCContinue(unsigned __int32& dwCRC, const unsigned char* pbData, int cbData);
+void SIMPLEAPI CalculateCRCFinish(unsigned __int32& dwCRC);
+unsigned __int32 SIMPLEAPI CalculateCRC(const unsigned char* pbData, int cbData);
 
 }	// namespace Simple
 

@@ -81,36 +81,36 @@ private:
 
 
 // Helper to get the owner of an object using it's IObjectWithWeakOwner interface
-HRESULT GetWeakOwnerOfObject(IUnknown* pObject, REFIID riid, void** ppvOwner);
-HRESULT SetWeakOwnerOfObject(IUnknown* pObject, IUnknown* pOwner);
+HRESULT SIMPLEAPI GetWeakOwnerOfObject(IUnknown* pObject, REFIID riid, void** ppvOwner);
+HRESULT SIMPLEAPI SetWeakOwnerOfObject(IUnknown* pObject, IUnknown* pOwner);
 
 // Template version of above....
 template <class Itf>
-HRESULT GetWeakOwnerOfObject(IUnknown* pObject, Itf** ppOwner)
+HRESULT SIMPLEAPI GetWeakOwnerOfObject(IUnknown* pObject, Itf** ppOwner)
 {
 	return GetWeakOwnerOfObject(pObject, __uuidof(Itf), (void**)ppOwner);
 }
 
 // Helper to check if one is child of another
-bool IsWeakChild(IUnknown* pParent, IUnknown* pChild);
+bool SIMPLEAPI IsWeakChild(IUnknown* pParent, IUnknown* pChild);
 
 // Helper to get to the top of the object heirarchy...
-HRESULT GetTopWeakOwner(IUnknown* pObject, bool bAllowSelf, REFIID riid, void** ppvOwner);
+HRESULT SIMPLEAPI GetTopWeakOwner(IUnknown* pObject, bool bAllowSelf, REFIID riid, void** ppvOwner);
 template <class Itf>
-HRESULT GetTopWeakOwner(IUnknown* pObject, bool bAllowSelf, Itf** ppOwner)
+HRESULT SIMPLEAPI GetTopWeakOwner(IUnknown* pObject, bool bAllowSelf, Itf** ppOwner)
 {
 	return GetTopWeakOwner(pObject, __uuidof(Itf), (void**)ppOwner);
 }
 
 
 // Walk weak owner chain to find an owner supporting a particular interface
-HRESULT GetWeakOwnerOfType(IUnknown* pObject, REFIID riid, void** ppvObject);
+HRESULT SIMPLEAPI GetWeakOwnerOfType(IUnknown* pObject, REFIID riid, void** ppvObject);
 template <class Itf>
-HRESULT GetWeakOwnerOfType(IUnknown* pObject, Itf** ppv)
+HRESULT SIMPLEAPI GetWeakOwnerOfType(IUnknown* pObject, Itf** ppv)
 	{ return GetWeakOwnerOfType(pObject, __uuidof(Itf), (void**)ppv); }
-HRESULT GetWeakOwnerOfTypeEx(IUnknown* pObject, REFIID riid, void** ppvObject, bool bIncludeSelf);
+HRESULT SIMPLEAPI GetWeakOwnerOfTypeEx(IUnknown* pObject, REFIID riid, void** ppvObject, bool bIncludeSelf);
 template <class Itf>
-HRESULT GetWeakOwnerOfTypeEx(IUnknown* pObject, Itf** ppv, bool bIncludeSelf)
+HRESULT SIMPLEAPI GetWeakOwnerOfTypeEx(IUnknown* pObject, Itf** ppv, bool bIncludeSelf)
 	{ return GetWeakOwnerOfTypeEx(pObject, __uuidof(Itf), (void**)ppv, bIncludeSelf); }
 
 

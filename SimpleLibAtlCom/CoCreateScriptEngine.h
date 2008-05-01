@@ -23,8 +23,8 @@ namespace Simple
 // Optimized version of CoCreateInstance for creating script engines.  Bypasses installed
 // McAfee scanners to save huge memory footprint.
 
-HRESULT CoCreateInstanceDLL(LPCOLESTR pszDLL, CLSID clsid, REFIID riid, void** ppvObject);
-HRESULT CoCreateScriptEngine(LPCOLESTR pszProgID, REFIID riid, void** pVal);
+HRESULT SIMPLEAPI CoCreateInstanceDLL(LPCOLESTR pszDLL, CLSID clsid, REFIID riid, void** ppvObject);
+HRESULT SIMPLEAPI CoCreateScriptEngine(LPCOLESTR pszProgID, REFIID riid, void** pVal);
 
 
 }	// namespace Simple

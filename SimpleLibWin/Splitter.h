@@ -24,7 +24,7 @@ namespace Simple
 {
 
 // Helper to make border of a control transparent for mouse clicks
-void MakeNCTransparent(HWND hWnd);
+void SIMPLEAPI MakeNCTransparent(HWND hWnd);
 
 // Splitter class
 class CAutoSplitter : 

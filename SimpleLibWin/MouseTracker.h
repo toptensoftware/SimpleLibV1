@@ -28,7 +28,7 @@ namespace Simple
 #define HOVER_TIMER_PERIOD			(HOVER_TIMEOUT/4)
 #define HOVER_TIMER_ID				98766			// Unlikely tracked window will be using this!
 
-void NormalizeRect(RECT* prc);
+void SIMPLEAPI NormalizeRect(RECT* prc);
 
 // CMouseTracker Class
 class CMouseTracker

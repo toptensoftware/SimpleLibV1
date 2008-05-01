@@ -51,7 +51,7 @@ extern PFNCLOSETHEMEDATA pfnCloseThemeData;
 
 
 // Helper to make sure uxtheme.dll loaded
-HINSTANCE LoadThemeLib();
+HINSTANCE SIMPLEAPI LoadThemeLib();
 
 
 // CThemeData - loads an automatically frees a HTHEME
@@ -87,12 +87,12 @@ public:
 #define THEME_FOCUSED		0x20000000
 
 // Draw a themed button using above styles.  pszText=NULL for no caption...
-void DrawThemedButton(CThemeData& theme, HDC hDC, LPCRECT prc, LPCWSTR pszText, UINT uState, int iIndent=-1);
-void DrawThemedButton(HWND hWnd, HDC hDC, LPCRECT prc, LPCWSTR pszText, UINT uState, int iIndent=-1);
+void SIMPLEAPI DrawThemedButton(CThemeData& theme, HDC hDC, LPCRECT prc, LPCWSTR pszText, UINT uState, int iIndent=-1);
+void SIMPLEAPI DrawThemedButton(HWND hWnd, HDC hDC, LPCRECT prc, LPCWSTR pszText, UINT uState, int iIndent=-1);
 
 // Draw a themed toolbar button
-void DrawThemedToolBarButton(CThemeData& theme, HDC hDC, LPCRECT prc, LPCWSTR pszText, UINT uState, HIMAGELIST hImageList, int iImage);
-void DrawThemedToolBarButton(HWND hWnd, HDC hDC, LPCRECT prc, LPCWSTR pszText, UINT uState, HIMAGELIST hImageList, int iImage);
+void SIMPLEAPI DrawThemedToolBarButton(CThemeData& theme, HDC hDC, LPCRECT prc, LPCWSTR pszText, UINT uState, HIMAGELIST hImageList, int iImage);
+void SIMPLEAPI DrawThemedToolBarButton(HWND hWnd, HDC hDC, LPCRECT prc, LPCWSTR pszText, UINT uState, HIMAGELIST hImageList, int iImage);
 
 }	// namespace Simple
 

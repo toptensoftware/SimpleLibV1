@@ -18,13 +18,13 @@ struct TOOLBARDATA {
 	WORD items[1];		// array of command IDs, actual size is wItemCount
 };
 
-BOOL LoadToolBar(HWND hWndToolBar, HINSTANCE hInst, LPCTSTR pszResource, COLORREF rgbTransparent, HIMAGELIST* phImageList)
+BOOL SIMPLEAPI LoadToolBar(HWND hWndToolBar, HINSTANCE hInst, LPCTSTR pszResource, COLORREF rgbTransparent, HIMAGELIST* phImageList)
 {
 	return LoadToolBar(hWndToolBar, hInst, pszResource, NULL, rgbTransparent, phImageList);
 }
 
 // Load a toolbar resource...
-BOOL LoadToolBar(HWND hWndToolBar, HINSTANCE hInst, LPCTSTR pszResource, LPCTSTR pszResource32, COLORREF rgbTransparent, HIMAGELIST* phImageList)
+BOOL SIMPLEAPI LoadToolBar(HWND hWndToolBar, HINSTANCE hInst, LPCTSTR pszResource, LPCTSTR pszResource32, COLORREF rgbTransparent, HIMAGELIST* phImageList)
 {
 USES_CONVERSION;
 
@@ -88,7 +88,7 @@ USES_CONVERSION;
 	return TRUE;
 }
 
-void SetToolBarButtonLabel(HWND hWndToolBar, UINT nID, LPCTSTR pszLabel)
+void SIMPLEAPI SetToolBarButtonLabel(HWND hWndToolBar, UINT nID, LPCTSTR pszLabel)
 {
 	ATLControls::CToolBarCtrl tb(hWndToolBar);
 

@@ -21,7 +21,7 @@
 namespace Simple
 {
 
-bool AreFontsEqual(IFont* p1, IFont* p2);
+bool SIMPLEAPI AreFontsEqual(IFont* p1, IFont* p2);
 
 
 }	// namespace Simple

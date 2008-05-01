@@ -66,7 +66,7 @@ static void InitCRCTable()
 	}
 }
 
-void CalculateCRCStart(unsigned __int32& dwCRC)
+void SIMPLEAPI CalculateCRCStart(unsigned __int32& dwCRC)
 {
 	// Make sure initialised
 	InitCRCTable();
@@ -74,19 +74,19 @@ void CalculateCRCStart(unsigned __int32& dwCRC)
 }
 
 
-void CalculateCRCContinue(unsigned __int32& dwCRC, const unsigned char* pbData, int cbData)
+void SIMPLEAPI CalculateCRCContinue(unsigned __int32& dwCRC, const unsigned char* pbData, int cbData)
 {
 	while(cbData--)
 		dwCRC = (dwCRC >> 8) ^ g_dwCRCTable[(dwCRC & 0xFF) ^ *pbData++];
 }
 
-void CalculateCRCFinish(unsigned __int32& dwCRC)
+void SIMPLEAPI CalculateCRCFinish(unsigned __int32& dwCRC)
 {
 	// Exclusive OR the result with the beginning value.
 	dwCRC = dwCRC ^ 0xffffffff;
 }
 
-unsigned __int32 CalculateCRC(const unsigned char* pbData, int cbData)
+unsigned __int32 SIMPLEAPI CalculateCRC(const unsigned char* pbData, int cbData)
 {
 	unsigned __int32 dwCRC;
 	CalculateCRCStart(dwCRC);

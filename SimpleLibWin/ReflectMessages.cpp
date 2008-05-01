@@ -30,7 +30,7 @@ namespace Simple
 // This is essentially a rip off of ATLHOST.H versions of ReflectNotifications
 // but available outside of	CAxHostWindow and with a couple of bugs fixed (wParam
 //	checks on owner draw notifications)
-LRESULT ReflectMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT SIMPLEAPI ReflectMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	HWND hWndChild = NULL;
 

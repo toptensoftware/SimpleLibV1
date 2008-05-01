@@ -71,7 +71,7 @@ int CalcVariantStackSize(VARTYPE vt)
 	return 0;
 }
 
-HRESULT InvokeEventHandler(void* pThis, EVENTENTRY<CDummy>* pEventMap, ITypeInfo* pEventInfo, DISPID dispid, DISPPARAMS* pDispParams)
+HRESULT SIMPLEAPI InvokeEventHandler(void* pThis, EVENTENTRY<CDummy>* pEventMap, ITypeInfo* pEventInfo, DISPID dispid, DISPPARAMS* pDispParams)
 {
 	// Check no named args...
 	if (pDispParams->cNamedArgs)

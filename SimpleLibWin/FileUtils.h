@@ -21,11 +21,11 @@
 namespace Simple
 {
 
-HRESULT RecursiveCreateDirectory(const wchar_t* psz);
+HRESULT SIMPLEAPI RecursiveCreateDirectory(const wchar_t* psz);
 //bool IsFullyQualified(const wchar_t* pszPath);
-CUniString SlxGetSystemDirectory();
-CUniString SlxGetModuleFileName(HMODULE hModule);
-CUniString SlxGetModuleFolder(HMODULE hModule);
+CUniString SIMPLEAPI SlxGetSystemDirectory();
+CUniString SIMPLEAPI SlxGetModuleFileName(HMODULE hModule);
+CUniString SIMPLEAPI SlxGetModuleFolder(HMODULE hModule);
 
 }	// namespace Simple
 

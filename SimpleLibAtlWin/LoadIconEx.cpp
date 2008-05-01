@@ -22,7 +22,7 @@
 namespace Simple
 {
 
-HICON LoadIconEx(HINSTANCE hInst, LPCTSTR pszRes, bool bLarge)
+HICON SIMPLEAPI LoadIconEx(HINSTANCE hInst, LPCTSTR pszRes, bool bLarge)
 {
 	return (HICON)LoadImage(hInst, pszRes, IMAGE_ICON, 
 					GetSystemMetrics(bLarge ? SM_CXICON : SM_CXSMICON),
@@ -31,7 +31,7 @@ HICON LoadIconEx(HINSTANCE hInst, LPCTSTR pszRes, bool bLarge)
 }
 
 
-HICON LoadIconEx(int iIcon, bool bLarge)
+HICON SIMPLEAPI LoadIconEx(int iIcon, bool bLarge)
 {
 	return LoadIconEx(_AtlBaseModule.GetResourceInstance(), MAKEINTRESOURCE(iIcon), bLarge);
 }

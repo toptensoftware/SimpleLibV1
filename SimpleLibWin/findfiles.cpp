@@ -21,7 +21,7 @@
 
 namespace Simple
 {
-void FindFiles(const wchar_t* pszSpec, CVector<CUniString>& Files, bool bFullPath)
+void SIMPLEAPI FindFiles(const wchar_t* pszSpec, CVector<CUniString>& Files, bool bFullPath)
 {
 	CUniString strFolder;
 	SplitPath(pszSpec, &strFolder, NULL);
@@ -46,7 +46,7 @@ void FindFiles(const wchar_t* pszSpec, CVector<CUniString>& Files, bool bFullPat
 	}
 }
 
-void FindSubFolders(const wchar_t* pszFolder, CVector<CUniString>& Folders, bool bFullPath)
+void SIMPLEAPI FindSubFolders(const wchar_t* pszFolder, CVector<CUniString>& Folders, bool bFullPath)
 {
 	WIN32_FIND_DATA fd;
 	HANDLE hFind=FindFirstFile(SimplePathAppend(pszFolder, L"*.*"), &fd);

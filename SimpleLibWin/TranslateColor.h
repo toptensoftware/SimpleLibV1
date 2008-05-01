@@ -21,7 +21,7 @@
 namespace Simple
 {
 
-COLORREF TranslateColor(OLE_COLOR oc);
+COLORREF SIMPLEAPI TranslateColor(OLE_COLOR oc);
 
 
 }	// namespace Simple

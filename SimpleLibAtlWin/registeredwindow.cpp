@@ -22,7 +22,7 @@ namespace Simple
 
 #pragma warning(disable:4996)	//'swprintf': swprintf has been changed to conform with the ISO C standard, adding an extra character count parameter. To use traditional Microsoft swprintf, set _CRT_NON_CONFORMING_SWPRINTFS.
 
-ATOM AtlModuleRegisterGlobalWndClassInfo(_ATL_MODULE* pM, _ATL_WNDCLASSINFOW& p, WNDPROC* pProc)
+ATOM SIMPLEAPI AtlModuleRegisterGlobalWndClassInfo(_ATL_MODULE* pM, _ATL_WNDCLASSINFOW& p, WNDPROC* pProc)
 {
 	if (p.m_atom == 0)
 	{

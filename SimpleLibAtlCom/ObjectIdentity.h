@@ -20,7 +20,7 @@
 namespace Simple
 {
 
-BOOL IsSameObject(IUnknown* pUnk1, IUnknown* pUnk2);
+BOOL SIMPLEAPI IsSameObject(IUnknown* pUnk1, IUnknown* pUnk2);
 
 }	// namespace Simple
 

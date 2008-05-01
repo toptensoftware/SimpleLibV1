@@ -16,6 +16,7 @@ namespace Simple
 /////////////////////////////////////////////////////////////////////////////
 // CGdiPlusLoader
 
+#pragma warning(disable:4073)	// initializers put in library initialization area
 #pragma init_seg(lib)
 DWORD gdiplusRef=0;
 GdiplusStartupInput gdiplusStartupInput;

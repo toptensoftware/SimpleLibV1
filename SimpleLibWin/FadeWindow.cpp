@@ -147,7 +147,7 @@ void CFadeInfo::OnTick()
 }
 
 
-bool FadeWindow(HWND hWnd, DWORD dwFlags, int iSteps, int iPeriod)
+bool SIMPLEAPI FadeWindow(HWND hWnd, DWORD dwFlags, int iSteps, int iPeriod)
 {
 	// Kill existing operation
 	for (int i=0; i<g_PendingFades.GetSize(); i++)
@@ -221,7 +221,7 @@ bool FadeWindow(HWND hWnd, DWORD dwFlags, int iSteps, int iPeriod)
 
 static bool g_bEnableFadeEffects=true;
 
-bool UseFadeEffects()
+bool SIMPLEAPI UseFadeEffects()
 {
 	if (!g_bEnableFadeEffects)
 		return false;
@@ -235,12 +235,12 @@ bool UseFadeEffects()
 	return true;
 }
 
-void SetEnableFadeEffects(bool bEnable)
+void SIMPLEAPI SetEnableFadeEffects(bool bEnable)
 {
 	g_bEnableFadeEffects=bEnable;
 }
 
-bool GetEnableFadeEffects()
+bool SIMPLEAPI GetEnableFadeEffects()
 {
 	return g_bEnableFadeEffects;
 }

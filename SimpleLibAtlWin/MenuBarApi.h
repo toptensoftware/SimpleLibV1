@@ -66,8 +66,8 @@ namespace Simple
 #define MenuBar_SetMdiMode(hwnd, hMdiClient) \
 	(BOOL)SNDMSG((hwnd), MBM_SETMDIMODE, (WPARAM)(hMdiClient), 0)
 
-void RegisterMenuBar();
-void UnregisterMenuBar();
+void SIMPLEAPI RegisterMenuBar();
+void SIMPLEAPI UnregisterMenuBar();
 
 /////////////////////////////////////////////////////////////////////////////
 // CMenuBarCtrlT - ATL wrapper for MenuBar

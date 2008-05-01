@@ -25,9 +25,9 @@ namespace Simple
 #define WM_NCMOUSEFIRST WM_NCMOUSEMOVE
 #define WM_NCMOUSELAST  WM_NCMBUTTONDBLCLK
 
-bool IsMouseMessage(UINT msg);
-bool IsKeyboardMessage(UINT msg);
-bool IsInputMessage(UINT msg);
+bool SIMPLEAPI IsMouseMessage(UINT msg);
+bool SIMPLEAPI IsKeyboardMessage(UINT msg);
+bool SIMPLEAPI IsInputMessage(UINT msg);
 
 }	// namespace Simple
 

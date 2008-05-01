@@ -24,14 +24,14 @@
 namespace Simple
 {
 
-HRESULT SlxGetIDsOfName(IDispatch* pDisp, LPCOLESTR psz, DISPID* pVal)
+HRESULT SIMPLEAPI SlxGetIDsOfName(IDispatch* pDisp, LPCOLESTR psz, DISPID* pVal)
 {
 	ASSERT(pDisp!=NULL);
 	return pDisp->GetIDsOfNames(IID_NULL, const_cast<LPOLESTR*>(&psz), 1, LOCALE_SYSTEM_DEFAULT, pVal);
 }
 
 
-HRESULT SlxGetProperty(IDispatch* pDisp, const CDISPID& DispID, VARIANT* pVar)
+HRESULT SIMPLEAPI SlxGetProperty(IDispatch* pDisp, const CDISPID& DispID, VARIANT* pVar)
 {
 	DISPID dwDispID;
 	RETURNIFFAILED(DispID.Resolve(pDisp, &dwDispID));
@@ -42,7 +42,7 @@ HRESULT SlxGetProperty(IDispatch* pDisp, const CDISPID& DispID, VARIANT* pVar)
 			&dispparamsNoArgs, pVar, NULL, NULL);
 }
 
-HRESULT SlxPutProperty(IDispatch* pDisp, const CDISPID& DispID, VARIANT newVal)
+HRESULT SIMPLEAPI SlxPutProperty(IDispatch* pDisp, const CDISPID& DispID, VARIANT newVal)
 {
 	DISPID dwDispID;
 	RETURNIFFAILED(DispID.Resolve(pDisp, &dwDispID));
@@ -67,7 +67,7 @@ HRESULT SlxPutProperty(IDispatch* pDisp, const CDISPID& DispID, VARIANT newVal)
 			&dispparams, NULL, NULL, NULL);
 }
 
-HRESULT SlxInitProperty(IDispatch* pDisp, const CDISPID& DispID, VARIANT newVal)
+HRESULT SIMPLEAPI SlxInitProperty(IDispatch* pDisp, const CDISPID& DispID, VARIANT newVal)
 {
 	if (IsParameterSpecified(newVal))
 		return SlxPutProperty(pDisp, DispID, newVal);

@@ -202,7 +202,7 @@ public:
 	};
 };
 
-HRESULT CreateRegistryStream(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValueName, IStream** pVal)
+HRESULT SIMPLEAPI CreateRegistryStream(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValueName, IStream** pVal)
 {
 	// Create an instance of RegStream object
 	CAutoPtr<CRegStream, SRefCounted> spRegStream=new CRegStream();
@@ -214,7 +214,7 @@ HRESULT CreateRegistryStream(HKEY hKey, const wchar_t* pszSubKey, const wchar_t*
 	return S_OK;
 }
 
-HRESULT OpenRegistryStream(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValueName, IStream** pVal)
+HRESULT SIMPLEAPI OpenRegistryStream(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValueName, IStream** pVal)
 {
 	// Create an instance of RegStream object
 	CAutoPtr<CRegStream, SRefCounted> spRegStream=new CRegStream();

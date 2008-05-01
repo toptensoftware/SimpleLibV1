@@ -23,8 +23,8 @@ namespace Simple
 struct ATL_DRAWINFO;
 
 // Helpers for normalizing ATL_DRAWINFO 
-void AtlMapZoom(ATL_DRAWINFO& di);
-void AtlZeroOrigin(ATL_DRAWINFO& di);
+void SIMPLEAPI AtlMapZoom(ATL_DRAWINFO& di);
+void SIMPLEAPI AtlZeroOrigin(ATL_DRAWINFO& di);
 
 }	// namespace Simple
 

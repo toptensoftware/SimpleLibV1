@@ -22,7 +22,7 @@
 namespace Simple
 {
 
-inline HWND _AtlGetTopLevelWindow(HWND hWnd)
+inline HWND SIMPLEAPI _AtlGetTopLevelWindow(HWND hWnd)
 {
 	HWND hWndTop;
 

@@ -23,7 +23,7 @@ namespace Simple
 {
 
 // Creates a string filled with a particular character
-void CharString(OLECHAR ch, int iLen, BSTR* pVal)
+void SIMPLEAPI CharString(OLECHAR ch, int iLen, BSTR* pVal)
 {
 	// Allocate a buffer
 	*pVal=::SysAllocStringLen(NULL, iLen);
@@ -143,7 +143,7 @@ void PadNumber(BSTR* pbstr, int iPrecision)
 }
 
 // Format a hex number
-void FormatHex(DWORD dwValue, int iPrecision, bool bUpperCase, BSTR* pVal)
+void SIMPLEAPI FormatHex(DWORD dwValue, int iPrecision, bool bUpperCase, BSTR* pVal)
 {
 	OLECHAR szBuf[16];
 	LPOLESTR p=szBuf;
@@ -176,7 +176,7 @@ void FormatHex(DWORD dwValue, int iPrecision, bool bUpperCase, BSTR* pVal)
 	PadNumber(pVal, iPrecision);
 }
 
-int FormatBSTR(BSTR* pVal, LPCOLESTR pszFormat, va_list args)
+int SIMPLEAPI FormatBSTR(BSTR* pVal, LPCOLESTR pszFormat, va_list args)
 {
 	CUniString buf;
 
@@ -234,7 +234,7 @@ void FormatUI64(CUniString& buf, unsigned __int64 i)
 
 
 // Format a string
-int FormatBSTR(CUniString& buf, LPCOLESTR pszFormat, va_list args)
+int SIMPLEAPI FormatBSTR(CUniString& buf, LPCOLESTR pszFormat, va_list args)
 {
 	bool bAppend=pszFormat[0]==L'%' && pszFormat[1]==L'+';
 	if (bAppend)
@@ -501,7 +501,7 @@ int FormatBSTR(CUniString& buf, LPCOLESTR pszFormat, va_list args)
 	return int(buf.GetLength());
 }
 
-int FormatBSTR(BSTR* pVal, LPCOLESTR pszFormat, ...)
+int SIMPLEAPI FormatBSTR(BSTR* pVal, LPCOLESTR pszFormat, ...)
 {
 	va_list args;
 	va_start(args, pszFormat);
@@ -511,7 +511,7 @@ int FormatBSTR(BSTR* pVal, LPCOLESTR pszFormat, ...)
 }
 
 
-CComBSTR FormatBSTR(LPCOLESTR pszFormat, ...)
+CComBSTR SIMPLEAPI FormatBSTR(LPCOLESTR pszFormat, ...)
 {
 	va_list args;
 	va_start(args, pszFormat);
@@ -521,14 +521,14 @@ CComBSTR FormatBSTR(LPCOLESTR pszFormat, ...)
 	return bstr;
 }
 
-int FormatBSTR(BSTR* pVal, UINT nResIDFormat, va_list args)
+int SIMPLEAPI FormatBSTR(BSTR* pVal, UINT nResIDFormat, va_list args)
 {
 	CComBSTR b;
 	b.LoadString(nResIDFormat);
 	return FormatBSTR(pVal, b, args);
 }
 
-int FormatBSTR(BSTR* pVal, UINT nResIDFormat, ...)
+int SIMPLEAPI FormatBSTR(BSTR* pVal, UINT nResIDFormat, ...)
 {
 	va_list args;
 	va_start(args, nResIDFormat);
@@ -537,7 +537,7 @@ int FormatBSTR(BSTR* pVal, UINT nResIDFormat, ...)
 	return iRetv;
 }
 
-CComBSTR FormatBSTR(UINT nResIDFormat, ...)
+CComBSTR SIMPLEAPI FormatBSTR(UINT nResIDFormat, ...)
 {
 	va_list args;
 	va_start(args, nResIDFormat);

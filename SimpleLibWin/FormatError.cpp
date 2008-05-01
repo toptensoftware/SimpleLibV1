@@ -22,7 +22,7 @@
 namespace Simple
 {
 
-CUniString FormatError(HRESULT hr, IUnknown* pObject, REFIID riidCalled)
+CUniString SIMPLEAPI FormatError(HRESULT hr, IUnknown* pObject, REFIID riidCalled)
 {
 	// Interface specific error code?
 	if (HRESULT_FACILITY(hr)==FACILITY_ITF)

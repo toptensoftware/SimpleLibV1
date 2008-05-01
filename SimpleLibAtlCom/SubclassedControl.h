@@ -81,8 +81,8 @@ How to use CSubclassedControl
 #ifdef __ATLCTL_H__
 
 // Helper functions (see SubclassedControl.cpp for implementation)
-void SubclassedControlSubclassParent(HWND hWndParent, HWND hWndControl);
-void SubclassedControlUnsubclassParent(HWND hWndParent, HWND hWndControl);
+void SIMPLEAPI SubclassedControlSubclassParent(HWND hWndParent, HWND hWndControl);
+void SIMPLEAPI SubclassedControlUnsubclassParent(HWND hWndParent, HWND hWndControl);
 
 // Subclassed com control class
 template <class T, class ThreadModel>

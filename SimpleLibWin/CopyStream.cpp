@@ -23,7 +23,7 @@ namespace Simple
 {
 
 // Copy everything from one stream to another
-HRESULT CopyStream(IStream* pTarget, IStream* pSource, DWORD dwMaxLength)
+HRESULT SIMPLEAPI CopyStream(IStream* pTarget, IStream* pSource, DWORD dwMaxLength)
 {
 	BYTE bBuffer[1024];
 	while (dwMaxLength)

@@ -20,7 +20,7 @@
 namespace Simple
 {
 
-void MakeFormatEtc(UINT cf, FORMATETC* pfetc);
+void SIMPLEAPI MakeFormatEtc(UINT cf, FORMATETC* pfetc);
 
 class CStgMedium : public STGMEDIUM
 {

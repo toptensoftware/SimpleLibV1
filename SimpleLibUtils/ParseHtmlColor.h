@@ -7,7 +7,7 @@
 namespace Simple
 {
 
-bool ParseHtmlColor(const wchar_t* psz, unsigned int* pVal);
+bool SIMPLEAPI ParseHtmlColor(const wchar_t* psz, unsigned int* pVal);
 
 }	// namespace Simple
 

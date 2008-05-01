@@ -23,7 +23,7 @@
 namespace Simple
 {
 
-bool IsControlInDesignMode(IUnknown* pControl)
+bool SIMPLEAPI IsControlInDesignMode(IUnknown* pControl)
 {
 	// QI for IOleObject
 	CComQIPtr<IOleObject> spOleObject(pControl);

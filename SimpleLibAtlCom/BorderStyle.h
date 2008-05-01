@@ -24,8 +24,8 @@ namespace Simple
 //		0 = No border
 //		1 = Flat border
 //		2 = 3D border
-void ChangeWindowBorderStyle(HWND hWnd, int iBorderStyle);
-int GetWindowBorderStyle(HWND hWnd);
+void SIMPLEAPI ChangeWindowBorderStyle(HWND hWnd, int iBorderStyle);
+int SIMPLEAPI GetWindowBorderStyle(HWND hWnd);
 
 }	// namespace Simple
 

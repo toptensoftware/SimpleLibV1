@@ -20,7 +20,7 @@
 namespace Simple
 {
 
-CUniString FormatError(HRESULT hr, IUnknown* pObject=NULL, REFIID riidCalled=CLSID_NULL);
+CUniString SIMPLEAPI FormatError(HRESULT hr, IUnknown* pObject=NULL, REFIID riidCalled=CLSID_NULL);
 
 }	// namespace Simple
 

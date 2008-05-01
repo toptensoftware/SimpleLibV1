@@ -39,7 +39,7 @@ struct EVENTENTRY
 // Helper functions for CSimpleEventSink
 int CalcVariantStackSize(VARTYPE vt);
 class CDummy {};
-HRESULT InvokeEventHandler(void* pThis, EVENTENTRY<CDummy>* pEventMap, ITypeInfo* pEventInfo, DISPID dispid, DISPPARAMS* pDispParams);
+HRESULT SIMPLEAPI InvokeEventHandler(void* pThis, EVENTENTRY<CDummy>* pEventMap, ITypeInfo* pEventInfo, DISPID dispid, DISPPARAMS* pDispParams);
 
 
 

@@ -22,7 +22,7 @@
 namespace Simple
 {
 
-HRESULT GetObjectSourceInterface(IUnknown* pObject, IID* piidEvents, ITypeInfo** ppEventInfo);
+HRESULT SIMPLEAPI GetObjectSourceInterface(IUnknown* pObject, IID* piidEvents, ITypeInfo** ppEventInfo);
 
 // CSimpleEventSinkBase
 class CSimpleEventSinkBase : public CSimpleSink<IDispatch>

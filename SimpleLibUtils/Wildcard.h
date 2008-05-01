@@ -21,7 +21,7 @@
 namespace Simple
 {
 
-bool DoesWildcardMatch(const wchar_t* pszSpec, const wchar_t* pszString);
+bool SIMPLEAPI DoesWildcardMatch(const wchar_t* pszSpec, const wchar_t* pszString);
 
 }	// namespace Simple
 

@@ -66,7 +66,7 @@ HRESULT IObjectWithWeakOwnerImpl::QueryOwnerInterface(REFIID riid, void** ppvObj
 
 
 // Get the weak owner of a 
-HRESULT GetWeakOwnerOfObject(IUnknown* pObject, REFIID riid, void** ppvOwner)
+HRESULT SIMPLEAPI GetWeakOwnerOfObject(IUnknown* pObject, REFIID riid, void** ppvOwner)
 {
 	// Get IUnknownWithWeakOwner
 	CComQIPtr<IObjectWithWeakOwner> spObjectWithWeakOwner(pObject);
@@ -85,7 +85,7 @@ HRESULT GetWeakOwnerOfObject(IUnknown* pObject, REFIID riid, void** ppvOwner)
 }
 
 // Helper to set an object's weak owner.
-HRESULT SetWeakOwnerOfObject(IUnknown* pObject, IUnknown* pOwner)
+HRESULT SIMPLEAPI SetWeakOwnerOfObject(IUnknown* pObject, IUnknown* pOwner)
 {
 	CComQIPtr<IObjectWithWeakOwner> sp(pObject);
 	if (!sp)
@@ -95,12 +95,12 @@ HRESULT SetWeakOwnerOfObject(IUnknown* pObject, IUnknown* pOwner)
 }
 
 // Walk weak owner chain to find an owner supporting a particular interface
-HRESULT GetWeakOwnerOfType(IUnknown* pObject, REFIID riid, void** ppvObject)
+HRESULT SIMPLEAPI GetWeakOwnerOfType(IUnknown* pObject, REFIID riid, void** ppvObject)
 {
 	return GetWeakOwnerOfTypeEx(pObject, riid, ppvObject, true);
 }
 
-HRESULT GetWeakOwnerOfTypeEx(IUnknown* pObject, REFIID riid, void** ppvObject, bool bIncludeSelf)
+HRESULT SIMPLEAPI GetWeakOwnerOfTypeEx(IUnknown* pObject, REFIID riid, void** ppvObject, bool bIncludeSelf)
 {
 	// Query for requested interface
 	if (bIncludeSelf)
@@ -131,7 +131,7 @@ HRESULT GetWeakOwnerOfTypeEx(IUnknown* pObject, REFIID riid, void** ppvObject, b
 }
 
 
-bool IsWeakChild(IUnknown* pParent, IUnknown* pChild)
+bool SIMPLEAPI IsWeakChild(IUnknown* pParent, IUnknown* pChild)
 {
 	if (!pParent || !pChild)
 		return false;
@@ -152,7 +152,7 @@ bool IsWeakChild(IUnknown* pParent, IUnknown* pChild)
 }
 
 
-HRESULT GetTopWeakOwner(IUnknown* pObject, bool bAllowSelf, REFIID riid, void** ppvOwner)
+HRESULT SIMPLEAPI GetTopWeakOwner(IUnknown* pObject, bool bAllowSelf, REFIID riid, void** ppvOwner)
 {
 	if (!pObject)
 		return E_NOOWNER;

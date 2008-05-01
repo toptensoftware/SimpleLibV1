@@ -22,7 +22,7 @@
 namespace Simple
 {
 
-CUniString LTrimString(const wchar_t* pszIn)
+CUniString SIMPLEAPI LTrimString(const wchar_t* pszIn)
 {
 	// Skip leading whitespace
 	while (iswspace(pszIn[0]))
@@ -31,7 +31,7 @@ CUniString LTrimString(const wchar_t* pszIn)
 	return pszIn;
 }
 
-CUniString RTrimString(const wchar_t* pszIn)
+CUniString SIMPLEAPI RTrimString(const wchar_t* pszIn)
 {
 	// Skip trailing whitespace
 	const wchar_t* p=pszIn + wcslen(pszIn);
@@ -41,7 +41,7 @@ CUniString RTrimString(const wchar_t* pszIn)
 	return CUniString(pszIn, int(p-pszIn));
 }
 
-CUniString TrimString(const wchar_t* pszIn)
+CUniString SIMPLEAPI TrimString(const wchar_t* pszIn)
 {
 	// Skip leading whitespace
 	while (iswspace(pszIn[0]))

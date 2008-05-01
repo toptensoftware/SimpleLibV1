@@ -28,62 +28,62 @@ namespace Simple
 #define COLORKEY_NONE			0xFF000000
 #define COLORKEY_ALPHA			0xFE0000FF
 #define COLORKEY_ALPHA_TRANS	0xFE000000		// Or with alpha value (255-opaque)
-void ImageBlt(HDC hdcDest, int iDestLeft, int iDestTop, int iDestWidth, int iDestHeight, 
+void SIMPLEAPI ImageBlt(HDC hdcDest, int iDestLeft, int iDestTop, int iDestWidth, int iDestHeight, 
 				HDC hdcSrc, int iSrcLeft, int iSrcTop, int iSrcWidth, int iSrcHeight, 
 				COLORREF rgbKey);
-void ImageBlt(HDC hdcDest, RECT* prcDest, HDC hdcSrc, RECT* prcSrc, COLORREF rgbKey);
-void ImageBlt(HDC hdcDest, int iDestLeft, int iDestTop, int iDestWidth, int iDestHeight, 
+void SIMPLEAPI ImageBlt(HDC hdcDest, RECT* prcDest, HDC hdcSrc, RECT* prcSrc, COLORREF rgbKey);
+void SIMPLEAPI ImageBlt(HDC hdcDest, int iDestLeft, int iDestTop, int iDestWidth, int iDestHeight, 
 				HBITMAP hbm, int iSrcLeft, int iSrcTop, int iSrcWidth, int iSrcHeight, 
 				COLORREF rgbKey);
-void ImageBlt(HDC hdcDest, RECT* prcDest, HBITMAP hbm, RECT* prcSrc, COLORREF rgbKey);
+void SIMPLEAPI ImageBlt(HDC hdcDest, RECT* prcDest, HBITMAP hbm, RECT* prcSrc, COLORREF rgbKey);
 
 // Draws a stretched image but doesn't stretch the edges as defined by "m"
-void EdgedStretchBlt(HDC hDC, RECT margins, RECT rcDest, HDC hdcMem, RECT rcSrc, COLORREF rgbKey);
-void EdgedStretchBlt(HDC hDC, RECT margins, RECT rcDest, HBITMAP hbmp, RECT rcSrc, COLORREF rgbKey);
+void SIMPLEAPI EdgedStretchBlt(HDC hDC, RECT margins, RECT rcDest, HDC hdcMem, RECT rcSrc, COLORREF rgbKey);
+void SIMPLEAPI EdgedStretchBlt(HDC hDC, RECT margins, RECT rcDest, HBITMAP hbmp, RECT rcSrc, COLORREF rgbKey);
 
 // Alpha blend colors
-BYTE AlphaBlendColor(BYTE b1, BYTE b2, BYTE bAlpha);
-COLORREF AlphaBlendColor(COLORREF rgb1, COLORREF rgb2, BYTE bAlpha);
+BYTE SIMPLEAPI AlphaBlendColor(BYTE b1, BYTE b2, BYTE bAlpha);
+COLORREF SIMPLEAPI AlphaBlendColor(COLORREF rgb1, COLORREF rgb2, BYTE bAlpha);
 
 // Convert a gdi plus bitmap to a Win32 bitmap, preserving alpha channel
-HBITMAP BitmapFromGdiplusBitmap(Gdiplus::Bitmap& bmSrc);
+HBITMAP SIMPLEAPI BitmapFromGdiplusBitmap(Gdiplus::Bitmap& bmSrc);
 
 // Load a png resource.  Resource Type should be "PNG"
-HBITMAP LoadPngImage(HINSTANCE hInstance, const wchar_t* pszResource, bool bPreMultiply=true);
+HBITMAP SIMPLEAPI LoadPngImage(HINSTANCE hInstance, const wchar_t* pszResource, bool bPreMultiply=true);
 
 // Load a dib resource.
-HBITMAP LoadAlphaDib(HINSTANCE hInstance, const wchar_t* pszResID, bool bPreMultiply=true);
+HBITMAP SIMPLEAPI LoadAlphaDib(HINSTANCE hInstance, const wchar_t* pszResID, bool bPreMultiply=true);
 
 // Calculate various colors for drawing XP style menus
 #define XPSTATE_CHECKED	0x0001
 #define XPSTATE_HOT		0x0002
-COLORREF GetMixedColor(COLORREF colorA,COLORREF colorB);
-COLORREF GetMidColor(COLORREF colorA,COLORREF colorB);
-COLORREF GetXPHighlightColor(UINT uiState, COLORREF crBg);
+COLORREF SIMPLEAPI GetMixedColor(COLORREF colorA,COLORREF colorB);
+COLORREF SIMPLEAPI GetMidColor(COLORREF colorA,COLORREF colorB);
+COLORREF SIMPLEAPI GetXPHighlightColor(UINT uiState, COLORREF crBg);
 
 // Premultiply an alpha channel dib so it will work with AlphaBlend
-void PreMultiplyDib(HBITMAP hDIB);
+void SIMPLEAPI PreMultiplyDib(HBITMAP hDIB);
 
 // Convert a dib to gray scale
-void GrayScaleDib(HBITMAP hDIB, COLORREF rgb=RGB(255,255,255), BYTE bBlend=0);
+void SIMPLEAPI GrayScaleDib(HBITMAP hDIB, COLORREF rgb=RGB(255,255,255), BYTE bBlend=0);
 
 // Color key a dib, changing all of one color to alpha 0
-void ColorKeyDib(HBITMAP hDIB, COLORREF rgbColor);
+void SIMPLEAPI ColorKeyDib(HBITMAP hDIB, COLORREF rgbColor);
 
 // Convert a dib to a shadow by making all pixels black but 1/4 of original alpha
-void ShadowDib(HBITMAP hDIB);
+void SIMPLEAPI ShadowDib(HBITMAP hDIB);
 
 // Perform a blt using AlphaBlend function
-void AlphaBlt(HDC hdcDest, int x, int y, int cx, int cy,
+void SIMPLEAPI AlphaBlt(HDC hdcDest, int x, int y, int cx, int cy,
 				HDC hdcSrc, int sx, int sy, int scx, int scy, BYTE bAlpha=255);
 
 
 #ifdef _INC_COMMCTRL
 // Enhanced image list loading - selects a 16 or 32 bpp image
-HIMAGELIST ImageList_LoadEx(HINSTANCE hInstance, const wchar_t* pszRes4, const wchar_t* pszRes32, COLORREF rgbMask, int cx);
+HIMAGELIST SIMPLEAPI ImageList_LoadEx(HINSTANCE hInstance, const wchar_t* pszRes4, const wchar_t* pszRes32, COLORREF rgbMask, int cx);
 
 // Load an image list as gray scale
-HIMAGELIST ImageList_LoadGrayScale(HINSTANCE hInstance, const wchar_t* pszRes32, int cx, bool bShadow);
+HIMAGELIST SIMPLEAPI ImageList_LoadGrayScale(HINSTANCE hInstance, const wchar_t* pszRes32, int cx, bool bShadow);
 #endif
 
 
@@ -104,7 +104,7 @@ public:
 	RGNDATA*	m_pRgnData;
 };
 
-HRGN CreateRegionFromAlphaChannel(HBITMAP hDIB, bool bConvex);
+HRGN SIMPLEAPI CreateRegionFromAlphaChannel(HBITMAP hDIB, bool bConvex);
 
 
 }	// namespace Simple

@@ -23,29 +23,29 @@
 namespace Simple
 {
 
-bool IsEOL(wchar_t ch);
-bool SkipEOL(const wchar_t*& p);
-void SkipToEOL(const wchar_t*& p);
-void SkipToNextLine(const wchar_t*& p);
-bool DoesMatch(const wchar_t* p, const wchar_t* psz, bool bEndWord=false);
-bool SkipMatch(const wchar_t*& p, const wchar_t* psz, bool bEndWord=false);
-bool DoesMatchI(const wchar_t* p, const wchar_t* psz, bool bEndWord=false);
-bool SkipMatchI(const wchar_t*& p, const wchar_t* psz, bool bEndWord=false);
-bool SkipWhiteSpace(const wchar_t*& p);
-bool IsLineEndChar(wchar_t ch);
-bool IsLineSpace(wchar_t ch);
-bool IsWhiteSpace(wchar_t ch);
-bool IsIdentifierLeadChar(wchar_t ch, const wchar_t* pszExtraChars=NULL);
-bool IsIdentifierChar(wchar_t ch, const wchar_t* pszExtraChars=NULL);
-bool SkipLineSpace(const wchar_t*& p);
-bool SkipLineEnd(const wchar_t*& p);
-bool SkipIdentifier(const wchar_t*& p, CUniString& str, const wchar_t* pszExtraLeadChars=NULL, const wchar_t* pszExtraChars=NULL);
-bool ReadInt(const wchar_t*& p, int* pi);
-bool ReadDouble(const wchar_t*& psz, double* pdblVal);
+bool SIMPLEAPI IsEOL(wchar_t ch);
+bool SIMPLEAPI SkipEOL(const wchar_t*& p);
+void SIMPLEAPI SkipToEOL(const wchar_t*& p);
+void SIMPLEAPI SkipToNextLine(const wchar_t*& p);
+bool SIMPLEAPI DoesMatch(const wchar_t* p, const wchar_t* psz, bool bEndWord=false);
+bool SIMPLEAPI SkipMatch(const wchar_t*& p, const wchar_t* psz, bool bEndWord=false);
+bool SIMPLEAPI DoesMatchI(const wchar_t* p, const wchar_t* psz, bool bEndWord=false);
+bool SIMPLEAPI SkipMatchI(const wchar_t*& p, const wchar_t* psz, bool bEndWord=false);
+bool SIMPLEAPI SkipWhiteSpace(const wchar_t*& p);
+bool SIMPLEAPI IsLineEndChar(wchar_t ch);
+bool SIMPLEAPI IsLineSpace(wchar_t ch);
+bool SIMPLEAPI IsWhiteSpace(wchar_t ch);
+bool SIMPLEAPI IsIdentifierLeadChar(wchar_t ch, const wchar_t* pszExtraChars=NULL);
+bool SIMPLEAPI IsIdentifierChar(wchar_t ch, const wchar_t* pszExtraChars=NULL);
+bool SIMPLEAPI SkipLineSpace(const wchar_t*& p);
+bool SIMPLEAPI SkipLineEnd(const wchar_t*& p);
+bool SIMPLEAPI SkipIdentifier(const wchar_t*& p, CUniString& str, const wchar_t* pszExtraLeadChars=NULL, const wchar_t* pszExtraChars=NULL);
+bool SIMPLEAPI ReadInt(const wchar_t*& p, int* pi);
+bool SIMPLEAPI ReadDouble(const wchar_t*& psz, double* pdblVal);
 
 
 template <class T>
-const T* FindOneOf(const T* psz, const T* pszDelims)
+const T* SIMPLEAPI FindOneOf(const T* psz, const T* pszDelims)
 {
 	while (psz[0])
 	{

@@ -20,8 +20,8 @@
 namespace Simple
 {
 
-HICON LoadIconEx(HINSTANCE hInst, LPCTSTR pszRes, bool bLarge);
-HICON LoadIconEx(int iIcon, bool bLarge);
+HICON SIMPLEAPI LoadIconEx(HINSTANCE hInst, LPCTSTR pszRes, bool bLarge);
+HICON SIMPLEAPI LoadIconEx(int iIcon, bool bLarge);
 
 
 }	// namespace Simple

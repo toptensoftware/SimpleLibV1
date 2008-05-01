@@ -44,9 +44,9 @@ IObjectWithNamedValues : IUnknown
 
 
 // Helper functions for working with named value collection
-HRESULT CopyNamedValues(IObjectWithNamedValues* pDest, IObjectWithNamedValues* pSource, bool bAll);
-bool AnyPersistedNamedValues(IObjectWithNamedValues* pNamedValues);
-HRESULT SerializeNamedValues(IObjectWithNamedValues* pNamedValues, CXMLArchive& ar, LPCOLESTR pszExcludeOnLoad, LPCOLESTR pszElementName);
+HRESULT SIMPLEAPI CopyNamedValues(IObjectWithNamedValues* pDest, IObjectWithNamedValues* pSource, bool bAll);
+bool SIMPLEAPI AnyPersistedNamedValues(IObjectWithNamedValues* pNamedValues);
+HRESULT SIMPLEAPI SerializeNamedValues(IObjectWithNamedValues* pNamedValues, CXMLArchive& ar, LPCOLESTR pszExcludeOnLoad, LPCOLESTR pszElementName);
 
 class ATL_NO_VTABLE IObjectWithNamedValuesImpl : public IObjectWithNamedValues
 {

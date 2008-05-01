@@ -62,8 +62,8 @@ public:
 };
 
 
-HRESULT OpenMemoryStream(LPVOID pData, DWORD cbData, IStream** pVal);
-HRESULT OpenResourceStream(HINSTANCE hInstance, const wchar_t* pszName, const wchar_t* pszType, IStream** pVal);
+HRESULT SIMPLEAPI OpenMemoryStream(LPVOID pData, DWORD cbData, IStream** pVal);
+HRESULT SIMPLEAPI OpenResourceStream(HINSTANCE hInstance, const wchar_t* pszName, const wchar_t* pszType, IStream** pVal);
 
 }	// namespace Simple
 

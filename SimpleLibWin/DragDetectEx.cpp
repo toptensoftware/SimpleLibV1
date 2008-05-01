@@ -26,7 +26,7 @@ namespace Simple
 /////////////////////////////////////////////////////////////////////////////
 // DragDetectEx
 
-BOOL DragDetectEx(HWND hWnd, POINT pt, DWORD dwFlags)
+BOOL SIMPLEAPI DragDetectEx(HWND hWnd, POINT pt, DWORD dwFlags)
 {
 	// Work out what message to cancel drag
 	UINT uMouseUpMessage=0;

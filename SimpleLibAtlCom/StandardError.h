@@ -20,7 +20,7 @@
 namespace Simple
 {
 
-HRESULT StandardError(HRESULT hr);
+HRESULT SIMPLEAPI StandardError(HRESULT hr);
 
 }	// namespace Simple
 

@@ -23,7 +23,7 @@
 namespace Simple
 {
 
-short GetOLEKeyboardState()
+short SIMPLEAPI GetOLEKeyboardState()
 {
 	short sKeyboard = 0;
 	if (GetKeyState(VK_SHIFT) < 0) sKeyboard |= SHIFT_MASK;
@@ -32,7 +32,7 @@ short GetOLEKeyboardState()
 	return sKeyboard;
 }
 
-short GetOLEMouseState()
+short SIMPLEAPI GetOLEMouseState()
 {
 	short sMouse = 0;
 	if (GetKeyState(VK_LBUTTON) < 0) sMouse |= LEFT_BUTTON;

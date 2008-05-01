@@ -34,7 +34,7 @@ struct MODALINFO
 	MODALINFO*	m_pPrev;
 };
 
-int RunModalLoop(HWND hWndOwnerIn, HWND hWndDialog)
+int SIMPLEAPI RunModalLoop(HWND hWndOwnerIn, HWND hWndDialog)
 {
 	// Check for a dialog
 	if (!hWndDialog)
@@ -148,7 +148,7 @@ int RunModalLoop(HWND hWndOwnerIn, HWND hWndDialog)
 	return ModalInfo.m_iRetv;
 }
 
-void EndModalLoop(HWND hWndDialog, int iResult)
+void SIMPLEAPI EndModalLoop(HWND hWndDialog, int iResult)
 {
 	ASSERT(iResult!=0);
 

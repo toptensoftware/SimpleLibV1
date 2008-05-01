@@ -27,7 +27,7 @@
 namespace Simple
 {
 
-int SlxMessageBox(HWND hWndParent, const wchar_t* pszMessage, UINT nFlags, const wchar_t* pszCaption)
+int SIMPLEAPI SlxMessageBox(HWND hWndParent, const wchar_t* pszMessage, UINT nFlags, const wchar_t* pszCaption)
 {
 	CUniString strAppName;
 	if (!pszCaption || pszCaption[0]==L'\0')
@@ -39,12 +39,12 @@ int SlxMessageBox(HWND hWndParent, const wchar_t* pszMessage, UINT nFlags, const
 	return MessageBox(hWndParent, pszMessage, pszCaption, nFlags);
 }
 
-int SlxMessageBox(const wchar_t* pszMessage, UINT nFlags, const wchar_t* pszCaption)
+int SIMPLEAPI SlxMessageBox(const wchar_t* pszMessage, UINT nFlags, const wchar_t* pszCaption)
 {
 	return SlxMessageBox(GetActiveWindow(), pszMessage, nFlags, pszCaption);
 }
 
-int SlxMessageBox(UINT nResID, UINT nFlags, const wchar_t* pszCaption)
+int SIMPLEAPI SlxMessageBox(UINT nResID, UINT nFlags, const wchar_t* pszCaption)
 {	
 	return SlxMessageBox(GetActiveWindow(), LoadString(nResID), nFlags, pszCaption);
 }

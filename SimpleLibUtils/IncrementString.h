@@ -20,9 +20,9 @@
 namespace Simple
 {
 
-CUniString IncrementString(const wchar_t* psz);
-CUniString IncrementStringEx(const wchar_t* psz, const wchar_t* pszDefAppend=L" (001)");
-bool IncrementStringExTest(const wchar_t* psz);
+CUniString SIMPLEAPI IncrementString(const wchar_t* psz);
+CUniString SIMPLEAPI IncrementStringEx(const wchar_t* psz, const wchar_t* pszDefAppend=L" (001)");
+bool SIMPLEAPI IncrementStringExTest(const wchar_t* psz);
 
 }	// namespace Simple
 

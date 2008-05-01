@@ -184,7 +184,7 @@ static void WriteSection(CONTEXT& ctx, CProfileSection* pSection)
 	}
 }
 
-HRESULT SaveBinaryProfile(const CProfileFile& Src, IStream* pStream)
+HRESULT SIMPLEAPI SaveBinaryProfile(const CProfileFile& Src, IStream* pStream)
 {
 	// Setup context
 	CONTEXT ctx;
@@ -261,7 +261,7 @@ static HRESULT ReadSection(CONTEXT& ctx, CProfileSection* pParent)
 	return S_OK;
 }
 
-HRESULT LoadBinaryProfile(CProfileFile& Dest, IStream* pStream)
+HRESULT SIMPLEAPI LoadBinaryProfile(CProfileFile& Dest, IStream* pStream)
 {
 	Dest.Reset(false);
 

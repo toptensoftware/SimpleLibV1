@@ -25,7 +25,7 @@ namespace Simple
 
 
 // Open a stream on a fixed block of memory
-HRESULT OpenMemoryStream(LPVOID pData, DWORD cbData, IStream** pVal)
+HRESULT SIMPLEAPI OpenMemoryStream(LPVOID pData, DWORD cbData, IStream** pVal)
 {
 	// Allocate new stream object
 	CSimpleMemoryStream* pStream=new CSimpleMemoryStream();
@@ -38,7 +38,7 @@ HRESULT OpenMemoryStream(LPVOID pData, DWORD cbData, IStream** pVal)
 }
 
 // Open a stream on an embedded resource
-HRESULT OpenResourceStream(HINSTANCE hInstance, const wchar_t* pszName, const wchar_t* pszType, IStream** pVal)
+HRESULT SIMPLEAPI OpenResourceStream(HINSTANCE hInstance, const wchar_t* pszName, const wchar_t* pszType, IStream** pVal)
 {
 	// Find it
 	HRSRC hRsrc=FindResource(hInstance, pszName, pszType);

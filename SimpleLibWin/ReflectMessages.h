@@ -21,7 +21,7 @@
 namespace Simple
 {
 
-LRESULT ReflectMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+LRESULT SIMPLEAPI ReflectMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 #define REFLECT_MESSAGES() \
 	{ \

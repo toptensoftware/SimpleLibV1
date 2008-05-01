@@ -20,18 +20,18 @@
 namespace Simple
 {
 
-const wchar_t* SlxGetCompanyName();
-const wchar_t* SlxGetAppName();
-void SlxInitProfile(const wchar_t* pszCompanyName, const wchar_t* pszAppName=NULL);
-bool SlxUpgradeProfile(const wchar_t* pszOldCompanyName, const wchar_t* pszOldAppName);
-int SlxGetProfileInt(const wchar_t* pszSection, const wchar_t* pszEntry, int nDefault);
-bool SlxSetProfileInt(const wchar_t* pszSection, const wchar_t* pszEntry, int nValue);
-CUniString SlxGetProfileString(const wchar_t* pszSection, const wchar_t* pszEntry, const wchar_t* pszDefault);
-bool SlxSetProfileString(const wchar_t* pszSection, const wchar_t* pszEntry, const wchar_t* pszValue);
-CUniString SlxGetProfileKey(const wchar_t* pszSuffix=NULL);
-void SlxDeleteProfileSection(const wchar_t* pszSection);
-bool SlxEnumProfileValues(const wchar_t* pszSection, CVector<CUniString>& vec);
-bool SlxEnumProfileSections(const wchar_t* pszSection, CVector<CUniString>& vec);
+const wchar_t* SIMPLEAPI SlxGetCompanyName();
+const wchar_t* SIMPLEAPI SlxGetAppName();
+void SIMPLEAPI SlxInitProfile(const wchar_t* pszCompanyName, const wchar_t* pszAppName=NULL);
+bool SIMPLEAPI SlxUpgradeProfile(const wchar_t* pszOldCompanyName, const wchar_t* pszOldAppName);
+int SIMPLEAPI SlxGetProfileInt(const wchar_t* pszSection, const wchar_t* pszEntry, int nDefault);
+bool SIMPLEAPI SlxSetProfileInt(const wchar_t* pszSection, const wchar_t* pszEntry, int nValue);
+CUniString SIMPLEAPI SlxGetProfileString(const wchar_t* pszSection, const wchar_t* pszEntry, const wchar_t* pszDefault);
+bool SIMPLEAPI SlxSetProfileString(const wchar_t* pszSection, const wchar_t* pszEntry, const wchar_t* pszValue);
+CUniString SIMPLEAPI SlxGetProfileKey(const wchar_t* pszSuffix=NULL);
+void SIMPLEAPI SlxDeleteProfileSection(const wchar_t* pszSection);
+bool SIMPLEAPI SlxEnumProfileValues(const wchar_t* pszSection, CVector<CUniString>& vec);
+bool SIMPLEAPI SlxEnumProfileSections(const wchar_t* pszSection, CVector<CUniString>& vec);
 
 }	// namespace Simple
 

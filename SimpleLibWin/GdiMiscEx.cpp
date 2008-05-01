@@ -32,7 +32,7 @@
 namespace Simple
 {
 
-void ImageBlt(HDC hdcDest, int iDestLeft, int iDestTop, int iDestWidth, int iDestHeight, 
+void SIMPLEAPI ImageBlt(HDC hdcDest, int iDestLeft, int iDestTop, int iDestWidth, int iDestHeight, 
 				HDC hdcSrc, int iSrcLeft, int iSrcTop, int iSrcWidth, int iSrcHeight, 
 				COLORREF rgbKey)
 {
@@ -57,13 +57,13 @@ void ImageBlt(HDC hdcDest, int iDestLeft, int iDestTop, int iDestWidth, int iDes
 	}
 }
 
-void ImageBlt(HDC hdcDest, RECT* prcDest, HDC hdcSrc, RECT* prcSrc, COLORREF rgbKey)
+void SIMPLEAPI ImageBlt(HDC hdcDest, RECT* prcDest, HDC hdcSrc, RECT* prcSrc, COLORREF rgbKey)
 {
 	ImageBlt(hdcDest, prcDest->left, prcDest->top, Width(*prcDest), Height(*prcDest),
 				hdcSrc, prcSrc->left, prcSrc->top, Width(*prcSrc), Height(*prcSrc), rgbKey);
 }
 
-void ImageBlt(HDC hdcDest, int iDestLeft, int iDestTop, int iDestWidth, int iDestHeight, 
+void SIMPLEAPI ImageBlt(HDC hdcDest, int iDestLeft, int iDestTop, int iDestWidth, int iDestHeight, 
 				HBITMAP hbm, int iSrcLeft, int iSrcTop, int iSrcWidth, int iSrcHeight, 
 				COLORREF rgbKey)
 {
@@ -78,7 +78,7 @@ void ImageBlt(HDC hdcDest, int iDestLeft, int iDestTop, int iDestWidth, int iDes
 }
 
 
-void ImageBlt(HDC hdcDest, RECT* prcDest, HBITMAP hbm, RECT* prcSrc, COLORREF rgbKey)
+void SIMPLEAPI ImageBlt(HDC hdcDest, RECT* prcDest, HBITMAP hbm, RECT* prcSrc, COLORREF rgbKey)
 {
 	HDC hdcMem=CreateCompatibleDC(hdcDest);
 
@@ -90,7 +90,7 @@ void ImageBlt(HDC hdcDest, RECT* prcDest, HBITMAP hbm, RECT* prcSrc, COLORREF rg
 }
 
 
-void EdgedStretchBlt(HDC hDC, RECT m, RECT rcDest, HDC hdcMem, RECT rcSrc, COLORREF rgbKey)
+void SIMPLEAPI EdgedStretchBlt(HDC hDC, RECT m, RECT rcDest, HDC hdcMem, RECT rcSrc, COLORREF rgbKey)
 {
 	// Redundant stretch
 	if (Width(rcDest)==Width(rcSrc) && Height(rcDest)==Height(rcSrc))
@@ -207,7 +207,7 @@ void EdgedStretchBlt(HDC hDC, RECT m, RECT rcDest, HDC hdcMem, RECT rcSrc, COLOR
 }
 
 
-void EdgedStretchBlt(HDC hDC, RECT m, RECT rcDest, HBITMAP hbmp, RECT rcSrc, COLORREF rgbKey)
+void SIMPLEAPI EdgedStretchBlt(HDC hDC, RECT m, RECT rcDest, HBITMAP hbmp, RECT rcSrc, COLORREF rgbKey)
 {
 	HDC hdcMem=CreateCompatibleDC(hDC);
 	{
@@ -224,14 +224,14 @@ void EdgedStretchBlt(HDC hDC, RECT m, RECT rcDest, HBITMAP hbmp, RECT rcSrc, COL
 	DeleteDC(hdcMem);
 }
 
-BYTE AlphaBlendColor(BYTE b1, BYTE b2, BYTE bAlpha)
+BYTE SIMPLEAPI AlphaBlendColor(BYTE b1, BYTE b2, BYTE bAlpha)
 {
 	int iVal=b2-b1;
 	iVal = (iVal * bAlpha) / 255;
 	return (BYTE)(b1+iVal);
 }
 
-COLORREF AlphaBlendColor(COLORREF rgb1, COLORREF rgb2, BYTE bAlpha)
+COLORREF SIMPLEAPI AlphaBlendColor(COLORREF rgb1, COLORREF rgb2, BYTE bAlpha)
 {
 	return RGB(
 				AlphaBlendColor(GetRValue(rgb1), GetRValue(rgb2), bAlpha),
@@ -241,7 +241,7 @@ COLORREF AlphaBlendColor(COLORREF rgb1, COLORREF rgb2, BYTE bAlpha)
 
 #include <gdiplus.h>
 
-HBITMAP BitmapFromGdiplusBitmap(Gdiplus::Bitmap& bmSrc)
+HBITMAP SIMPLEAPI BitmapFromGdiplusBitmap(Gdiplus::Bitmap& bmSrc)
 {
 	// Get source pixel format
 	Gdiplus::PixelFormat pfSrc=bmSrc.GetPixelFormat();
@@ -363,7 +363,7 @@ HBITMAP BitmapFromGdiplusBitmap(Gdiplus::Bitmap& bmSrc)
 }
 
 // Load a png image from a resource
-HBITMAP LoadPngImage(HINSTANCE hInstance, const wchar_t* pszResource, bool bPreMultiply)
+HBITMAP SIMPLEAPI LoadPngImage(HINSTANCE hInstance, const wchar_t* pszResource, bool bPreMultiply)
 {
 	// Open the resource stream
 	CAutoPtr<IStream, SRefCounted> spStream;
@@ -390,7 +390,7 @@ HBITMAP LoadPngImage(HINSTANCE hInstance, const wchar_t* pszResource, bool bPreM
 	return hBitmap;
 }
 
-COLORREF GetMixedColor(COLORREF colorA,COLORREF colorB)
+COLORREF SIMPLEAPI GetMixedColor(COLORREF colorA,COLORREF colorB)
 {
 	// ( 86a + 14b ) / 100
 	int red   = MulDiv(86,GetRValue(colorA),100) + MulDiv(14,GetRValue(colorB),100);
@@ -400,7 +400,7 @@ COLORREF GetMixedColor(COLORREF colorA,COLORREF colorB)
 	return RGB( red,green,blue);
 }
 
-COLORREF GetMidColor(COLORREF colorA,COLORREF colorB)
+COLORREF SIMPLEAPI GetMidColor(COLORREF colorA,COLORREF colorB)
 { 
 	// (7a + 3b)/10
 	int red   = MulDiv(7,GetRValue(colorA),10) + MulDiv(3,GetRValue(colorB),10);
@@ -410,7 +410,7 @@ COLORREF GetMidColor(COLORREF colorA,COLORREF colorB)
 	return RGB( red, green, blue);
 }
 
-COLORREF GetXPHighlightColor(UINT uiState, COLORREF crBg) 
+COLORREF SIMPLEAPI GetXPHighlightColor(UINT uiState, COLORREF crBg) 
 {
 	ASSERT(uiState!=0);
 	BYTE bGamma, bAlpha;
@@ -447,7 +447,7 @@ COLORREF GetXPHighlightColor(UINT uiState, COLORREF crBg)
 #define RGBA(r,g,b,a)        ((COLORREF)(((BYTE)(b)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(r))<<16))|(((DWORD)(BYTE)(a))<<24))
 
 
-void PreMultiplyDib(HBITMAP hDIB)
+void SIMPLEAPI PreMultiplyDib(HBITMAP hDIB)
 {
 	DIBSECTION dib;
 	if (!GetObject(hDIB, sizeof(dib), &dib))
@@ -472,7 +472,7 @@ void PreMultiplyDib(HBITMAP hDIB)
 }
 
 // Convert a DIB to grayscale
-void GrayScaleDib(HBITMAP hDIB, COLORREF rgb, BYTE bBlend)
+void SIMPLEAPI GrayScaleDib(HBITMAP hDIB, COLORREF rgb, BYTE bBlend)
 {
 	DIBSECTION dib;
 	GetObject(hDIB, sizeof(dib), &dib);
@@ -503,7 +503,7 @@ void GrayScaleDib(HBITMAP hDIB, COLORREF rgb, BYTE bBlend)
 }
 
 // Convert a DIB to grayscale
-void ColorKeyDib(HBITMAP hDIB, COLORREF rgbColor)
+void SIMPLEAPI ColorKeyDib(HBITMAP hDIB, COLORREF rgbColor)
 {
 	rgbColor|=0xFF000000;
 
@@ -526,7 +526,7 @@ void ColorKeyDib(HBITMAP hDIB, COLORREF rgbColor)
 
 }
 // Convert a dib to a shadow by making all pixels black but 1/4 of original alpha
-void ShadowDib(HBITMAP hDIB)
+void SIMPLEAPI ShadowDib(HBITMAP hDIB)
 {
 	DIBSECTION dib;
 	GetObject(hDIB, sizeof(dib), &dib);
@@ -545,7 +545,7 @@ void ShadowDib(HBITMAP hDIB)
 
 }
 
-HBITMAP LoadAlphaDib(HINSTANCE hInstance, const wchar_t* pszResID, bool bPreMultiply)
+HBITMAP SIMPLEAPI LoadAlphaDib(HINSTANCE hInstance, const wchar_t* pszResID, bool bPreMultiply)
 {
 	HBITMAP hDIB=(HBITMAP)LoadImage(hInstance, pszResID, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
 	if (!hDIB)
@@ -557,7 +557,7 @@ HBITMAP LoadAlphaDib(HINSTANCE hInstance, const wchar_t* pszResID, bool bPreMult
 	return hDIB;
 }
 
-void AlphaBlt(HDC hdcDest, int x, int y, int cx, int cy,
+void SIMPLEAPI AlphaBlt(HDC hdcDest, int x, int y, int cx, int cy,
 				HDC hdcSrc, int sx, int sy, int scx, int scy, BYTE bAlpha)
 {
 	BLENDFUNCTION b;
@@ -570,7 +570,7 @@ void AlphaBlt(HDC hdcDest, int x, int y, int cx, int cy,
 }
 
 
-HIMAGELIST ImageList_LoadEx(HINSTANCE hInstance, const wchar_t* pszRes4, const wchar_t* pszRes32, COLORREF rgbMask, int cx)
+HIMAGELIST SIMPLEAPI ImageList_LoadEx(HINSTANCE hInstance, const wchar_t* pszRes4, const wchar_t* pszRes32, COLORREF rgbMask, int cx)
 {
 	// Limit to 16 color
 	CSmartHandle<HDC> hdcMem=CreateIC(L"display", NULL, NULL, NULL);
@@ -637,7 +637,7 @@ HIMAGELIST ImageList_LoadEx(HINSTANCE hInstance, const wchar_t* pszRes4, const w
 	}
 }
 
-HIMAGELIST ImageList_LoadGrayScale(HINSTANCE hInstance, const wchar_t* pszRes32, int cx, bool bShadow)
+HIMAGELIST SIMPLEAPI ImageList_LoadGrayScale(HINSTANCE hInstance, const wchar_t* pszRes32, int cx, bool bShadow)
 {
 	// If limited to 16, no grayscale
 	CSmartHandle<HDC> hdcMem=CreateIC(L"display", NULL, NULL, NULL);
@@ -773,7 +773,7 @@ HRGN CRgnData::Create()
 
 
 // Convert a DIB to grayscale
-HRGN CreateRegionFromAlphaChannel(HBITMAP hDIB, bool bConvex)
+HRGN SIMPLEAPI CreateRegionFromAlphaChannel(HBITMAP hDIB, bool bConvex)
 {
 	if (!hDIB)
 		return NULL;

@@ -21,7 +21,7 @@
 namespace Simple
 {
 
-HRESULT RecursiveCreateDirectory(const wchar_t* psz)
+HRESULT SIMPLEAPI RecursiveCreateDirectory(const wchar_t* psz)
 {
 	// Check if exists
 	DWORD dwAttribs=GetFileAttributes(psz);
@@ -93,7 +93,7 @@ bool IsFullyQualified(const wchar_t* pszPath)
 */
 
 // Get the system directory
-CUniString SlxGetSystemDirectory()
+CUniString SIMPLEAPI SlxGetSystemDirectory()
 {
 	OLECHAR sz[MAX_PATH];
 	GetSystemDirectory(sz, MAX_PATH);
@@ -101,7 +101,7 @@ CUniString SlxGetSystemDirectory()
 }
 
 // Get the file name of a module
-CUniString SlxGetModuleFileName(HMODULE hModule)
+CUniString SIMPLEAPI SlxGetModuleFileName(HMODULE hModule)
 {
 	OLECHAR sz[MAX_PATH];
 	GetModuleFileName(hModule, sz, MAX_PATH);
@@ -109,7 +109,7 @@ CUniString SlxGetModuleFileName(HMODULE hModule)
 }
 
 // Get the folder location of a module
-CUniString SlxGetModuleFolder(HMODULE hModule)
+CUniString SIMPLEAPI SlxGetModuleFolder(HMODULE hModule)
 {
 	CUniString str;
 	SplitPath(SlxGetModuleFileName(hModule), &str, NULL);

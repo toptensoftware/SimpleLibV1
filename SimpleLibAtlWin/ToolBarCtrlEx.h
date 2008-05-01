@@ -11,9 +11,9 @@
 namespace Simple
 {
 
-BOOL LoadToolBar(HWND hWndToolBar, HINSTANCE hInst, LPCTSTR pszResource, COLORREF rgbTransparent, HIMAGELIST* phImageList);
-BOOL LoadToolBar(HWND hWndToolBar, HINSTANCE hInst, LPCTSTR pszResource, LPCTSTR pszResource32, COLORREF rgbTransparent, HIMAGELIST* phImageList);
-void SetToolBarButtonLabel(HWND hWndToolBar, UINT nID, LPCTSTR pszLabel);
+BOOL SIMPLEAPI LoadToolBar(HWND hWndToolBar, HINSTANCE hInst, LPCTSTR pszResource, COLORREF rgbTransparent, HIMAGELIST* phImageList);
+BOOL SIMPLEAPI LoadToolBar(HWND hWndToolBar, HINSTANCE hInst, LPCTSTR pszResource, LPCTSTR pszResource32, COLORREF rgbTransparent, HIMAGELIST* phImageList);
+void SIMPLEAPI SetToolBarButtonLabel(HWND hWndToolBar, UINT nID, LPCTSTR pszLabel);
 
 class CToolBarCtrlEx : public ATLControls::CToolBarCtrl
 {

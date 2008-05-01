@@ -20,7 +20,7 @@
 namespace Simple
 {
 
-HRESULT CopyStream(IStream* pTarget, IStream* pSource, DWORD dwMaxLength=0xFFFFFFFF);
+HRESULT SIMPLEAPI CopyStream(IStream* pTarget, IStream* pSource, DWORD dwMaxLength=0xFFFFFFFF);
 
 }	// namespace Simple
 

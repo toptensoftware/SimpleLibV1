@@ -88,7 +88,7 @@ static void FillSolidRect(HDC hDC, const RECT& rc, COLORREF color)
 	::DeleteObject(::SelectObject(hDC, hbrOld));
 }
 
-static bool Draw3DCheckmark(HDC hDC, RECT* prc, COLORREF crBg)
+static bool SIMPLEAPI Draw3DCheckmark(HDC hDC, RECT* prc, COLORREF crBg)
 {
 #ifndef OBM_CHECK
 #define OBM_CHECK 32760 // from winuser.h

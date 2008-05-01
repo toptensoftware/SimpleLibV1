@@ -22,7 +22,7 @@
 namespace Simple
 {
 
-void SelectSingleItem(ATLControls::CListViewCtrl& ListView, int iItem)
+void SIMPLEAPI SelectSingleItem(ATLControls::CListViewCtrl& ListView, int iItem)
 {
 	int iSel=-1;
 	while  ( (iSel=ListView.GetNextItem(iSel, LVNI_SELECTED)) >= 0 )
@@ -35,7 +35,7 @@ void SelectSingleItem(ATLControls::CListViewCtrl& ListView, int iItem)
 }
 
 
-void SelectAllItems(ATLControls::CListViewCtrl& ListView)
+void SIMPLEAPI SelectAllItems(ATLControls::CListViewCtrl& ListView)
 {
 	for (int i=ListView.GetItemCount()-1; i>=0; i--)
 		{
@@ -43,7 +43,7 @@ void SelectAllItems(ATLControls::CListViewCtrl& ListView)
 		}
 }
 
-void ToggleCheckState(ATLControls::CListViewCtrl& ListView)
+void SIMPLEAPI ToggleCheckState(ATLControls::CListViewCtrl& ListView)
 {
 	// See if all selected items are checked
 	bool bAllSelected=true;
@@ -66,7 +66,7 @@ void ToggleCheckState(ATLControls::CListViewCtrl& ListView)
 }
 
 
-void LoadColumnWidths(ATLControls::CListViewCtrl& ListView, const wchar_t* pszSection, const wchar_t* pszPrefix)
+void SIMPLEAPI LoadColumnWidths(ATLControls::CListViewCtrl& ListView, const wchar_t* pszSection, const wchar_t* pszPrefix)
 {
 	OLECHAR szText[MAX_PATH];
 	ATLControls::CHeaderCtrl header=ListView.GetHeader();
@@ -88,7 +88,7 @@ void LoadColumnWidths(ATLControls::CListViewCtrl& ListView, const wchar_t* pszSe
 		}
 }
 
-void SaveColumnWidths(ATLControls::CListViewCtrl& ListView, const wchar_t* pszSection, const wchar_t* pszPrefix)
+void SIMPLEAPI SaveColumnWidths(ATLControls::CListViewCtrl& ListView, const wchar_t* pszSection, const wchar_t* pszPrefix)
 {
 	OLECHAR szText[MAX_PATH];
 	ATLControls::CHeaderCtrl header=ListView.GetHeader();

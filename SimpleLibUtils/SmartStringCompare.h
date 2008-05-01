@@ -7,7 +7,7 @@
 namespace Simple
 {
 
-int SmartStringCompare(const wchar_t* psz1, const wchar_t* psz2);
+int SIMPLEAPI SmartStringCompare(const wchar_t* psz1, const wchar_t* psz2);
 
 
 }	// namespace Simple

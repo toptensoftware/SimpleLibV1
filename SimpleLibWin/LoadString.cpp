@@ -23,7 +23,7 @@ namespace Simple
 
 extern HINSTANCE SlxGetResourceInstance();
 
-CUniString LoadString(UINT nID)
+CUniString SIMPLEAPI LoadString(UINT nID)
 {
 	CUniString str;
 	::LoadString(SlxGetResourceInstance(), nID, str.GetBuffer(MAX_PATH), MAX_PATH);

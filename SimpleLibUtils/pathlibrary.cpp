@@ -27,13 +27,13 @@ namespace Simple
 
 #define PATH_SEPARATOR	'\\'
 
-bool IsPathSeparator(wchar_t ch)
+bool SIMPLEAPI IsPathSeparator(wchar_t ch)
 {
 	return ch=='/' || ch=='\\';
 }
 
 // Remove the trailing backslash from a path (if any)
-void RemoveTrailingBackslash(wchar_t* pszPath)
+void SIMPLEAPI RemoveTrailingBackslash(wchar_t* pszPath)
 {
 	if (!pszPath)
 		return;
@@ -46,7 +46,7 @@ void RemoveTrailingBackslash(wchar_t* pszPath)
 }
 
 // Append two path strings, ensuring path separator character between them
-CUniString SimplePathAppend(const wchar_t* pszPath1, const wchar_t* pszPath2)
+CUniString SIMPLEAPI SimplePathAppend(const wchar_t* pszPath1, const wchar_t* pszPath2)
 {
 	size_t iLen1=CUniString::len(pszPath1);
 	size_t iLen2=CUniString::len(pszPath2);
@@ -74,7 +74,7 @@ CUniString SimplePathAppend(const wchar_t* pszPath1, const wchar_t* pszPath2)
 }
 
 // Fully qualify a path against the current working directory
-CUniString QualifyPath(const wchar_t* psz)
+CUniString SIMPLEAPI QualifyPath(const wchar_t* psz)
 {
 	CUniString str;
 	_wfullpath(str.GetBuffer(_MAX_PATH), psz, _MAX_PATH);
@@ -82,7 +82,7 @@ CUniString QualifyPath(const wchar_t* psz)
 }
 
 // Find the extension of a file name
-const wchar_t* FindExtension(const wchar_t* pszPath)
+const wchar_t* SIMPLEAPI FindExtension(const wchar_t* pszPath)
 {
 	if (!pszPath)
 		return NULL;
@@ -103,7 +103,7 @@ const wchar_t* FindExtension(const wchar_t* pszPath)
 }
 
 // Remove the extension from a file name
-void RemoveExtension(wchar_t* pszPath)
+void SIMPLEAPI RemoveExtension(wchar_t* pszPath)
 {
 	wchar_t* p=const_cast<wchar_t*>(FindExtension(pszPath));
 	if (p)
@@ -113,7 +113,7 @@ void RemoveExtension(wchar_t* pszPath)
 
 
 // Find the last element in a path
-const wchar_t* FindLastElement(const wchar_t* pszPath)
+const wchar_t* SIMPLEAPI FindLastElement(const wchar_t* pszPath)
 {
 	if (!pszPath)
 		return NULL;
@@ -133,7 +133,7 @@ const wchar_t* FindLastElement(const wchar_t* pszPath)
 
 
 // Remove the last element in a file name
-void RemoveLastElement(wchar_t* pszPath)
+void SIMPLEAPI RemoveLastElement(wchar_t* pszPath)
 {
 	wchar_t* p=const_cast<wchar_t*>(FindLastElement(pszPath));
 	if (p)
@@ -147,7 +147,7 @@ void RemoveLastElement(wchar_t* pszPath)
 	}
 }
 
-bool SplitPath(const wchar_t* pszPath, CUniString* pstrFolder, CUniString* pstrFileName)
+bool SIMPLEAPI SplitPath(const wchar_t* pszPath, CUniString* pstrFolder, CUniString* pstrFileName)
 {
 	const wchar_t* pszLastElement=FindLastElement(pszPath);
 	if (!pszLastElement || pszLastElement==pszPath)
@@ -166,7 +166,7 @@ bool SplitPath(const wchar_t* pszPath, CUniString* pstrFolder, CUniString* pstrF
 	return true;
 }
 
-CUniString ExtractFileTitle(const wchar_t* pszPath)
+CUniString SIMPLEAPI ExtractFileTitle(const wchar_t* pszPath)
 {
 	const wchar_t* pszLastElement=FindLastElement(pszPath);
 	if (!pszLastElement)
@@ -182,7 +182,7 @@ CUniString ExtractFileTitle(const wchar_t* pszPath)
 
 
 // Make a path canonical
-CUniString CanonicalizePath(const wchar_t* pszPath)
+CUniString SIMPLEAPI CanonicalizePath(const wchar_t* pszPath)
 {
 	if (!pszPath)
 		return NULL;
@@ -249,7 +249,7 @@ CUniString CanonicalizePath(const wchar_t* pszPath)
 	return str;
 }
 
-CUniString CanonicalPathAppend(const wchar_t* pszPath1, const wchar_t* pszPath2)
+CUniString SIMPLEAPI CanonicalPathAppend(const wchar_t* pszPath1, const wchar_t* pszPath2)
 {
 	if (IsFullyQualified(pszPath2))
 		return pszPath2;
@@ -258,7 +258,7 @@ CUniString CanonicalPathAppend(const wchar_t* pszPath1, const wchar_t* pszPath2)
 
 
 // Find the end of the drive or UNC part of a path
-const wchar_t* FindEndOfDrive(const wchar_t* pszPath)
+const wchar_t* SIMPLEAPI FindEndOfDrive(const wchar_t* pszPath)
 {
 	const wchar_t* p=pszPath;
 
@@ -297,12 +297,12 @@ const wchar_t* FindEndOfDrive(const wchar_t* pszPath)
 
 
 // Check if path contains drive or UNC part
-bool IsFullyQualified(const wchar_t* pszPath)
+bool SIMPLEAPI IsFullyQualified(const wchar_t* pszPath)
 {
 	return FindEndOfDrive(pszPath)!=NULL;
 }
 
-CUniString FindFileOnSearchPath(CVector<CUniString>& vecPath, const wchar_t* pszFileName)
+CUniString SIMPLEAPI FindFileOnSearchPath(CVector<CUniString>& vecPath, const wchar_t* pszFileName)
 {
 	if (IsEmptyString(pszFileName))
 		return NULL;
@@ -322,7 +322,7 @@ CUniString FindFileOnSearchPath(CVector<CUniString>& vecPath, const wchar_t* psz
 	return NULL;
 }
 
-bool DoesFileExist(const wchar_t* pszFileName)
+bool SIMPLEAPI DoesFileExist(const wchar_t* pszFileName)
 {
 	if (IsEmptyString(pszFileName))
 		return false;
@@ -334,7 +334,7 @@ bool DoesFileExist(const wchar_t* pszFileName)
 	return (s.st_mode & _S_IFREG)!=0;
 }
 
-bool DoesPathExist(const wchar_t* pszFileName)
+bool SIMPLEAPI DoesPathExist(const wchar_t* pszFileName)
 {
 	if (IsEmptyString(pszFileName))
 		return false;
@@ -347,7 +347,7 @@ bool DoesPathExist(const wchar_t* pszFileName)
 }
 
 
-CUniString FindFileOnSearchPath(const wchar_t* pszSearchPath, const wchar_t* pszFileName)
+CUniString SIMPLEAPI FindFileOnSearchPath(const wchar_t* pszSearchPath, const wchar_t* pszFileName)
 {
 	CVector<CUniString> vecPath;
 	SplitString(pszSearchPath, L";", vecPath);
@@ -355,14 +355,14 @@ CUniString FindFileOnSearchPath(const wchar_t* pszSearchPath, const wchar_t* psz
 }
 
 
-CUniString ChangeFileName(const wchar_t* pszFileName, const wchar_t* pszNewFileName)
+CUniString SIMPLEAPI ChangeFileName(const wchar_t* pszFileName, const wchar_t* pszNewFileName)
 {
 	CUniString strFolder;
 	SplitPath(pszFileName, &strFolder, NULL);
 	return SimplePathAppend(strFolder, pszNewFileName);
 }
 
-CUniString ChangeFileExtension(const wchar_t* pszFileName, const wchar_t* pszNewExtension)
+CUniString SIMPLEAPI ChangeFileExtension(const wchar_t* pszFileName, const wchar_t* pszNewExtension)
 {
 	const wchar_t* pszExt=FindExtension(pszFileName);
 	if (!pszExt)
@@ -376,7 +376,7 @@ CUniString ChangeFileExtension(const wchar_t* pszFileName, const wchar_t* pszNew
 }
 
 // Extract the drive letter or UNC machine/share part of a path
-CUniString ExtractDrive(const wchar_t* pszPath)
+CUniString SIMPLEAPI ExtractDrive(const wchar_t* pszPath)
 {
 	// Find end of drive
 	const wchar_t* pszEndOfDrive=FindEndOfDrive(pszPath);
@@ -396,7 +396,7 @@ bool LenICompare(const wchar_t* psz1, int iLen1, const wchar_t* psz2, int iLen2)
 	return _wcsnicmp(psz1, psz2, iLen1)==0;
 }
 
-const wchar_t* FindEndOfElement(const wchar_t* p)
+const wchar_t* SIMPLEAPI FindEndOfElement(const wchar_t* p)
 {
 	// Find end of part
 	while (p[0] && p[0]!=L'\\')
@@ -409,7 +409,7 @@ const wchar_t* FindEndOfElement(const wchar_t* p)
 // Both pszPath1, and pszPath2 should be fully qualified paths
 // Does support c:path	must be c:\path
 // pszPath1 must be a folder, pszPath2 can be file or folder.
-CUniString FindRelativePath(const wchar_t* pszPath1, const wchar_t* pszPath2)
+CUniString SIMPLEAPI FindRelativePath(const wchar_t* pszPath1, const wchar_t* pszPath2)
 {
 	if (!IsFullyQualified(pszPath1) || !IsFullyQualified(pszPath2))
 		return pszPath2;

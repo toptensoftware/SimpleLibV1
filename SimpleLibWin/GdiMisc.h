@@ -20,23 +20,23 @@
 namespace Simple
 {
 // Create a 1 pixel dither brush
-HBRUSH CreatePatternBrush(LPBYTE pBits);
-HBRUSH CreateDitherBrush();
+HBRUSH SIMPLEAPI CreatePatternBrush(LPBYTE pBits);
+HBRUSH SIMPLEAPI CreateDitherBrush();
 
 // Various FillRect overloads
-void FillRect(HDC hDC, int l, int t, int r, int b, HBRUSH hbr);
-void FillHLine(HDC hDC, int l, int r, int y, HBRUSH hbr);
-void FillVLine(HDC hDC, int t, int b, int x, HBRUSH hbr);
+void SIMPLEAPI FillRect(HDC hDC, int l, int t, int r, int b, HBRUSH hbr);
+void SIMPLEAPI FillHLine(HDC hDC, int l, int r, int y, HBRUSH hbr);
+void SIMPLEAPI FillVLine(HDC hDC, int t, int b, int x, HBRUSH hbr);
 
 // Xor horizontal/vertical linke
-void XorVLine(HDC hDC, int t, int b, int x);
-void XorHLine(HDC hDC, int l, int r, int y);
+void SIMPLEAPI XorVLine(HDC hDC, int t, int b, int x);
+void SIMPLEAPI XorHLine(HDC hDC, int l, int r, int y);
 
 // Calculate the difference between two rectangle (if can)
 // Returns false if can't
-BOOL DifferenceRect(RECT* prcDest, RECT* prcA, RECT* prcB);
+BOOL SIMPLEAPI DifferenceRect(RECT* prcDest, RECT* prcA, RECT* prcB);
 
-void AlphaFill(HDC hDC, RECT* prc, COLORREF rgb, BYTE bAlpha);
+void SIMPLEAPI AlphaFill(HDC hDC, RECT* prc, COLORREF rgb, BYTE bAlpha);
 
 }	// namespace Simple
 

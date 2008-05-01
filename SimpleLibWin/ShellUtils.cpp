@@ -26,7 +26,7 @@ namespace Simple
 
 #pragma comment(lib, "Shell32.lib")
 
-HRESULT GetSpecialFolderLocation(int i, const wchar_t* pszSubFolder, bool bCreate, CUniString& str)
+HRESULT SIMPLEAPI GetSpecialFolderLocation(int i, const wchar_t* pszSubFolder, bool bCreate, CUniString& str)
 {
 	CAutoPtr<IMalloc, SRefCounted> spMalloc;
 	SHGetMalloc(&spMalloc);
@@ -69,7 +69,7 @@ static int CALLBACK BrowseFolderCallback(HWND hWnd, UINT msg, LPARAM lParam, LPA
 	return 0;
 }
 						
-LPITEMIDLIST GetItemIDFromPath(const wchar_t* pszPath)
+LPITEMIDLIST SIMPLEAPI GetItemIDFromPath(const wchar_t* pszPath)
 {
 	if (!pszPath)
 		return NULL;
@@ -94,7 +94,7 @@ LPITEMIDLIST GetItemIDFromPath(const wchar_t* pszPath)
 }
 
 
-HRESULT BrowseForFolder(HWND hWndParent, const wchar_t* pszTitle, const wchar_t* pszInitialDir, CUniString& str)
+HRESULT SIMPLEAPI BrowseForFolder(HWND hWndParent, const wchar_t* pszTitle, const wchar_t* pszInitialDir, CUniString& str)
 {
 	CAutoPtr<IMalloc, SRefCounted> spMalloc;
 	SHGetMalloc(&spMalloc);

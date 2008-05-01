@@ -22,9 +22,9 @@ namespace Simple
 
 #pragma comment(lib, "Shell32.lib")
 
-HRESULT GetSpecialFolderLocation(int i, const wchar_t* pszSubFolder, bool bCreate, CUniString& str);
-LPITEMIDLIST GetItemIDFromPath(const wchar_t* pszPath);
-HRESULT BrowseForFolder(HWND hWndParent, const wchar_t* pszTitle, const wchar_t* pszInitialDir, CUniString& bstrPath);
+HRESULT SIMPLEAPI GetSpecialFolderLocation(int i, const wchar_t* pszSubFolder, bool bCreate, CUniString& str);
+LPITEMIDLIST SIMPLEAPI GetItemIDFromPath(const wchar_t* pszPath);
+HRESULT SIMPLEAPI BrowseForFolder(HWND hWndParent, const wchar_t* pszTitle, const wchar_t* pszInitialDir, CUniString& bstrPath);
 
 }	// namespace Simple
 

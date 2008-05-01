@@ -20,11 +20,11 @@
 namespace Simple
 {
 
-DATE Now();
-VARIANT NowVariant();
-DATE NowGMT();
-VARIANT NowGMTVariant();
-VARIANT DateAsVariant(DATE d);
+DATE SIMPLEAPI Now();
+VARIANT SIMPLEAPI NowVariant();
+DATE SIMPLEAPI NowGMT();
+VARIANT SIMPLEAPI NowGMTVariant();
+VARIANT SIMPLEAPI DateAsVariant(DATE d);
 
 
 }	// namespace Simple

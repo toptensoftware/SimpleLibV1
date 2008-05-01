@@ -10,8 +10,8 @@ namespace Simple
 
 
 // Create/open a stream on a registry key
-HRESULT CreateRegistryStream(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValueName, IStream** pVal);
-HRESULT OpenRegistryStream(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValueName, IStream** pVal);
+HRESULT SIMPLEAPI CreateRegistryStream(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValueName, IStream** pVal);
+HRESULT SIMPLEAPI OpenRegistryStream(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValueName, IStream** pVal);
 
 }	// namespace Simple
 

@@ -23,7 +23,7 @@
 namespace Simple
 {
 
-void MakeFormatEtc(UINT cf, FORMATETC* pfetc)
+void SIMPLEAPI MakeFormatEtc(UINT cf, FORMATETC* pfetc)
 {
 	pfetc->cfFormat=cf;
 	pfetc->dwAspect=DVASPECT_CONTENT;

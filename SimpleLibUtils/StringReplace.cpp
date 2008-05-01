@@ -25,7 +25,7 @@ namespace Simple
 
 
 // String replace helper
-CUniString StringReplace(const wchar_t* pszIn, const wchar_t* pszFind, const wchar_t* pszReplace, bool bCaseSensitive, int iStartAt, int iMaxReplace)
+CUniString SIMPLEAPI StringReplace(const wchar_t* pszIn, const wchar_t* pszFind, const wchar_t* pszReplace, bool bCaseSensitive, int iStartAt, int iMaxReplace)
 {
 	// NULL search string
 	if (!pszIn)

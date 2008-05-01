@@ -19,7 +19,7 @@
 namespace Simple
 {
 
-void ADX_Text(CADXExchange* pDX, int nIDC, CComBSTR& str)
+void SIMPLEAPI ADX_Text(CADXExchange* pDX, int nIDC, CComBSTR& str)
 {
 	// Get the control
 	HWND hWnd=pDX->PrepareControl(nIDC);

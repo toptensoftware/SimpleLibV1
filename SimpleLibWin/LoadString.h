@@ -21,7 +21,7 @@
 namespace Simple
 {
 
-CUniString LoadString(UINT nID);
+CUniString SIMPLEAPI LoadString(UINT nID);
 
 
 }	// namespace Simple

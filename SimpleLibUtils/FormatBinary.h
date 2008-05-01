@@ -20,11 +20,11 @@
 namespace Simple
 {
 
-wchar_t ToHex(int iNibble);
-unsigned char FromHex(wchar_t ch);
-CUniString FormatBinaryData(unsigned char* pData, size_t cb, int iBytesPerLine);
-bool UnformatBinaryData(const wchar_t* psz, unsigned char** ppData, size_t* pcb);
-size_t UnformatBinaryData(const wchar_t* psz, unsigned char* pData, size_t cbData);
+wchar_t SIMPLEAPI ToHex(int iNibble);
+unsigned char SIMPLEAPI FromHex(wchar_t ch);
+CUniString SIMPLEAPI FormatBinaryData(unsigned char* pData, size_t cb, int iBytesPerLine);
+bool SIMPLEAPI UnformatBinaryData(const wchar_t* psz, unsigned char** ppData, size_t* pcb);
+size_t SIMPLEAPI UnformatBinaryData(const wchar_t* psz, unsigned char* pData, size_t cbData);
 
 }	// namespace Simple
 

@@ -25,7 +25,7 @@ namespace Simple
 #include "wininet.h"
 #pragma comment(lib, "wininet.lib")
 
-bool DoWebRequest(const wchar_t* pszUrl, CUniString& str)
+bool SIMPLEAPI DoWebRequest(const wchar_t* pszUrl, CUniString& str)
 {
 	// Check connected
 	DWORD dw;

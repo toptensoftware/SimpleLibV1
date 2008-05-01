@@ -70,6 +70,7 @@
 
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#define SIMPLEAPI __stdcall
 #include <intrin.h>
 #ifdef _M_IX86
 #pragma intrinsic(_InterlockedCompareExchange)
@@ -91,6 +92,10 @@ inline void* _InterlockedCompareExchangePointer(void** volatile pDest, void* pEx
 #endif
 #else
 #define _SIMPLELIB_NO_COMPAREANDEXCHANGE
+#endif
+
+#ifndef SIMPLEAPI
+#define SIMPLEAPI
 #endif
 
 #if defined(_MSC_VER) && (_MSC_VER < 1300)
@@ -401,15 +406,15 @@ template <> inline CString<wchar_t> t2t<wchar_t, char>(const char* psz, int iLen
 
 
 template <class T>
-int Compare(const T& a, const T& b)
+int _cdecl Compare(const T& a, const T& b)
 {
 	return a > b ? 1 : a < b ? -1 : 0;
 }
 
 inline int Compare(const char* psz1, const char* psz2)			{ return strcmp(psz1, psz2); }
 inline int Compare(const wchar_t* psz1, const wchar_t* psz2)	{ return wcscmp(psz1, psz2); }
-inline int CompareI(const char* psz1, const char* psz2)			{ return _stricmp(psz1, psz2); }
-inline int CompareI(const wchar_t* psz1, const wchar_t* psz2)	{ return _wcsicmp(psz1, psz2); }
+inline int __cdecl CompareI(const char* psz1, const char* psz2)			{ return _stricmp(psz1, psz2); }
+inline int __cdecl CompareI(const wchar_t* psz1, const wchar_t* psz2)	{ return _wcsicmp(psz1, psz2); }
 
 template <class T>
 int Compare(Simple::CString<T> const& str1, Simple::CString<T> const& str2)
@@ -418,7 +423,7 @@ int Compare(Simple::CString<T> const& str1, Simple::CString<T> const& str2)
 }
 
 template <class T>
-int CompareI(Simple::CString<T> const& str1, Simple::CString<T> const& str2)
+int __cdecl CompareI(Simple::CString<T> const& str1, Simple::CString<T> const& str2)
 {
 	return CompareI(static_cast<const T*>(str1), static_cast<const T*>(str2));
 }
@@ -468,7 +473,7 @@ public:
 		{ }
 	
 	template <class T1, class T2>
-	static int Compare(const T1& a, const T2& b)
+	static int __cdecl Compare(const T1& a, const T2& b)
 		{ return ::Compare(a,b); }
 
 };
@@ -490,7 +495,7 @@ public:
 		{ }
 
 	template <class T>
-	static int Compare(const T& a, const T& b)
+	static int __cdecl Compare(const T& a, const T& b)
 		{ return ::Compare(a,b); }
 
 };
@@ -602,24 +607,24 @@ public:
 // Search and sort
 	int Find(const TArg& val, int iStartAfter=-1) const;
 	void QuickSort();
-	void QuickSort(int (*pfnCompare)(T const& a, T const& b));
+	void QuickSort(int (_cdecl *pfnCompare)(T const& a, T const& b));
 #if defined(_MSC_VER) && (_MSC_VER>=1400)
-	void QuickSort(int (*pfnCompare)(void* ctx, T const& a, T const& b), void* ctx);
+	void QuickSort(int (__cdecl *pfnCompare)(void* ctx, T const& a, T const& b), void* ctx);
 #endif
 	bool QuickSearch(const TArg& key, int& iPosition) const;
-	bool QuickSearch(const TArg& key, int (*pfnCompare)(T const& a, TArg const& b), int& iPosition) const;
-	bool QuickSearch(const TArg& key, void* ctx, int (*pfnCompare)(void* ctx, T const& a, TArg const& b), int& iPosition) const;
+	bool QuickSearch(const TArg& key, int (__cdecl *pfnCompare)(T const& a, TArg const& b), int& iPosition) const;
+	bool QuickSearch(const TArg& key, void* ctx, int (__cdecl *pfnCompare)(void* ctx, T const& a, TArg const& b), int& iPosition) const;
 
 // FindKey and QuickSearchKey allow search by a key that is a different type than the vector elements
 //			eg: useful for searching on member variable of a the vector element type.
 	template <class TKey>
-	int FindKey(TKey key, int (*pfnCompare)(T const& a, TKey b), int iStartAfter=-1) const;
+	int FindKey(TKey key, int (__cdecl *pfnCompare)(T const& a, TKey b), int iStartAfter=-1) const;
 	template <class TKey>
-	bool QuickSearchKey(TKey key, int (*pfnCompare)(T const& a, TKey b), int& iPosition) const;
+	bool QuickSearchKey(TKey key, int (__cdecl *pfnCompare)(T const& a, TKey b), int& iPosition) const;
 	template <class TKey>
-	int FindKey(TKey key, void* ctx, int (*pfnCompare)(void* ctx, T const& a, TKey b), int iStartAfter=-1) const;
+	int FindKey(TKey key, void* ctx, int (__cdecl *pfnCompare)(void* ctx, T const& a, TKey b), int iStartAfter=-1) const;
 	template <class TKey>
-	bool QuickSearchKey(TKey key, void* ctx, int (*pfnCompare)(void* ctx, T const& a, TKey b), int& iPosition) const;
+	bool QuickSearchKey(TKey key, void* ctx, int (__cdecl *pfnCompare)(void* ctx, T const& a, TKey b), int& iPosition) const;
 
 
 
@@ -662,12 +667,12 @@ public:
 	CUniStringVector() {};
 	virtual ~CUniStringVector() {};
 
-	static int FindFunc(const CUniString& a, const wchar_t* psz)
+	static int __cdecl FindFunc(const CUniString& a, const wchar_t* psz)
 	{
 		return wcscmp(a, psz);
 	}
 
-	static int FindFuncI(const CUniString& a, const wchar_t* psz)
+	static int __cdecl FindFuncI(const CUniString& a, const wchar_t* psz)
 	{
 		return _wcsicmp(a, psz);
 	}
@@ -723,17 +728,17 @@ public:
 	bool IsEmpty() const;
 	bool QuickSearch(const TArg& key, int& iPosition) const;
 	int Find(const TArg& key) const;
-	void Resort(int (*pfnCompare)(const T& a, const T& b), bool bAllowDuplicates=true);
+	void Resort(int (_cdecl *pfnCompare)(const T& a, const T& b), bool bAllowDuplicates=true);
 #if defined(_MSC_VER) && (_MSC_VER>=1400)
-	void Resort(void* ctx, int (*pfnCompare)(void* ctx, const T& a, const T& b), bool bAllowDuplicates=true);
+	void Resort(void* ctx, int (__cdecl *pfnCompare)(void* ctx, const T& a, const T& b), bool bAllowDuplicates=true);
 #endif
 	template <class TKey>
-	bool FindKey(TKey key, int (*pfnCompare)(T const& a, TKey b), int& iPos) const
+	bool FindKey(TKey key, int (__cdecl *pfnCompare)(T const& a, TKey b), int& iPos) const
 	{
 		return m_vec.QuickSearchKey(key, pfnCompare, iPos);
 	}
 	template <class TKey>
-	bool FindKey(TKey key, void* ctx, int (*pfnCompare)(void* ctx, T const& a, TKey b), int& iPos) const
+	bool FindKey(TKey key, void* ctx, int (__cdecl *pfnCompare)(void* ctx, T const& a, TKey b), int& iPos) const
 	{
 		return m_vec.QuickSearchKey(key, ctx, pfnCompare, iPos);
 	}
@@ -741,9 +746,9 @@ public:
 private:
 	CVector<T,TSem,TArg>		m_vec;
 	bool						m_bAllowDuplicates;
-	int (*m_pfnCompare)(const T& a, const T& b);
+	int (__cdecl *m_pfnCompare)(const T& a, const T& b);
 #if defined(_MSC_VER) && (_MSC_VER>=1400)
-	int (*m_pfnCompareEx)(void* ctx, const T& a, const T& b);
+	int (__cdecl *m_pfnCompareEx)(void* ctx, const T& a, const T& b);
 	void*						m_ctx;
 #endif
 	CSortedVector(const CSortedVector& Other);

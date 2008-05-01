@@ -24,7 +24,7 @@ namespace Simple
 {
 
 
-DATE Now()
+DATE SIMPLEAPI Now()
 {
 	SYSTEMTIME st;
 	GetLocalTime(&st);
@@ -34,7 +34,7 @@ DATE Now()
 	return d;
 }
 
-DATE NowGMT()
+DATE SIMPLEAPI NowGMT()
 {
 	SYSTEMTIME st;
 	GetSystemTime(&st);
@@ -44,7 +44,7 @@ DATE NowGMT()
 	return d;
 }
 
-VARIANT NowVariant()
+VARIANT SIMPLEAPI NowVariant()
 {
 	VARIANT v;
 	V_VT(&v)=VT_DATE;
@@ -52,7 +52,7 @@ VARIANT NowVariant()
 	return v;
 }
 
-VARIANT NowGMTVariant()
+VARIANT SIMPLEAPI NowGMTVariant()
 {
 	VARIANT v;
 	V_VT(&v)=VT_DATE;
@@ -61,7 +61,7 @@ VARIANT NowGMTVariant()
 }
 
 
-VARIANT DateAsVariant(DATE d)
+VARIANT SIMPLEAPI DateAsVariant(DATE d)
 {
 	VARIANT v;
 	V_VT(&v)=VT_DATE;

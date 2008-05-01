@@ -21,7 +21,7 @@
 namespace Simple
 {
 
-CUniString GetWindowText(HWND hWnd)
+CUniString SIMPLEAPI GetWindowText(HWND hWnd)
 {
 	CUniString str;
 	int iLen=GetWindowTextLength(hWnd);
@@ -29,7 +29,7 @@ CUniString GetWindowText(HWND hWnd)
 	return str;
 }
 
-CUniString GetDlgItemText(HWND hWnd, int iID)
+CUniString SIMPLEAPI GetDlgItemText(HWND hWnd, int iID)
 {
 	return GetWindowText(GetDlgItem(hWnd, iID));
 }
@@ -83,7 +83,7 @@ void CADXExchange::SetErrorCaption(const wchar_t* pszCaption)
 
 
 // Simple text exchange
-void ADX_Text(CADXExchange* pDX, int nIDC, CUniString& str)
+void SIMPLEAPI ADX_Text(CADXExchange* pDX, int nIDC, CUniString& str)
 {
 	// Get the control
 	HWND hWnd=pDX->PrepareControl(nIDC);
@@ -99,7 +99,7 @@ void ADX_Text(CADXExchange* pDX, int nIDC, CUniString& str)
 };
 
 // Integer text exchange
-void ADX_Text(CADXExchange* pDX, int nIDC, int& iVal)
+void SIMPLEAPI ADX_Text(CADXExchange* pDX, int nIDC, int& iVal)
 {
 	CUniString str;
 
@@ -129,7 +129,7 @@ void ADX_Text(CADXExchange* pDX, int nIDC, int& iVal)
 };
 
 // Unsigned integer text exchange
-void ADX_Text(CADXExchange* pDX, unsigned int nIDC, unsigned int& iVal)
+void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, unsigned int& iVal)
 {
 	CUniString str;
 
@@ -160,7 +160,7 @@ void ADX_Text(CADXExchange* pDX, unsigned int nIDC, unsigned int& iVal)
 
 
 // Double text exchange
-void ADX_Text(CADXExchange* pDX, unsigned int nIDC, double& dblVal)
+void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, double& dblVal)
 {
 	CUniString str;
 
@@ -190,7 +190,7 @@ void ADX_Text(CADXExchange* pDX, unsigned int nIDC, double& dblVal)
 
 
 // Check that a string has been entered
-void ADX_Required(CADXExchange* pDX, const wchar_t* psz)
+void SIMPLEAPI ADX_Required(CADXExchange* pDX, const wchar_t* psz)
 {
 	// Quit if not saving or already have an error
 	if (!pDX->m_bSave || !pDX->m_bOK)
@@ -205,7 +205,7 @@ void ADX_Required(CADXExchange* pDX, const wchar_t* psz)
 
 
 // Get the buddy up/down control associated with a control
-HWND GetBuddyControl(HWND hWnd)
+HWND SIMPLEAPI GetBuddyControl(HWND hWnd)
 {
 	HWND hWndBuddy=GetWindow(hWnd, GW_HWNDNEXT);
 	if (!hWndBuddy)
@@ -232,7 +232,7 @@ HWND GetBuddyControl(HWND hWnd)
 }
 
 // Validate the range of an integer number, also sets the range on buddy up/down if found
-void ADX_RangeInt(CADXExchange* pDX, int iValue, int iMin, int iMax)
+void SIMPLEAPI ADX_RangeInt(CADXExchange* pDX, int iValue, int iMin, int iMax)
 {
 	if (!pDX->m_bSave)
 		{
@@ -252,7 +252,7 @@ void ADX_RangeInt(CADXExchange* pDX, int iValue, int iMin, int iMax)
 }
 
 // Validate the range of an unsigned integer number, also sets the range on buddy up/down if found
-void ADX_RangeUInt(CADXExchange* pDX, unsigned int iValue, unsigned int iMin, unsigned int iMax)
+void SIMPLEAPI ADX_RangeUInt(CADXExchange* pDX, unsigned int iValue, unsigned int iMin, unsigned int iMax)
 {
 	if (!pDX->m_bSave)
 		{
@@ -272,7 +272,7 @@ void ADX_RangeUInt(CADXExchange* pDX, unsigned int iValue, unsigned int iMin, un
 }
 
 // Check that an integer number is greater than/less than and/or equal to a value
-void ADX_LimitInt(CADXExchange* pDX, int Value, int iLimit, bool bMustBeGreater, bool bInclusive)
+void SIMPLEAPI ADX_LimitInt(CADXExchange* pDX, int Value, int iLimit, bool bMustBeGreater, bool bInclusive)
 {
 	if (!pDX->m_bSave)
 		return;
@@ -298,7 +298,7 @@ void ADX_LimitInt(CADXExchange* pDX, int Value, int iLimit, bool bMustBeGreater,
 }
 
 // Check that an unsigned integer number is greater than/less than and/or equal to a value
-void ADX_LimitUInt(CADXExchange* pDX, unsigned int Value, unsigned int iLimit, bool bMustBeGreater, bool bInclusive)
+void SIMPLEAPI ADX_LimitUInt(CADXExchange* pDX, unsigned int Value, unsigned int iLimit, bool bMustBeGreater, bool bInclusive)
 {
 	if (!pDX->m_bSave)
 		return;
@@ -324,7 +324,7 @@ void ADX_LimitUInt(CADXExchange* pDX, unsigned int Value, unsigned int iLimit, b
 }
 
 // Check that a double value is within range
-void ADX_RangeDouble(CADXExchange* pDX, double dblValue, double dblMin, double dblMax)
+void SIMPLEAPI ADX_RangeDouble(CADXExchange* pDX, double dblValue, double dblMin, double dblMax)
 {
 	if (!pDX->m_bSave)
 		return;
@@ -336,7 +336,7 @@ void ADX_RangeDouble(CADXExchange* pDX, double dblValue, double dblMin, double d
 }
 
 // Check that a double number is greater than/less than and/or equal to a value
-void ADX_LimitDouble(CADXExchange* pDX, double Value, double dblLimit, bool bMustBeGreater, bool bInclusive)
+void SIMPLEAPI ADX_LimitDouble(CADXExchange* pDX, double Value, double dblLimit, bool bMustBeGreater, bool bInclusive)
 {
 	if (!pDX->m_bSave)
 		return;
@@ -361,7 +361,7 @@ void ADX_LimitDouble(CADXExchange* pDX, double Value, double dblLimit, bool bMus
 }
 
 // Simple check box exchange
-void ADX_CheckBox(CADXExchange* pDX, int nIDC, int& iValue)
+void SIMPLEAPI ADX_CheckBox(CADXExchange* pDX, int nIDC, int& iValue)
 {
 	// Get the control
 	HWND hWnd=pDX->PrepareControl(nIDC);
@@ -382,7 +382,7 @@ void ADX_CheckBox(CADXExchange* pDX, int nIDC, int& iValue)
 		}
 }
 
-void ADX_CheckBox(CADXExchange* pDX, int nIDC, VARIANT_BOOL& bValue)
+void SIMPLEAPI ADX_CheckBox(CADXExchange* pDX, int nIDC, VARIANT_BOOL& bValue)
 {
 	// Get the control
 	HWND hWnd=pDX->PrepareControl(nIDC);
@@ -397,7 +397,7 @@ void ADX_CheckBox(CADXExchange* pDX, int nIDC, VARIANT_BOOL& bValue)
 		}
 }
 
-void ADX_CheckBox(CADXExchange* pDX, int nIDC, bool& bValue)
+void SIMPLEAPI ADX_CheckBox(CADXExchange* pDX, int nIDC, bool& bValue)
 {
 	VARIANT_BOOL b=BOOL2VBOOL(bValue);
 	ADX_CheckBox(pDX, nIDC, b);
@@ -412,7 +412,7 @@ void ADX_CheckBox(CADXExchange* pDX, int nIDC, bool& bValue)
 // Helper function to add a \n separated list of strings
 // to either a list box or combo box.  msg_ADDSTRING should be either
 // LB_ADDSTRING or CB_ADDSTRING
-void ADX_AddListItems(HWND hWnd, const wchar_t* pszItems, UINT msg_ADDSTRING)
+void SIMPLEAPI ADX_AddListItems(HWND hWnd, const wchar_t* pszItems, UINT msg_ADDSTRING)
 {
 	// Quit if not specified...
 	if (!pszItems)
@@ -447,7 +447,7 @@ void ADX_AddListItems(HWND hWnd, const wchar_t* pszItems, UINT msg_ADDSTRING)
 }
 
 // Exchange list box index, optionally adding items to the list first...
-void ADX_CBIndex(CADXExchange* pDX, int nIDC, int& iIndex, const wchar_t* pszItems)
+void SIMPLEAPI ADX_CBIndex(CADXExchange* pDX, int nIDC, int& iIndex, const wchar_t* pszItems)
 {
 	HWND hWnd=pDX->PrepareControl(nIDC);
 
@@ -471,7 +471,7 @@ void ADX_CBIndex(CADXExchange* pDX, int nIDC, int& iIndex, const wchar_t* pszIte
 };
 
 
-void ADX_CBData(CADXExchange* pDX, int nIDC, LPARAM& lData)
+void SIMPLEAPI ADX_CBData(CADXExchange* pDX, int nIDC, LPARAM& lData)
 {
 	HWND hWnd=pDX->PrepareControl(nIDC);
 	if (!pDX->m_bSave)
@@ -505,7 +505,7 @@ void ADX_CBData(CADXExchange* pDX, int nIDC, LPARAM& lData)
 		}
 }
 
-void ADX_LBData(CADXExchange* pDX, int nIDC, LPARAM& lData)
+void SIMPLEAPI ADX_LBData(CADXExchange* pDX, int nIDC, LPARAM& lData)
 {
 	HWND hWnd=pDX->PrepareControl(nIDC);
 	if (!pDX->m_bSave)
@@ -540,7 +540,7 @@ void ADX_LBData(CADXExchange* pDX, int nIDC, LPARAM& lData)
 }
 
 // Exchange list box index, optionally adding items to the list first...
-void ADX_LBIndex(CADXExchange* pDX, int nIDC, int& iIndex, const wchar_t* pszItems)
+void SIMPLEAPI ADX_LBIndex(CADXExchange* pDX, int nIDC, int& iIndex, const wchar_t* pszItems)
 {
 	HWND hWnd=pDX->PrepareControl(nIDC);
 
@@ -564,7 +564,7 @@ void ADX_LBIndex(CADXExchange* pDX, int nIDC, int& iIndex, const wchar_t* pszIte
 };
 
 // Exchange selected radio button
-void ADX_Radio(CADXExchange* pDX, int nIDC, int& value)
+void SIMPLEAPI ADX_Radio(CADXExchange* pDX, int nIDC, int& value)
 {
 	HWND hWnd=pDX->PrepareControl(nIDC);
 	ASSERT(GetWindowLong(hWnd, GWL_STYLE) & WS_GROUP);			// Must start with a group	
@@ -610,7 +610,7 @@ void ADX_Radio(CADXExchange* pDX, int nIDC, int& value)
 }
 
 
-void ADX_CheckBit(CADXExchange* pDX, int nIDC, DWORD& iValue, DWORD iBit)
+void SIMPLEAPI ADX_CheckBit(CADXExchange* pDX, int nIDC, DWORD& iValue, DWORD iBit)
 {
 	bool bValue=(iValue & iBit)!=0;
 	ADX_CheckBox(pDX, nIDC, bValue);
@@ -623,7 +623,7 @@ void ADX_CheckBit(CADXExchange* pDX, int nIDC, DWORD& iValue, DWORD iBit)
 
 // Generic validation function.  If bCondition isn't true, pszMessage is displayed
 // and focus set back to control nIDC.
-void ADX_Validate(CADXExchange* pDX, int nIDC, bool bCondition, const wchar_t* pszMessage)
+void SIMPLEAPI ADX_Validate(CADXExchange* pDX, int nIDC, bool bCondition, const wchar_t* pszMessage)
 {
 	if (!pDX->m_bSave || bCondition)
 		return;

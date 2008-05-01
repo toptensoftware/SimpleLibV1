@@ -413,7 +413,7 @@ LRESULT CMenuBar::OnLButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 #define WM_NCMOUSEFIRST WM_NCMOUSEMOVE
 #define WM_NCMOUSELAST  WM_NCMBUTTONDBLCLK
 
-static bool IsInputMessage(UINT msg)
+static bool SIMPLEAPI IsInputMessage(UINT msg)
 {
 	if ((msg>=WM_MOUSEFIRST) && (msg<=WM_MOUSELAST)) return TRUE;
 	if ((msg>=WM_NCMOUSEFIRST) && (msg<=WM_NCMOUSELAST)) return TRUE;
@@ -1040,12 +1040,12 @@ HMENU CMenuBar::GetSubMenu(int iIndex)
 
 
 
-void RegisterMenuBar()
+void SIMPLEAPI RegisterMenuBar()
 {
 	CMenuBar::Register();
 }
 
-void UnregisterMenuBar()
+void SIMPLEAPI UnregisterMenuBar()
 {
 	CMenuBar::Unregister();
 }

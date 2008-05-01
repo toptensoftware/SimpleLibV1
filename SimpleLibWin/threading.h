@@ -21,10 +21,12 @@ public:
 	{
 		DeleteCriticalSection(this);
 	}
+#if (_WIN32_WINNT >= 0x0403)
 	void SetSpinCount(DWORD dwSpinCount=4000)
 	{
 		SetCriticalSectionSpinCount(this, dwSpinCount);
 	}
+#endif
 };
 class CEnterCriticalSection
 {

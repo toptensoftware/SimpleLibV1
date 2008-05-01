@@ -26,8 +26,8 @@ typedef void* HCALLBACKTIMER;
 #define CBT_ONESHOT		0x00000001
 #define CBT_AUTORELEASE	0x00000002
 
-HCALLBACKTIMER SetCallbackTimer(UINT nPeriod, DWORD dwFlags, CALLBACKTIMERPROC pfnCallback, LPARAM lUserData);
-void KillCallbackTimer(HCALLBACKTIMER hTimer);
+HCALLBACKTIMER SIMPLEAPI SetCallbackTimer(UINT nPeriod, DWORD dwFlags, CALLBACKTIMERPROC pfnCallback, LPARAM lUserData);
+void SIMPLEAPI KillCallbackTimer(HCALLBACKTIMER hTimer);
 
 }	// namespace Simple
 

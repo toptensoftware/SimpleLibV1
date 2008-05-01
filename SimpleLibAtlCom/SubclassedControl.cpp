@@ -180,7 +180,7 @@ LRESULT CALLBACK ParentSubClassProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
 
 // Subclass parent window of control to reflect messages (easier than
 // creating a parking window!)
-void SubclassedControlSubclassParent(HWND hWndParent, HWND hWndControl)
+void SIMPLEAPI SubclassedControlSubclassParent(HWND hWndParent, HWND hWndControl)
 {
 	// Get control parent info
 	CONTROLPARENTINFO* pInfo=GetParentInfo(hWndParent);
@@ -236,7 +236,7 @@ void SubclassedControlSubclassParent(HWND hWndParent, HWND hWndControl)
 
 
 // Unsubclass parent window
-void SubclassedControlUnsubclassParent(HWND hWndParent, HWND hWndControl)
+void SIMPLEAPI SubclassedControlUnsubclassParent(HWND hWndParent, HWND hWndControl)
 {
 	// Get control parent info
 	CONTROLPARENTINFO* pInfo=GetParentInfo(hWndParent);

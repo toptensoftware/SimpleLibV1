@@ -23,7 +23,7 @@
 namespace Simple
 {
 
-HBITMAP GetControlImage(LPCOLESTR pszCLSID, int cx, int cy)
+HBITMAP SIMPLEAPI GetControlImage(LPCOLESTR pszCLSID, int cx, int cy)
 {
 	COLORREF cBack = GetSysColor(COLOR_WINDOW);
 
@@ -91,7 +91,7 @@ HBITMAP GetControlImage(LPCOLESTR pszCLSID, int cx, int cy)
 	return hbmpResized;
 }
 
-HICON GetControlIcon(LPCOLESTR pszCLSID, int cx, int cy)
+HICON SIMPLEAPI GetControlIcon(LPCOLESTR pszCLSID, int cx, int cy)
 {
 	HBITMAP hbmp = GetControlImage(pszCLSID, cx, cy);
 	if (!hbmp)

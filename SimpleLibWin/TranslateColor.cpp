@@ -23,7 +23,7 @@ namespace Simple
 {
 
 
-COLORREF TranslateColor(OLE_COLOR oc)
+COLORREF SIMPLEAPI TranslateColor(OLE_COLOR oc)
 {
 	if (oc & 0x80000000)
 		{

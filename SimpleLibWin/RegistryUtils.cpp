@@ -26,7 +26,7 @@ namespace Simple
 
 #define HANDLEREGERR(x) { LONG l=(x); if (l!=ERROR_SUCCESS) return l; }
 
-LONG RegNukeKey(HKEY hKey, const wchar_t* pszSubKey)
+LONG SIMPLEAPI RegNukeKey(HKEY hKey, const wchar_t* pszSubKey)
 {
 	// Open the key
 	CSmartHandle<HKEY> Key;
@@ -45,7 +45,7 @@ LONG RegNukeKey(HKEY hKey, const wchar_t* pszSubKey)
 }
 
 
-LONG RegGetString(HKEY hKey, const wchar_t* pszKey, const wchar_t* pszValue, CUniString& str)
+LONG SIMPLEAPI RegGetString(HKEY hKey, const wchar_t* pszKey, const wchar_t* pszValue, CUniString& str)
 {
 	// Open key
 	CSmartHandle<HKEY> KeyTemp;
@@ -73,7 +73,7 @@ LONG RegGetString(HKEY hKey, const wchar_t* pszKey, const wchar_t* pszValue, CUn
 
 
 
-LONG RegGetDWORD(HKEY hKey, const wchar_t* pszKey, const wchar_t* pszValue, DWORD* pVal)
+LONG SIMPLEAPI RegGetDWORD(HKEY hKey, const wchar_t* pszKey, const wchar_t* pszValue, DWORD* pVal)
 {
 	// Open key
 	CSmartHandle<HKEY> KeyTemp;
@@ -98,7 +98,7 @@ LONG RegGetDWORD(HKEY hKey, const wchar_t* pszKey, const wchar_t* pszValue, DWOR
 }
 
 
-LONG RegSetString(HKEY hKey, const wchar_t* pszKey, const wchar_t* pszValueName, const wchar_t* pszValue)
+LONG SIMPLEAPI RegSetString(HKEY hKey, const wchar_t* pszKey, const wchar_t* pszValueName, const wchar_t* pszValue)
 {
 	// Create key
 	CSmartHandle<HKEY> KeyTemp;
@@ -114,7 +114,7 @@ LONG RegSetString(HKEY hKey, const wchar_t* pszKey, const wchar_t* pszValueName,
 
 
 
-HRESULT RegSetDWORD(HKEY hKey, const wchar_t* pszKey, const wchar_t* pszValueName, DWORD dwValue)
+HRESULT SIMPLEAPI RegSetDWORD(HKEY hKey, const wchar_t* pszKey, const wchar_t* pszValueName, DWORD dwValue)
 {
 	// Create key
 	CSmartHandle<HKEY> KeyTemp;
@@ -131,7 +131,7 @@ HRESULT RegSetDWORD(HKEY hKey, const wchar_t* pszKey, const wchar_t* pszValueNam
 
 
 
-LONG RegEnumAllValues(HKEY hKey, const wchar_t* pszSubKey, CVector<CUniString>& vec)
+LONG SIMPLEAPI RegEnumAllValues(HKEY hKey, const wchar_t* pszSubKey, CVector<CUniString>& vec)
 {
 	// Open key
 	CSmartHandle<HKEY> KeyTemp;
@@ -154,7 +154,7 @@ LONG RegEnumAllValues(HKEY hKey, const wchar_t* pszSubKey, CVector<CUniString>& 
 	return ERROR_SUCCESS;	
 }
 
-LONG RegEnumAllKeys(HKEY hKey, const wchar_t* pszSubKey, CVector<CUniString>& vec)
+LONG SIMPLEAPI RegEnumAllKeys(HKEY hKey, const wchar_t* pszSubKey, CVector<CUniString>& vec)
 {
 	// Open key
 	CSmartHandle<HKEY> KeyTemp;
@@ -174,7 +174,7 @@ LONG RegEnumAllKeys(HKEY hKey, const wchar_t* pszSubKey, CVector<CUniString>& ve
 	return ERROR_SUCCESS;	
 }
 
-LONG RegCopyKey(HKEY hDestKey, const wchar_t* pszDestSubKey, HKEY hSrcKey, const wchar_t* pszSrcSubKey)
+LONG SIMPLEAPI RegCopyKey(HKEY hDestKey, const wchar_t* pszDestSubKey, HKEY hSrcKey, const wchar_t* pszSrcSubKey)
 {
 	// Open source key...
 	CSmartHandle<HKEY> keySrc;

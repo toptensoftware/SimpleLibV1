@@ -9,7 +9,7 @@ namespace Simple
 
 #ifdef __ATLWIN_H__
 
-bool Draw3DCheckmark(HDC hDC, RECT* prc, COLORREF crBg);
+bool SIMPLEAPI Draw3DCheckmark(HDC hDC, RECT* prc, COLORREF crBg);
 
 
 // CMenuIcons Class

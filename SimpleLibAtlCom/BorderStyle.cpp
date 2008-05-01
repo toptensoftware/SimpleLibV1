@@ -29,7 +29,7 @@ namespace Simple
 //		0 = No border
 //		1 = Flat border
 //		2 = 3D border
-void ChangeWindowBorderStyle(HWND hWnd, int iBorderStyle)
+void SIMPLEAPI ChangeWindowBorderStyle(HWND hWnd, int iBorderStyle)
 {
 	// Change window style
 	if (hWnd==NULL)
@@ -49,7 +49,7 @@ void ChangeWindowBorderStyle(HWND hWnd, int iBorderStyle)
 	// Done
 }
 
-int GetWindowBorderStyle(HWND hWnd)
+int SIMPLEAPI GetWindowBorderStyle(HWND hWnd)
 {
 	DWORD dwExStyle=::GetWindowLong(hWnd, GWL_EXSTYLE);
 	if (dwExStyle & WS_EX_CLIENTEDGE)

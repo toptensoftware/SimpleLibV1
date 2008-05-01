@@ -25,7 +25,7 @@ namespace Simple
 {
 
 
-__int64 GetStreamOffset(IStream* pStream)
+__int64 SIMPLEAPI GetStreamOffset(IStream* pStream)
 {
 	ULARGE_INTEGER ulPos;
 	LARGE_INTEGER li;
@@ -35,7 +35,7 @@ __int64 GetStreamOffset(IStream* pStream)
 	return (__int64)ulPos.QuadPart;
 }
 
-__int64 GetStreamLength(IStream* pStream)
+__int64 SIMPLEAPI GetStreamLength(IStream* pStream)
 {
 	__int64 iPos=GetStreamOffset(pStream);
 	__int64 iEndPos=StreamSeek(pStream, 0, STREAM_SEEK_END);
@@ -43,7 +43,7 @@ __int64 GetStreamLength(IStream* pStream)
 	return iEndPos;
 }
 
-__int64 StreamSeek(IStream* pStream, __int64 iOffset, DWORD dwOrigin)
+__int64 SIMPLEAPI StreamSeek(IStream* pStream, __int64 iOffset, DWORD dwOrigin)
 {
 	ULARGE_INTEGER ulPos;
 	LARGE_INTEGER li;
@@ -52,7 +52,7 @@ __int64 StreamSeek(IStream* pStream, __int64 iOffset, DWORD dwOrigin)
 	return (__int64)ulPos.QuadPart;
 }
 
-bool IsEOF(IStream* pStream)
+bool SIMPLEAPI IsEOF(IStream* pStream)
 {
 	__int64 iPos=GetStreamOffset(pStream);
 	__int64 iEndPos=StreamSeek(pStream, 0, STREAM_SEEK_END);
@@ -60,7 +60,7 @@ bool IsEOF(IStream* pStream)
 	return iPos>=iEndPos;
 }
 
-HRESULT WriteStringToStream(IStream* pStream, const wchar_t* psz)
+HRESULT SIMPLEAPI WriteStringToStream(IStream* pStream, const wchar_t* psz)
 {
 	// Work out length in bytes
 	ULONG ulLen=(ULONG)(psz ? wcslen(psz) : 0);
@@ -78,7 +78,7 @@ HRESULT WriteStringToStream(IStream* pStream, const wchar_t* psz)
 }
 
 
-HRESULT ReadStringFromStream(IStream* pStream, CUniString& str)
+HRESULT SIMPLEAPI ReadStringFromStream(IStream* pStream, CUniString& str)
 {
 	// Release old string
 	str.Empty();

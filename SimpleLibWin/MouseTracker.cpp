@@ -23,7 +23,7 @@
 namespace Simple
 {
 
-void NormalizeRect(RECT* prc)
+void SIMPLEAPI NormalizeRect(RECT* prc)
 {
 	if (prc->left>prc->right)
 		{

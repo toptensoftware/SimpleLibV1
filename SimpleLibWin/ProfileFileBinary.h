@@ -7,8 +7,8 @@
 namespace Simple
 {
 
-HRESULT SaveBinaryProfile(const CProfileFile& Src, IStream* pStream);
-HRESULT LoadBinaryProfile(CProfileFile& Dest, IStream* pStream);
+HRESULT SIMPLEAPI SaveBinaryProfile(const CProfileFile& Src, IStream* pStream);
+HRESULT SIMPLEAPI LoadBinaryProfile(CProfileFile& Dest, IStream* pStream);
 
 #endif	// __PROFILEFILEBINARY_H
 

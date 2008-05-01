@@ -246,7 +246,7 @@ bool ReadHex(const wchar_t*& p, unsigned int* pdwVal)
 	return true;
 }
 
-bool ParseHtmlColor(const wchar_t* psz, unsigned int* pVal)
+bool SIMPLEAPI ParseHtmlColor(const wchar_t* psz, unsigned int* pVal)
 {
 	// RGB color value
 	if (psz[0]==L'#')

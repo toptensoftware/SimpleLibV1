@@ -58,7 +58,7 @@ HMODULE					g_hKernel32;
 
 
 
-void InitThemeActivateImpl(HMODULE hMod, int id)
+void SIMPLEAPI InitThemeActivateImpl(HMODULE hMod, int id)
 {
 	g_hActCtx=INVALID_HANDLE_VALUE;
 	g_pfnCreateActCtx=NULL;
@@ -95,7 +95,7 @@ void InitThemeActivateImpl(HMODULE hMod, int id)
 	g_hActCtx = g_pfnCreateActCtx(&act);
 }
 
-void CleanUpThemeActivateImpl()
+void SIMPLEAPI CleanUpThemeActivateImpl()
 {
 	if (g_hActCtx!=INVALID_HANDLE_VALUE)
 		{
@@ -107,7 +107,7 @@ void CleanUpThemeActivateImpl()
 		FreeLibrary(g_hKernel32);
 }
 
-void ThemeActivate(HANDLE hContext, ULONG_PTR* pulCookie)
+void SIMPLEAPI ThemeActivate(HANDLE hContext, ULONG_PTR* pulCookie)
 {
 	if (!g_pfnActivateActCtx)
 		return;
@@ -115,12 +115,12 @@ void ThemeActivate(HANDLE hContext, ULONG_PTR* pulCookie)
 	g_pfnActivateActCtx(hContext, pulCookie); 
 }
 
-void ThemeActivate(ULONG_PTR* pulCookie)
+void SIMPLEAPI ThemeActivate(ULONG_PTR* pulCookie)
 {
 	ThemeActivate(g_hActCtx, pulCookie);
 }
 
-void ThemeDeactivate(ULONG_PTR ulCookie)
+void SIMPLEAPI ThemeDeactivate(ULONG_PTR ulCookie)
 {
 	if (!g_pfnDeactivateActCtx)
 		return;

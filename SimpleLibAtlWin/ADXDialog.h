@@ -19,13 +19,13 @@
 namespace Simple
 {
 
-void ADX_Text(CADXExchange* pDX, int nIDC, CComBSTR& str);
+void SIMPLEAPI ADX_Text(CADXExchange* pDX, int nIDC, CComBSTR& str);
 
 // Template function to do ADX exchange with any window class that
 // derives from CWindow and has a function:
 //			 void DoDataExchange(CADXExchange* pDX)
 template <class T>
-bool ADXUpdateData(T* pDlg, bool bSave)
+bool SIMPLEAPI ADXUpdateData(T* pDlg, bool bSave)
 {
 	// Construct an exchange object
 	CADXExchange dx(*static_cast<CWindow*>(pDlg), bSave);

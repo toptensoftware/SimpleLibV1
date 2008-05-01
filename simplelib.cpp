@@ -28,7 +28,7 @@ namespace Simple
 
 template <class T, class TKey>
 int slxFind(TKey key, const T* lo, const T* hi, 
-					int (*pfnCompare)(const T& a, TKey b))
+					int (__cdecl *pfnCompare)(const T& a, TKey b))
 {
     const T* pos = lo;
 	while (pos<hi)
@@ -48,7 +48,7 @@ int slxFind(TKey key, const T* lo, const T* hi,
 // Assumes items are sorted and early aborts
 template <class T, class TKey>
 bool slxLinearSearch(TKey key, const T* lo, const T* hi, 
-					int (*pfnCompare)(const T& a, TKey b), int& iPosition)
+					int (__cdecl *pfnCompare)(const T& a, TKey b), int& iPosition)
 {
     const T* pos = lo;
 	while (pos<=hi)
@@ -80,7 +80,7 @@ bool slxLinearSearch(TKey key, const T* lo, const T* hi,
 // Perform a binary search on an array
 template <class T, class TKey>
 bool slxQuickSearch(TKey key, const T* base, int iSize, 
-				int (*pfnCompare)(const T& a, TKey b), int& iPosition)
+				int (__cdecl *pfnCompare)(const T& a, TKey b), int& iPosition)
 {
 	if (iSize<1)
 	{
@@ -130,7 +130,7 @@ bool slxQuickSearch(TKey key, const T* base, int iSize,
 
 template <class T, class TKey>
 int slxFindEx(TKey key, void* c, const T* lo, const T* hi, 
-					int (*pfnCompare)(void* c, const T& a, TKey b))
+					int (__cdecl *pfnCompare)(void* c, const T& a, TKey b))
 {
     const T* pos = lo;
 	while (pos<hi)
@@ -150,7 +150,7 @@ int slxFindEx(TKey key, void* c, const T* lo, const T* hi,
 // Assumes items are sorted and early aborts
 template <class T, class TKey>
 bool slxLinearSearchEx(TKey key, void* c, const T* lo, const T* hi, 
-					int (*pfnCompare)(void* c, const T& a, TKey b), int& iPosition)
+					int (__cdecl *pfnCompare)(void* c, const T& a, TKey b), int& iPosition)
 {
     const T* pos = lo;
 	while (pos<=hi)
@@ -182,7 +182,7 @@ bool slxLinearSearchEx(TKey key, void* c, const T* lo, const T* hi,
 // Perform a binary search on an array
 template <class T, class TKey>
 bool slxQuickSearchEx(TKey key, void* c, const T* base, int iSize, 
-				int (*pfnCompare)(void* c, const T& a, TKey b), int& iPosition)
+				int (__cdecl *pfnCompare)(void* c, const T& a, TKey b), int& iPosition)
 {
 	if (iSize<1)
 	{
@@ -1224,15 +1224,12 @@ void CVector<T,TSem,TArg>::QuickSort()
 	QuickSort(TSem::Compare);
 }
 
-extern "C"
-{
-typedef int (*PFNQSORTCOMPARE)(const void*, const void*);
-}
+typedef int (__cdecl *PFNQSORTCOMPARE)(const void*, const void*);
 
 
 // QuickSort
 template <class T, class TSem, class TArg>
-void CVector<T,TSem,TArg>::QuickSort(int (*pfnCompare)(const T& a, const T& b))
+void CVector<T,TSem,TArg>::QuickSort(int (__cdecl *pfnCompare)(const T& a, const T& b))
 {
 	if (IsEmpty())
 		return;
@@ -1249,7 +1246,7 @@ typedef int (*PFNQSORTCOMPAREEX)(void*, const void*, const void*);
 }
 // QuickSort
 template <class T, class TSem, class TArg>
-void CVector<T,TSem,TArg>::QuickSort(int (*pfnCompare)(void* ctx, const T& a, const T& b), void* ctx)
+void CVector<T,TSem,TArg>::QuickSort(int (__cdecl *pfnCompare)(void* ctx, const T& a, const T& b), void* ctx)
 {
 	if (IsEmpty())
 		return;
@@ -1269,39 +1266,39 @@ bool CVector<T,TSem,TArg>::QuickSearch(const TArg& key, int& iPosition) const
 
 // QuickSearch
 template <class T, class TSem, class TArg>
-bool CVector<T,TSem,TArg>::QuickSearch(const TArg& key, int (*pfnCompare)(const T& a, const TArg& b), int& iPosition) const
+bool CVector<T,TSem,TArg>::QuickSearch(const TArg& key, int (__cdecl *pfnCompare)(const T& a, const TArg& b), int& iPosition) const
 {
 	return Simple::slxQuickSearch<T,const TArg&>(key, m_pData, m_iSize, pfnCompare, iPosition);
 }
 
 // QuickSearchEx
 template <class T, class TSem, class TArg>
-bool CVector<T,TSem,TArg>::QuickSearch(const TArg& key, void* ctx, int (*pfnCompare)(void* ctx, const T& a, const TArg& b), int& iPosition) const
+bool CVector<T,TSem,TArg>::QuickSearch(const TArg& key, void* ctx, int (__cdecl *pfnCompare)(void* ctx, const T& a, const TArg& b), int& iPosition) const
 {
 	return Simple::slxQuickSearchEx<T,const TArg&>(key, ctx, m_pData, m_iSize, pfnCompare, iPosition);
 }
 
 template <class T, class TSem, class TArg> template <class TKey>
-bool CVector<T,TSem,TArg>::QuickSearchKey(TKey key, int (*pfnCompare)(const T& a, TKey b), int& iPosition) const
+bool CVector<T,TSem,TArg>::QuickSearchKey(TKey key, int (__cdecl *pfnCompare)(const T& a, TKey b), int& iPosition) const
 {
 	return slxQuickSearch<T, TKey>(key, GetBuffer(), GetSize(), pfnCompare, iPosition);
 }
 
 template <class T, class TSem, class TArg> template <class TKey>
-bool CVector<T,TSem,TArg>::QuickSearchKey(TKey key, void* ctx, int (*pfnCompare)(void* ctx, const T& a, TKey b), int& iPosition) const
+bool CVector<T,TSem,TArg>::QuickSearchKey(TKey key, void* ctx, int (__cdecl *pfnCompare)(void* ctx, const T& a, TKey b), int& iPosition) const
 {
 	return slxQuickSearchEx<T, TKey>(key, ctx, GetBuffer(), GetSize(), pfnCompare, iPosition);
 }
 
 
 template <class T, class TSem, class TArg> template <class TKey>
-int CVector<T,TSem,TArg>::FindKey(TKey key, int (*pfnCompare)(const T& a, TKey b), int iStartAfter) const
+int CVector<T,TSem,TArg>::FindKey(TKey key, int (__cdecl *pfnCompare)(const T& a, TKey b), int iStartAfter) const
 {
 	return slxFind(key, GetBuffer()+iStartAfter+1, GetBuffer()+GetSize(), pfnCompare);
 }
 
 template <class T, class TSem, class TArg> template <class TKey>
-int CVector<T,TSem,TArg>::FindKey(TKey key, void* ctx, int (*pfnCompare)(void* ctx, const T& a, TKey b), int iStartAfter) const
+int CVector<T,TSem,TArg>::FindKey(TKey key, void* ctx, int (__cdecl *pfnCompare)(void* ctx, const T& a, TKey b), int iStartAfter) const
 {
 	return slxFindEx(key, ctx, GetBuffer()+iStartAfter+1, GetBuffer()+GetSize(), pfnCompare);
 }
@@ -1581,7 +1578,7 @@ int CSortedVector<T,TSem,TArg>::Find(const TArg& key) const
 
 // Resort the vertor. Specify NULL for pfnCompare to use TSem::Compare
 template <class T, class TSem, class TArg>
-void CSortedVector<T,TSem,TArg>::Resort(int (*pfnCompare)(const T& a, const T& b), bool bAllowDuplicates)
+void CSortedVector<T,TSem,TArg>::Resort(int (__cdecl *pfnCompare)(const T& a, const T& b), bool bAllowDuplicates)
 {
 	// If turning off allow duplicates, verify vector is empty
 	ASSERT(!m_bAllowDuplicates || bAllowDuplicates || IsEmpty());
@@ -1602,7 +1599,7 @@ void CSortedVector<T,TSem,TArg>::Resort(int (*pfnCompare)(const T& a, const T& b
 #if defined(_MSC_VER) && (_MSC_VER>=1400)
 // Resort the vertor with Ex comparer
 template <class T, class TSem, class TArg>
-void CSortedVector<T,TSem,TArg>::Resort(void* ctx, int (*pfnCompare)(void* ctx, const T& a, const T& b), bool bAllowDuplicates)
+void CSortedVector<T,TSem,TArg>::Resort(void* ctx, int (__cdecl *pfnCompare)(void* ctx, const T& a, const T& b), bool bAllowDuplicates)
 {
 	// If turning off allow duplicates, verify vector is empty
 	ASSERT(!m_bAllowDuplicates || bAllowDuplicates || IsEmpty());

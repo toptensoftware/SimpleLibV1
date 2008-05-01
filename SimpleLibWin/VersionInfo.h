@@ -23,14 +23,14 @@ namespace Simple
 
 bool IsVista();
 
-bool GetModuleVersionInfo(const wchar_t* pszModuleName, VS_FIXEDFILEINFO* pInfo);
-bool GetModuleVersionInfo(HMODULE hModule, VS_FIXEDFILEINFO* pInfo);
-DWORD GetModuleVersion(const wchar_t* pszModuleName, CUniString& str);
-DWORD GetModuleVersion(HMODULE hModule, CUniString& str);
+bool SIMPLEAPI GetModuleVersionInfo(const wchar_t* pszModuleName, VS_FIXEDFILEINFO* pInfo);
+bool SIMPLEAPI GetModuleVersionInfo(HMODULE hModule, VS_FIXEDFILEINFO* pInfo);
+DWORD SIMPLEAPI GetModuleVersion(const wchar_t* pszModuleName, CUniString& str);
+DWORD SIMPLEAPI GetModuleVersion(HMODULE hModule, CUniString& str);
 
 // Helper to get dll versions
-DWORD GetDllVersion(const wchar_t* pszDllName);
-DWORD GetCommonControlsVersion();
+DWORD SIMPLEAPI GetDllVersion(const wchar_t* pszDllName);
+DWORD SIMPLEAPI GetCommonControlsVersion();
 
 
 }	// namespace Simple

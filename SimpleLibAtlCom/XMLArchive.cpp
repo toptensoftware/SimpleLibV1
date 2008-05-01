@@ -762,17 +762,17 @@ HRESULT XML_ItemHelper(CXMLTarget& ar, LPCOLESTR pszName, bool& bValue, bool bDe
 	return S_OK;
 }
 
-HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, bool& bValue)
+HRESULT SIMPLEAPI XML_Item(CXMLTarget& ar, LPCOLESTR pszName, bool& bValue)
 {
 	return XML_ItemHelper(ar, pszName, bValue, false, false);
 }
 
-HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, bool& bValue, bool bDefault)
+HRESULT SIMPLEAPI XML_Item(CXMLTarget& ar, LPCOLESTR pszName, bool& bValue, bool bDefault)
 {
 	return XML_ItemHelper(ar, pszName, bValue, bDefault, true);
 }
 
-HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, long& iValue)
+HRESULT SIMPLEAPI XML_Item(CXMLTarget& ar, LPCOLESTR pszName, long& iValue)
 {
 	CComBSTR bstr;
 
@@ -791,7 +791,7 @@ HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, long& iValue)
 	return S_OK;
 }
 
-HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, long& iValue, long iDefault)
+HRESULT SIMPLEAPI XML_Item(CXMLTarget& ar, LPCOLESTR pszName, long& iValue, long iDefault)
 {
 	CComBSTR bstr;
 
@@ -822,7 +822,7 @@ HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, long& iValue, long iDefault)
 	return hr;
 }
 
-HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, unsigned long& iValue)
+HRESULT SIMPLEAPI XML_Item(CXMLTarget& ar, LPCOLESTR pszName, unsigned long& iValue)
 {
 	CComBSTR bstr;
 
@@ -841,7 +841,7 @@ HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, unsigned long& iValue)
 	return S_OK;
 }
 
-HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, unsigned long& iValue, unsigned long iDefault)
+HRESULT SIMPLEAPI XML_Item(CXMLTarget& ar, LPCOLESTR pszName, unsigned long& iValue, unsigned long iDefault)
 {
 	CComBSTR bstr;
 
@@ -873,7 +873,7 @@ HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, unsigned long& iValue, unsig
 }
 
 
-HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, double& dblValue)
+HRESULT SIMPLEAPI XML_Item(CXMLTarget& ar, LPCOLESTR pszName, double& dblValue)
 {
 	CComBSTR bstr;
 
@@ -892,7 +892,7 @@ HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, double& dblValue)
 	return S_OK;
 }
 
-HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, double& dblValue, double dblDefault)
+HRESULT SIMPLEAPI XML_Item(CXMLTarget& ar, LPCOLESTR pszName, double& dblValue, double dblDefault)
 {
 	CComBSTR bstr;
 
@@ -924,7 +924,7 @@ HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, double& dblValue, double dbl
 }
 
 
-HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, VARIANT* pvarValue, VARTYPE vt, VARIANT* pvarDefault)
+HRESULT SIMPLEAPI XML_Item(CXMLTarget& ar, LPCOLESTR pszName, VARIANT* pvarValue, VARTYPE vt, VARIANT* pvarDefault)
 {
 USES_CONVERSION;
 
@@ -981,7 +981,7 @@ USES_CONVERSION;
 	return hr;
 }
 
-HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, IDispatch* pObject, DISPID dispid, VARTYPE vt, VARIANT* pvarDefault)
+HRESULT SIMPLEAPI XML_Item(CXMLTarget& ar, LPCOLESTR pszName, IDispatch* pObject, DISPID dispid, VARTYPE vt, VARIANT* pvarDefault)
 {
 	CComVariant varTemp;
 
@@ -1001,7 +1001,7 @@ HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, IDispatch* pObject, DISPID d
 }
 
 
-HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR psz, CLSID& clsid)
+HRESULT SIMPLEAPI XML_Item(CXMLTarget& ar, LPCOLESTR psz, CLSID& clsid)
 {
 	CComBSTR bstr;
 
@@ -1030,7 +1030,7 @@ HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR psz, CLSID& clsid)
 };
 
 
-HRESULT XML_EnumItemHelper(CXMLTarget& ar, LPCOLESTR pszName, unsigned int& iValue, XMLENUMENTRY* pEntries, unsigned int iDefault, bool bOptional)
+HRESULT SIMPLEAPI XML_EnumItemHelper(CXMLTarget& ar, LPCOLESTR pszName, unsigned int& iValue, XMLENUMENTRY* pEntries, unsigned int iDefault, bool bOptional)
 {
 	CComBSTR bstr;
 
@@ -1082,17 +1082,17 @@ HRESULT XML_EnumItemHelper(CXMLTarget& ar, LPCOLESTR pszName, unsigned int& iVal
 	return hr;
 };
 
-HRESULT XML_EnumItemInt(CXMLTarget& ar, LPCOLESTR pszName, unsigned int& iValue, XMLENUMENTRY* pEntries)
+HRESULT SIMPLEAPI XML_EnumItemInt(CXMLTarget& ar, LPCOLESTR pszName, unsigned int& iValue, XMLENUMENTRY* pEntries)
 {
 	return XML_EnumItemHelper(ar, pszName, iValue, pEntries, 0, false);
 }
 
-HRESULT XML_EnumItemInt(CXMLTarget& ar, LPCOLESTR pszName, unsigned int& iValue, XMLENUMENTRY* pEntries, unsigned int iDefault)
+HRESULT SIMPLEAPI XML_EnumItemInt(CXMLTarget& ar, LPCOLESTR pszName, unsigned int& iValue, XMLENUMENTRY* pEntries, unsigned int iDefault)
 {
 	return XML_EnumItemHelper(ar, pszName, iValue, pEntries, iDefault, true);
 }
 
-HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, IDispatch* pObject, DISPID dispid, XMLENUMENTRY* pEntries)
+HRESULT SIMPLEAPI XML_Item(CXMLTarget& ar, LPCOLESTR pszName, IDispatch* pObject, DISPID dispid, XMLENUMENTRY* pEntries)
 {
 	CComVariant varTemp;
 	if (ar.IsStoring())
@@ -1111,7 +1111,7 @@ HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, IDispatch* pObject, DISPID d
 	return S_OK;
 }
 
-HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, IDispatch* pObject, DISPID dispid, XMLENUMENTRY* pEntries, unsigned int iDefault)
+HRESULT SIMPLEAPI XML_Item(CXMLTarget& ar, LPCOLESTR pszName, IDispatch* pObject, DISPID dispid, XMLENUMENTRY* pEntries, unsigned int iDefault)
 {
 	CComVariant varTemp;
 	if (ar.IsStoring())
@@ -1131,7 +1131,7 @@ HRESULT XML_Item(CXMLTarget& ar, LPCOLESTR pszName, IDispatch* pObject, DISPID d
 	return S_OK;
 }
 
-HRESULT XML_Element(CXMLArchive& ar, IUnknown* pObject)
+HRESULT SIMPLEAPI XML_Element(CXMLArchive& ar, IUnknown* pObject)
 {
 	// Query the object for IPersistXML
 	CComQIPtr<IPersistXML> spPersistXML(pObject);
@@ -1253,7 +1253,7 @@ HRESULT XML_Element(CXMLArchive& ar, IUnknown* pObject)
 }
 
 // Serialize an object by querying it for IPersistXML
-HRESULT XML_Element(CXMLArchive& ar, LPCOLESTR pszName, IUnknown* pObject, VARIANT_BOOL bOptional)
+HRESULT SIMPLEAPI XML_Element(CXMLArchive& ar, LPCOLESTR pszName, IUnknown* pObject, VARIANT_BOOL bOptional)
 {
 	if (!pObject)
 		return E_POINTER;
@@ -1273,7 +1273,7 @@ HRESULT XML_Element(CXMLArchive& ar, LPCOLESTR pszName, IUnknown* pObject, VARIA
 	return hr;
 }
 
-HRESULT XML_Element(CXMLArchive& ar, IXMLDOMElement* pElement, IUnknown* pObject)
+HRESULT SIMPLEAPI XML_Element(CXMLArchive& ar, IXMLDOMElement* pElement, IUnknown* pObject)
 {
 	if (!pObject)
 		return E_POINTER;
@@ -1290,7 +1290,7 @@ HRESULT XML_Element(CXMLArchive& ar, IXMLDOMElement* pElement, IUnknown* pObject
 	return ar.SetResult(spPersistXML->Load(pElement, spContext, ar.GetFlags()));
 }
 
-HRESULT XML_EmbeddedXML(CXMLArchive& ar, LPCOLESTR pszName, CComBSTR& bstrXML, LPCOLESTR psz)
+HRESULT SIMPLEAPI XML_EmbeddedXML(CXMLArchive& ar, LPCOLESTR pszName, CComBSTR& bstrXML, LPCOLESTR psz)
 {
 	if (ar.IsStoring())
 		{
@@ -1358,7 +1358,7 @@ HRESULT XML_EmbeddedXML(CXMLArchive& ar, LPCOLESTR pszName, CComBSTR& bstrXML, L
 	return ar.GetResult();
 }
 
-HRESULT SlxSaveObject(IUnknown* pObject, BSTR* pVal, LPCOLESTR pszDocElem, DWORD dwFlags)
+HRESULT SIMPLEAPI SlxSaveObject(IUnknown* pObject, BSTR* pVal, LPCOLESTR pszDocElem, DWORD dwFlags)
 {
 	// Query the object for IPersistXML
 	CComQIPtr<IPersistXML> spPersistXML(pObject);
@@ -1438,7 +1438,7 @@ HRESULT SlxSaveObject(IUnknown* pObject, BSTR* pVal, LPCOLESTR pszDocElem, DWORD
 	return S_OK;
 }
 
-HRESULT SlxLoadObject(IUnknown* pObject, BSTR newVal, LPCOLESTR pszDocElem, DWORD dwFlags)
+HRESULT SIMPLEAPI SlxLoadObject(IUnknown* pObject, BSTR newVal, LPCOLESTR pszDocElem, DWORD dwFlags)
 {
 	ASSERT(pObject!=NULL);
 

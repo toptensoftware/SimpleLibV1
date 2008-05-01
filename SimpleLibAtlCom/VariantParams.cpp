@@ -23,14 +23,14 @@ namespace Simple
 
 
 // Check if a variant parameter is specified
-BOOL IsParameterSpecified(VARIANT& var)
+BOOL SIMPLEAPI IsParameterSpecified(VARIANT& var)
 {
 	return !((V_VT(&var)==VT_EMPTY) || 
 			 ((V_VT(&var)==VT_ERROR) && (V_ERROR(&var)==DISP_E_PARAMNOTFOUND)));
 }
 
 // Return S_OK if integer, S_FALSE if string, or error code if failed
-HRESULT VariantToStringOrInt(VARIANT& Item, int& i, CComBSTR& bstr)
+HRESULT SIMPLEAPI VariantToStringOrInt(VARIANT& Item, int& i, CComBSTR& bstr)
 {
 	HRESULT hr;
 	// Convert to long first
@@ -59,7 +59,7 @@ HRESULT VariantToStringOrInt(VARIANT& Item, int& i, CComBSTR& bstr)
 	return S_FALSE;
 }
 
-HRESULT VariantToStringOrIntOrObject(VARIANT& Item, int* pi, BSTR* pbstrVal, IUnknown** pVal)
+HRESULT SIMPLEAPI VariantToStringOrIntOrObject(VARIANT& Item, int* pi, BSTR* pbstrVal, IUnknown** pVal)
 {
 	CComVariant varTemp;
 	if (SUCCEEDED(varTemp.ChangeType(VT_UNKNOWN, &Item)))
@@ -92,7 +92,7 @@ HRESULT VariantToStringOrIntOrObject(VARIANT& Item, int* pi, BSTR* pbstrVal, IUn
 }
 
 
-HRESULT GetOptionalString(CComBSTR& bstr, VARIANT& var, LPCOLESTR pszDefault)
+HRESULT SIMPLEAPI GetOptionalString(CComBSTR& bstr, VARIANT& var, LPCOLESTR pszDefault)
 {
 	if (IsParameterSpecified(var))
 		{
@@ -114,7 +114,7 @@ HRESULT GetOptionalString(CComBSTR& bstr, VARIANT& var, LPCOLESTR pszDefault)
 		}
 }
 
-HRESULT GetOptionalInt(int& i, VARIANT& var, int iDefault)
+HRESULT SIMPLEAPI GetOptionalInt(int& i, VARIANT& var, int iDefault)
 {
 	if (IsParameterSpecified(var))
 		{
@@ -130,7 +130,7 @@ HRESULT GetOptionalInt(int& i, VARIANT& var, int iDefault)
 		}
 }
 
-HRESULT GetOptionalUInt(unsigned int& i, VARIANT& var, unsigned int iDefault)
+HRESULT SIMPLEAPI GetOptionalUInt(unsigned int& i, VARIANT& var, unsigned int iDefault)
 {
 	if (IsParameterSpecified(var))
 		{
@@ -146,7 +146,7 @@ HRESULT GetOptionalUInt(unsigned int& i, VARIANT& var, unsigned int iDefault)
 		}
 }
 
-HRESULT GetOptionalShort(short& i, VARIANT& var, short iDefault)
+HRESULT SIMPLEAPI GetOptionalShort(short& i, VARIANT& var, short iDefault)
 {
 	if (IsParameterSpecified(var))
 		{
@@ -162,7 +162,7 @@ HRESULT GetOptionalShort(short& i, VARIANT& var, short iDefault)
 		}
 }
 
-HRESULT GetOptionalUShort(unsigned short& i, VARIANT& var, unsigned short iDefault)
+HRESULT SIMPLEAPI GetOptionalUShort(unsigned short& i, VARIANT& var, unsigned short iDefault)
 {
 	if (IsParameterSpecified(var))
 		{
@@ -178,7 +178,7 @@ HRESULT GetOptionalUShort(unsigned short& i, VARIANT& var, unsigned short iDefau
 		}
 }
 
-HRESULT GetOptionalObject(VARIANT& var, REFIID riid, void** ppvObject)
+HRESULT SIMPLEAPI GetOptionalObject(VARIANT& var, REFIID riid, void** ppvObject)
 {
 	if (!IsParameterSpecified(var))
 		{
@@ -198,7 +198,7 @@ HRESULT GetOptionalObject(VARIANT& var, REFIID riid, void** ppvObject)
 	return V_UNKNOWN(&varTemp)->QueryInterface(riid, ppvObject);
 }
 
-HRESULT GetOptionalDouble(double& dbl, VARIANT& var, double dblDefault)
+HRESULT SIMPLEAPI GetOptionalDouble(double& dbl, VARIANT& var, double dblDefault)
 {
 	if (IsParameterSpecified(var))
 		{

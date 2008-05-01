@@ -21,7 +21,7 @@
 namespace Simple
 {
 
-bool DoWebRequest(const wchar_t* pszUrl, CUniString& str);
+bool SIMPLEAPI DoWebRequest(const wchar_t* pszUrl, CUniString& str);
 
 }	// namespace Simple
 

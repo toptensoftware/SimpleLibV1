@@ -84,7 +84,7 @@ extern CComModule _Module;
 
 
 
-ATOM AtlModuleRegisterGlobalWndClassInfo(_ATL_MODULE* pM, _ATL_WNDCLASSINFOW& p, WNDPROC* pProc);
+ATOM SIMPLEAPI AtlModuleRegisterGlobalWndClassInfo(_ATL_MODULE* pM, _ATL_WNDCLASSINFOW& p, WNDPROC* pProc);
 
 #define THIS_PTR_PROP	_T("pThis")
 

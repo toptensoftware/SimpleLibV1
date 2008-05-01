@@ -66,7 +66,7 @@ static const wchar_t* g_pszErrors[] =
 //////////////////////////////////////////////////////////////////////////
 // Parser utility functions
 
-int ParseHexChar(wchar_t ch)
+int SIMPLEAPI ParseHexChar(wchar_t ch)
 {
 	if (ch>=L'0' && ch<='9')
 		return ch-L'0';
@@ -80,7 +80,7 @@ int ParseHexChar(wchar_t ch)
 	return -1;
 }
 
-bool ParseHexU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverflow)
+bool SIMPLEAPI ParseHexU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverflow)
 {
 	// Store start
 	const wchar_t* pszStart=p;
@@ -104,7 +104,7 @@ bool ParseHexU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverflow)
 	return p>pszStart;
 }
 
-bool ParseIntU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverflow)
+bool SIMPLEAPI ParseIntU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverflow)
 {
 	// Store start
 	const wchar_t* pszStart=p;
@@ -128,7 +128,7 @@ bool ParseIntU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverflow)
 	return p>pszStart;
 }
 
-bool IsDoubleU(const wchar_t* p)
+bool SIMPLEAPI IsDoubleU(const wchar_t* p)
 {
 	if (p[0]=='.')
 		return true;
@@ -142,7 +142,7 @@ bool IsDoubleU(const wchar_t* p)
 	return p[0]=='.';
 }
 
-bool ParseDoubleU(const wchar_t*& p, double& dblVal, bool& bOverflow)
+bool SIMPLEAPI ParseDoubleU(const wchar_t*& p, double& dblVal, bool& bOverflow)
 {
 	// Clear out values
 	bOverflow=false;
@@ -175,7 +175,7 @@ bool ParseDoubleU(const wchar_t*& p, double& dblVal, bool& bOverflow)
 	return true;
 }
 
-bool ParseDouble(const wchar_t*& psz, double& dblVal, bool& bError)
+bool SIMPLEAPI ParseDouble(const wchar_t*& psz, double& dblVal, bool& bError)
 {
 	// Use local ptr
 	const wchar_t* p=psz;
@@ -202,7 +202,7 @@ bool ParseDouble(const wchar_t*& psz, double& dblVal, bool& bError)
 	return true;
 }
 
-bool ParseInt64(const wchar_t*& psz, __int64& iVal, bool& bError)
+bool SIMPLEAPI ParseInt64(const wchar_t*& psz, __int64& iVal, bool& bError)
 {
 	// Use local ptr
 	const wchar_t* p=psz;

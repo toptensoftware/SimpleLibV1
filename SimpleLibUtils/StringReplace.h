@@ -20,7 +20,7 @@
 namespace Simple
 {
 
-CUniString StringReplace(const wchar_t* pszIn, const wchar_t* pszFind, const wchar_t* pszReplace, bool bCaseSensitive, int iStartAt=0, int iMaxReplace=-1);
+CUniString SIMPLEAPI StringReplace(const wchar_t* pszIn, const wchar_t* pszFind, const wchar_t* pszReplace, bool bCaseSensitive, int iStartAt=0, int iMaxReplace=-1);
 
 }	// namespace Simple
 

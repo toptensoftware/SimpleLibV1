@@ -26,17 +26,17 @@ static HMENU g_hMenu=NULL;
 static int g_iIndex=-1;
 static UINT g_iID=0;
 
-HMENU CommandStateGetMenu()
+HMENU SIMPLEAPI CommandStateGetMenu()
 {
 	return g_hMenu;
 }
 
-int CommandStateGetMenuIndex()
+int SIMPLEAPI CommandStateGetMenuIndex()
 {
 	return g_iIndex;
 }
 
-void CommandStateUpdateMenu(HWND hWnd, HMENU hMenu)
+void SIMPLEAPI CommandStateUpdateMenu(HWND hWnd, HMENU hMenu)
 {
 	g_hMenu=hMenu;
 	for (g_iIndex=0; g_iIndex<GetMenuItemCount(hMenu); g_iIndex++)
@@ -60,7 +60,7 @@ void CommandStateUpdateMenu(HWND hWnd, HMENU hMenu)
 	g_iID=0;
 }
 
-void CommandStateSetMenuText(const wchar_t* psz)
+void SIMPLEAPI CommandStateSetMenuText(const wchar_t* psz)
 {
 	if (!g_hMenu)
 		return;
@@ -69,7 +69,7 @@ void CommandStateSetMenuText(const wchar_t* psz)
 }
 
 
-void CommandStateUpdateToolBar(HWND hWnd, HWND hWndToolBar, int iFirst, int iLast)
+void SIMPLEAPI CommandStateUpdateToolBar(HWND hWnd, HWND hWndToolBar, int iFirst, int iLast)
 {
 	if (iLast<0)
 		iLast=(int)SendMessage(hWndToolBar, TB_BUTTONCOUNT, 0, 0)-1;;

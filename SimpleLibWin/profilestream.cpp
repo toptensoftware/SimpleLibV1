@@ -147,7 +147,7 @@ public:
 	};
 };
 
-HRESULT CreateProfileStream(CProfileEntry* pEntry, IStream** pVal)
+HRESULT SIMPLEAPI CreateProfileStream(CProfileEntry* pEntry, IStream** pVal)
 {
 	if (!pEntry)
 		return E_UNEXPECTED;
@@ -163,7 +163,7 @@ HRESULT CreateProfileStream(CProfileEntry* pEntry, IStream** pVal)
 	return S_OK;
 }
 
-HRESULT OpenProfileStream(CProfileEntry* pEntry, IStream** pVal)
+HRESULT SIMPLEAPI OpenProfileStream(CProfileEntry* pEntry, IStream** pVal)
 {
 	if (!pEntry)
 		return E_UNEXPECTED;

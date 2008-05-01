@@ -20,9 +20,9 @@
 namespace Simple
 {
 
-CUniString LTrimString(const wchar_t* pszIn);
-CUniString RTrimString(const wchar_t* pszIn);
-CUniString TrimString(const wchar_t* pszIn);
+CUniString SIMPLEAPI LTrimString(const wchar_t* pszIn);
+CUniString SIMPLEAPI RTrimString(const wchar_t* pszIn);
+CUniString SIMPLEAPI TrimString(const wchar_t* pszIn);
 
 }	// namespace Simple
 

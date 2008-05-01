@@ -26,7 +26,7 @@ namespace Simple
 
 
 // Get source interface for an object
-HRESULT GetObjectSourceInterface(IUnknown* pObject, IID* piidEvents, ITypeInfo** ppEventInfo)
+HRESULT SIMPLEAPI GetObjectSourceInterface(IUnknown* pObject, IID* piidEvents, ITypeInfo** ppEventInfo)
 {
 	// Get dispatch interface
 	CComQIPtr<IDispatch> spDispSource(pObject);

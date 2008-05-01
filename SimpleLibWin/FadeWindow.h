@@ -27,11 +27,11 @@ namespace Simple
 #define FWF_CANCEL			0x00000020		// Cancel any pending operations on specified window
 #define FWF_FORCE			0x00000040		// Use even if UseFadeEffects returns false
 
-bool FadeWindow(HWND hWnd, DWORD dwFlags, int iSteps, int iPeriod);
+bool SIMPLEAPI FadeWindow(HWND hWnd, DWORD dwFlags, int iSteps, int iPeriod);
 
-bool UseFadeEffects();
-void SetEnableFadeEffects(bool bEnable);
-bool GetEnableFadeEffects();
+bool SIMPLEAPI UseFadeEffects();
+void SIMPLEAPI SetEnableFadeEffects(bool bEnable);
+bool SIMPLEAPI GetEnableFadeEffects();
 
 }	// namespace Simple
 

@@ -29,13 +29,13 @@ inline HRESULT MapReadResult(HRESULT x)
 
 
 // Seek helpers
-__int64 GetStreamOffset(IStream* pStream);
-__int64 GetStreamLength(IStream* pStream);
-__int64 StreamSeek(IStream* pStream, __int64 iOffset, DWORD dwOrigin=STREAM_SEEK_SET);
-bool IsEOF(IStream* pStream);
+__int64 SIMPLEAPI GetStreamOffset(IStream* pStream);
+__int64 SIMPLEAPI GetStreamLength(IStream* pStream);
+__int64 SIMPLEAPI StreamSeek(IStream* pStream, __int64 iOffset, DWORD dwOrigin=STREAM_SEEK_SET);
+bool SIMPLEAPI IsEOF(IStream* pStream);
 
 template <class T>
-HRESULT StreamRead(IStream* pStream, T& t)
+HRESULT SIMPLEAPI StreamRead(IStream* pStream, T& t)
 {
 	// Read
 	ULONG cbRead;
@@ -54,7 +54,7 @@ HRESULT StreamRead(IStream* pStream, T& t)
 
 
 template <class T>
-HRESULT StreamWrite(IStream* pStream, const T& t)
+HRESULT SIMPLEAPI StreamWrite(IStream* pStream, const T& t)
 {
 	// Read
 	ULONG cbWrite;
@@ -73,8 +73,8 @@ HRESULT StreamWrite(IStream* pStream, const T& t)
 
 
 // Write string to stream (compatible with ATL's BSTR to stream writing
-HRESULT WriteStringToStream(IStream* pStream, const wchar_t* psz);
-HRESULT ReadStringFromStream(IStream* pStream, CUniString& str);
+HRESULT SIMPLEAPI WriteStringToStream(IStream* pStream, const wchar_t* psz);
+HRESULT SIMPLEAPI ReadStringFromStream(IStream* pStream, CUniString& str);
 
 class CStreamArchive : public CAutoPtr<IStream, SRefCounted>
 {
@@ -116,17 +116,17 @@ public:
 	}
 
 #ifdef __ATLCOMCLI_H__
-	HRESULT operator >> (CComBSTR& Value)
+	HRESULT operator >> (ATL::CComBSTR& Value)
 	{	
 		ASSERT(p!=NULL);
 		RETURNIFFAILED(m_hr);
 		return m_hr=Value.ReadFromStream(p);
 	}
-	HRESULT operator << (const CComBSTR& Value)
+	HRESULT operator << (const ATL::CComBSTR& Value)
 	{	
 		ASSERT(p!=NULL);
 		RETURNIFFAILED(m_hr);
-		return m_hr=const_cast<CComBSTR&>(Value).WriteToStream(p);
+		return m_hr=const_cast<ATL::CComBSTR&>(Value).WriteToStream(p);
 	}
 #endif
 

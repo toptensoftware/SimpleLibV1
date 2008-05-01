@@ -25,11 +25,11 @@ namespace Simple
 {
 
 // Public operations
-void InitThemeActivateImpl(HMODULE hMod, int id=SXS_MANIFEST_RESOURCE_ID);
-void CleanUpThemeActivateImpl();
-void ThemeActivate(HANDLE hContext, ULONG_PTR* pulCookie);
-void ThemeActivate(ULONG_PTR* pulCookie);
-void ThemeDeactivate(ULONG_PTR ulCookie);
+void SIMPLEAPI InitThemeActivateImpl(HMODULE hMod, int id=SXS_MANIFEST_RESOURCE_ID);
+void SIMPLEAPI CleanUpThemeActivateImpl();
+void SIMPLEAPI ThemeActivate(HANDLE hContext, ULONG_PTR* pulCookie);
+void SIMPLEAPI ThemeActivate(ULONG_PTR* pulCookie);
+void SIMPLEAPI ThemeDeactivate(ULONG_PTR ulCookie);
 
 
 #ifdef ISOLATION_AWARE_ENABLED

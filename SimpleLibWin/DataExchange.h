@@ -20,8 +20,8 @@
 namespace Simple
 {
 
-CUniString GetWindowText(HWND hWnd);
-CUniString GetDlgItemText(HWND hWnd, int iID);
+CUniString SIMPLEAPI GetWindowText(HWND hWnd);
+CUniString SIMPLEAPI GetDlgItemText(HWND hWnd, int iID);
 
 // CADXExchange - maintains info about the current exchange state
 class CADXExchange
@@ -46,30 +46,30 @@ public:
 
 
 // Exchange functions (call from within DoDataExchange)
-void ADX_Text(CADXExchange* pDX, int nIDC, CUniString& str);
-void ADX_Text(CADXExchange* pDX, int nIDC, int& iVal);
-void ADX_Text(CADXExchange* pDX, unsigned int nIDC, unsigned int& iVal);
-void ADX_Text(CADXExchange* pDX, unsigned int nIDC, double& dblVal);
-void ADX_CheckBox(CADXExchange* pDX, int nIDC, int& iValue);
-void ADX_CheckBox(CADXExchange* pDX, int nIDC, VARIANT_BOOL& bValue);
-void ADX_CheckBox(CADXExchange* pDX, int nIDC, bool& bValue);
-void ADX_AddListItems(HWND hWnd, const wchar_t* pszItems, UINT msg_ADDSTRING);
-void ADX_CBIndex(CADXExchange* pDX, int nIDC, int& iIndex, const wchar_t* pszItems=NULL);
-void ADX_LBIndex(CADXExchange* pDX, int nIDC, int& iIndex, const wchar_t* pszItems=NULL);
-void ADX_CBData(CADXExchange* pDX, int nIDC, LPARAM& dwData);
-void ADX_LBData(CADXExchange* pDX, int nIDC, LPARAM& dwData);
-void ADX_Radio(CADXExchange* pDX, int nIDC, int& value);
-void ADX_CheckBit(CADXExchange* pDX, int nIDC, DWORD& iValue, DWORD iBit);
+void SIMPLEAPI ADX_Text(CADXExchange* pDX, int nIDC, CUniString& str);
+void SIMPLEAPI ADX_Text(CADXExchange* pDX, int nIDC, int& iVal);
+void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, unsigned int& iVal);
+void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, double& dblVal);
+void SIMPLEAPI ADX_CheckBox(CADXExchange* pDX, int nIDC, int& iValue);
+void SIMPLEAPI ADX_CheckBox(CADXExchange* pDX, int nIDC, VARIANT_BOOL& bValue);
+void SIMPLEAPI ADX_CheckBox(CADXExchange* pDX, int nIDC, bool& bValue);
+void SIMPLEAPI ADX_AddListItems(HWND hWnd, const wchar_t* pszItems, UINT msg_ADDSTRING);
+void SIMPLEAPI ADX_CBIndex(CADXExchange* pDX, int nIDC, int& iIndex, const wchar_t* pszItems=NULL);
+void SIMPLEAPI ADX_LBIndex(CADXExchange* pDX, int nIDC, int& iIndex, const wchar_t* pszItems=NULL);
+void SIMPLEAPI ADX_CBData(CADXExchange* pDX, int nIDC, LPARAM& dwData);
+void SIMPLEAPI ADX_LBData(CADXExchange* pDX, int nIDC, LPARAM& dwData);
+void SIMPLEAPI ADX_Radio(CADXExchange* pDX, int nIDC, int& value);
+void SIMPLEAPI ADX_CheckBit(CADXExchange* pDX, int nIDC, DWORD& iValue, DWORD iBit);
 
 // Validation functions (call from within DoDataExchange)
-void ADX_Required(CADXExchange* pDX, const wchar_t* psz);
-void ADX_RangeInt(CADXExchange* pDX, int iValue, int iMin, int iMax);
-void ADX_RangeUInt(CADXExchange* pDX, unsigned int iValue, unsigned int iMin, unsigned int iMax);
-void ADX_LimitInt(CADXExchange* pDX, int Value, int iLimit, bool bMustBeGreater, bool bInclusive);
-void ADX_LimitUInt(CADXExchange* pDX, unsigned int Value, unsigned int iLimit, bool bMustBeGreater, bool bInclusive);
-void ADX_RangeDouble(CADXExchange* pDX, double dblValue, double dblMin, double dblMax);
-void ADX_LimitDouble(CADXExchange* pDX, double Value, double dblLimit, bool bMustBeGreater, bool bInclusive);
-void ADX_Validate(CADXExchange* pDX, int nIDC, bool bCondition, const wchar_t* pszMessage);
+void SIMPLEAPI ADX_Required(CADXExchange* pDX, const wchar_t* psz);
+void SIMPLEAPI ADX_RangeInt(CADXExchange* pDX, int iValue, int iMin, int iMax);
+void SIMPLEAPI ADX_RangeUInt(CADXExchange* pDX, unsigned int iValue, unsigned int iMin, unsigned int iMax);
+void SIMPLEAPI ADX_LimitInt(CADXExchange* pDX, int Value, int iLimit, bool bMustBeGreater, bool bInclusive);
+void SIMPLEAPI ADX_LimitUInt(CADXExchange* pDX, unsigned int Value, unsigned int iLimit, bool bMustBeGreater, bool bInclusive);
+void SIMPLEAPI ADX_RangeDouble(CADXExchange* pDX, double dblValue, double dblMin, double dblMax);
+void SIMPLEAPI ADX_LimitDouble(CADXExchange* pDX, double Value, double dblLimit, bool bMustBeGreater, bool bInclusive);
+void SIMPLEAPI ADX_Validate(CADXExchange* pDX, int nIDC, bool bCondition, const wchar_t* pszMessage);
 
 
 }	// namespace Simple

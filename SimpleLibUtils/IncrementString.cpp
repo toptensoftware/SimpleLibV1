@@ -23,7 +23,7 @@
 namespace Simple
 {
 
-CUniString IncrementString(const wchar_t* psz)
+CUniString SIMPLEAPI IncrementString(const wchar_t* psz)
 {
 	if (IsEmptyString(psz))
 	{
@@ -51,7 +51,7 @@ CUniString IncrementString(const wchar_t* psz)
 		}
 }
 
-CUniString IncrementStringEx(const wchar_t* psz, const wchar_t* pszDefAppend)
+CUniString SIMPLEAPI IncrementStringEx(const wchar_t* psz, const wchar_t* pszDefAppend)
 {
 	if (IsEmptyString(psz))
 		{
@@ -95,7 +95,7 @@ CUniString IncrementStringEx(const wchar_t* psz, const wchar_t* pszDefAppend)
 
 
 // Test if string contains a number
-bool IncrementStringExTest(const wchar_t* psz)
+bool SIMPLEAPI IncrementStringExTest(const wchar_t* psz)
 {
 	if (IsEmptyString(psz))
 		{

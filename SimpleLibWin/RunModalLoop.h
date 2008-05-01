@@ -23,8 +23,8 @@ namespace Simple
 #define WM_PRETRANSLATEMESSAGE		(WM_USER+100)
 #define WM_IDLE						(WM_USER+101)
 
-int RunModalLoop(HWND hWndOwner, HWND hWndDialog);
-void EndModalLoop(HWND hWndDialog, int iResult);
+int SIMPLEAPI RunModalLoop(HWND hWndOwner, HWND hWndDialog);
+void SIMPLEAPI EndModalLoop(HWND hWndDialog, int iResult);
 
 
 }	// namespace Simple

@@ -23,17 +23,17 @@ namespace Simple
 #pragma warning(disable:4996)
 
 template <class T>
-FILE* fopen_t(const T* pszFileName, const T* pszMode);
+FILE* SIMPLEAPI fopen_t(const T* pszFileName, const T* pszMode);
 
 template <>
-inline FILE* fopen_t(const wchar_t* pszFileName, const wchar_t* pszMode)
+inline FILE* SIMPLEAPI fopen_t(const wchar_t* pszFileName, const wchar_t* pszMode)
 {
 	return _wfopen(pszFileName, pszMode);
 }
 
 
 template <>
-inline FILE* fopen_t(const char* pszFileName, const char* pszMode)
+inline FILE* SIMPLEAPI fopen_t(const char* pszFileName, const char* pszMode)
 {
 	return fopen(pszFileName, pszMode);
 }
@@ -42,7 +42,7 @@ inline FILE* fopen_t(const char* pszFileName, const char* pszMode)
 
 
 template <class T, class TString>
-bool LoadTextFile(const T* pszFileName, TString& str)
+bool SIMPLEAPI LoadTextFile(const T* pszFileName, TString& str)
 {
 	// Open file
 	FILE* pFile=fopen_t<T>(pszFileName, t2t<T,char>("rb"));
@@ -92,7 +92,7 @@ bool LoadTextFile(const T* pszFileName, TString& str)
 #pragma warning(disable:4127)	 // conditional expression is constant
 
 template <class T, class TString>
-bool SaveTextFile(const T* pszFileName, const TString* psz)
+bool SIMPLEAPI SaveTextFile(const T* pszFileName, const TString* psz)
 {
 	// Open file
 	FILE* pFile=fopen_t<T>(pszFileName, t2t<T,char>("wb"));
@@ -124,13 +124,13 @@ bool SaveTextFile(const T* pszFileName, const TString* psz)
 
 #pragma warning(default:4127)
 
-inline bool SaveTextFile(const char* pszFileName, const char* psz) 
+inline bool SIMPLEAPI SaveTextFile(const char* pszFileName, const char* psz) 
 	{ return SaveTextFile<char, char>(pszFileName, psz); };
-inline bool SaveTextFile(const wchar_t* pszFileName, const char* psz) 
+inline bool SIMPLEAPI SaveTextFile(const wchar_t* pszFileName, const char* psz) 
 	{ return SaveTextFile<wchar_t, char>(pszFileName, psz); };
-inline bool SaveTextFile(const char* pszFileName, const wchar_t* psz) 
+inline bool SIMPLEAPI SaveTextFile(const char* pszFileName, const wchar_t* psz) 
 	{ return SaveTextFile<char, wchar_t>(pszFileName, psz); };
-inline bool SaveTextFile(const wchar_t* pszFileName, const wchar_t* psz) 
+inline bool SIMPLEAPI SaveTextFile(const wchar_t* pszFileName, const wchar_t* psz) 
 	{ return SaveTextFile<wchar_t, wchar_t>(pszFileName, psz); };
 
 }	// namespace Simple

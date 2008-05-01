@@ -27,7 +27,7 @@
 namespace Simple
 {
 
-HBRUSH CreatePatternBrush(LPBYTE pBits)
+HBRUSH SIMPLEAPI CreatePatternBrush(LPBYTE pBits)
 {
 	// Create bitmap
 	HBITMAP hbm=CreateBitmap(8, 8, 1, 1, pBits);
@@ -44,28 +44,28 @@ HBRUSH CreatePatternBrush(LPBYTE pBits)
 }
 
 
-HBRUSH CreateDitherBrush()
+HBRUSH SIMPLEAPI CreateDitherBrush()
 {
 	BYTE bDither[] = {	0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA, 
 						0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA, };
 	return CreatePatternBrush(bDither);
 }
 
-void FillRect(HDC hDC, int l, int t, int r, int b, HBRUSH hbr)
+void SIMPLEAPI FillRect(HDC hDC, int l, int t, int r, int b, HBRUSH hbr)
 {
 	RECT rc;
 	SetRect(&rc, l, t, r, b);
 	::FillRect(hDC, &rc, hbr);
 }
 
-void FillHLine(HDC hDC, int l, int r, int y, HBRUSH hbr)
+void SIMPLEAPI FillHLine(HDC hDC, int l, int r, int y, HBRUSH hbr)
 {
 	RECT rc;
 	SetRect(&rc, l, y, r, y+1);
 	::FillRect(hDC, &rc, hbr);
 }
 
-void FillVLine(HDC hDC, int t, int b, int x, HBRUSH hbr)
+void SIMPLEAPI FillVLine(HDC hDC, int t, int b, int x, HBRUSH hbr)
 {
 	RECT rc;
 	SetRect(&rc, x, t, x+1, b);
@@ -73,7 +73,7 @@ void FillVLine(HDC hDC, int t, int b, int x, HBRUSH hbr)
 }
 
 
-void XorVLine(HDC hDC, int t, int b, int x)
+void SIMPLEAPI XorVLine(HDC hDC, int t, int b, int x)
 {
 	int iOldROP=SetROP2(hDC, R2_NOT);
 	MoveToEx(hDC, x, t, NULL);
@@ -82,7 +82,7 @@ void XorVLine(HDC hDC, int t, int b, int x)
 	SetROP2(hDC, iOldROP);
 }
 
-void XorHLine(HDC hDC, int l, int r, int y)
+void SIMPLEAPI XorHLine(HDC hDC, int l, int r, int y)
 {
 	int iOldROP=SetROP2(hDC, R2_NOT);
 	MoveToEx(hDC, l, y, NULL);
@@ -91,7 +91,7 @@ void XorHLine(HDC hDC, int l, int r, int y)
 	SetROP2(hDC, iOldROP);
 }
 
-BOOL DifferenceRect(RECT* prcDest, RECT* prcA, RECT* prcB)
+BOOL SIMPLEAPI DifferenceRect(RECT* prcDest, RECT* prcA, RECT* prcB)
 {
 	// Top/bottom same?
 	if (prcA->top==prcB->top && prcA->bottom==prcB->bottom)
@@ -186,7 +186,7 @@ BOOL DifferenceRect(RECT* prcDest, RECT* prcA, RECT* prcB)
 
 
 
-void AlphaFill(HDC hDC, RECT* prc, COLORREF rgb, BYTE bAlpha)
+void SIMPLEAPI AlphaFill(HDC hDC, RECT* prc, COLORREF rgb, BYTE bAlpha)
 {
 	HDC hdcMem=CreateCompatibleDC(hDC);
 	{

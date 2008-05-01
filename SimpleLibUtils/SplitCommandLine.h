@@ -20,7 +20,7 @@
 namespace Simple
 {
 
-void SplitCommandLine(const wchar_t* pszCommandLine, CVector<CUniString>& Args);
+void SIMPLEAPI SplitCommandLine(const wchar_t* pszCommandLine, CVector<CUniString>& Args);
 
 }	// namespace Simple
 

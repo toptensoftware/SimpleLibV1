@@ -21,7 +21,7 @@ namespace Simple
 {
 
 #define DDXF_NOTIMER	0x00000001
-BOOL DragDetectEx(HWND hWnd, POINT pt, DWORD dwFlags);
+BOOL SIMPLEAPI DragDetectEx(HWND hWnd, POINT pt, DWORD dwFlags);
 
 
 }	// namespace Simple

@@ -20,8 +20,8 @@
 namespace Simple
 {
 
-const wchar_t* StringSearch(const wchar_t* pszIn, const wchar_t* pszFind, bool bCaseSensitive);
-const wchar_t* StringSearchRev(const wchar_t* pszIn, const wchar_t* pszFind, bool bCaseSensitive, int iStartAt=-1);
+const wchar_t* SIMPLEAPI StringSearch(const wchar_t* pszIn, const wchar_t* pszFind, bool bCaseSensitive);
+const wchar_t* SIMPLEAPI StringSearchRev(const wchar_t* pszIn, const wchar_t* pszFind, bool bCaseSensitive, int iStartAt=-1);
 
 }	// namespace Simple
 

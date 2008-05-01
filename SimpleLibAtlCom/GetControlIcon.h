@@ -21,8 +21,8 @@ namespace Simple
 {
 
 
-HBITMAP GetControlImage(LPCOLESTR pszCLSID, int cx, int cy);
-HICON GetControlIcon(LPCOLESTR pszCLSID, int cx, int cy);
+HBITMAP SIMPLEAPI GetControlImage(LPCOLESTR pszCLSID, int cx, int cy);
+HICON SIMPLEAPI GetControlIcon(LPCOLESTR pszCLSID, int cx, int cy);
 
 }	// namespace Simple
 

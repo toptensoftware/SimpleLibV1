@@ -24,7 +24,7 @@ namespace Simple
 
 typedef HRESULT (STDMETHODCALLTYPE *PFNDLLGETCLASSOBJECT)(REFCLSID rclsid, REFIID riid, LPVOID* ppv);
 
-HRESULT CoCreateInstanceDLL(LPCOLESTR pszDLL, CLSID clsid, REFIID riid, void** ppvObject)
+HRESULT SIMPLEAPI CoCreateInstanceDLL(LPCOLESTR pszDLL, CLSID clsid, REFIID riid, void** ppvObject)
 {
 USES_CONVERSION;
 
@@ -51,7 +51,7 @@ static CLSID CLSID_JScript={0xF414C260, 0x6AC0, 0x11CF, 0xB6, 0xD1, 0x00, 0xAA, 
 
 #include <activscp.h>
 
-HRESULT CoCreateScriptEngine(LPCOLESTR pszProgID, REFIID riid, void** pVal)
+HRESULT SIMPLEAPI CoCreateScriptEngine(LPCOLESTR pszProgID, REFIID riid, void** pVal)
 {
 	if (IsEqualStringI(pszProgID, L"VBScript"))
 		{

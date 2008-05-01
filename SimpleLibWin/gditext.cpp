@@ -35,7 +35,7 @@ static int CountLines(const wchar_t* psz)
 	return iCount;
 }
 
-int SlxDrawText(HDC hdc, const wchar_t* pszString, int nCount, LPRECT lpRect, UINT uFormat)
+int SIMPLEAPI SlxDrawText(HDC hdc, const wchar_t* pszString, int nCount, LPRECT lpRect, UINT uFormat)
 {
 	RECT rcTemp;
 	if (uFormat & DT_VCENTER)
@@ -60,7 +60,7 @@ int SlxDrawText(HDC hdc, const wchar_t* pszString, int nCount, LPRECT lpRect, UI
 	return DrawText(hdc, pszString, nCount, lpRect, uFormat);
 }
 
-SIZE MeasureDrawText(HDC hdc, HFONT hFont, const wchar_t* pszString, int iCount, int iMaxWidth, UINT nFormat)
+SIZE SIMPLEAPI MeasureDrawText(HDC hdc, HFONT hFont, const wchar_t* pszString, int iCount, int iMaxWidth, UINT nFormat)
 {
 	// Create a DC?
 	HDC hDC=hdc;
@@ -94,7 +94,7 @@ SIZE MeasureDrawText(HDC hdc, HFONT hFont, const wchar_t* pszString, int iCount,
 }
 
 
-SIZE MeasureText(HDC hdc, HFONT hFont, const wchar_t* pszString, int iCount)
+SIZE SIMPLEAPI MeasureText(HDC hdc, HFONT hFont, const wchar_t* pszString, int iCount)
 {
 	// Create a DC?
 	HDC hDC=hdc;
@@ -130,7 +130,7 @@ SIZE MeasureText(HDC hdc, HFONT hFont, const wchar_t* pszString, int iCount)
 	return size;
 }
 
-bool DrawTextIsCropped(HDC hDC, const wchar_t* psz, int cchText, LPRECT prc, UINT format)
+bool SIMPLEAPI DrawTextIsCropped(HDC hDC, const wchar_t* psz, int cchText, LPRECT prc, UINT format)
 {
 	CUniString str(psz);
 	DrawText(hDC, str.GetBuffer(str.GetLength()+10), cchText, prc, format|DT_MODIFYSTRING);

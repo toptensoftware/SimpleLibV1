@@ -28,8 +28,8 @@ namespace Simple
 #define RIGHT_BUTTON    0x02
 #define MIDDLE_BUTTON   0x04
 
-short GetOLEKeyboardState();
-short GetOLEMouseState();
+short SIMPLEAPI GetOLEKeyboardState();
+short SIMPLEAPI GetOLEMouseState();
 
 }	// namespace Simple
 

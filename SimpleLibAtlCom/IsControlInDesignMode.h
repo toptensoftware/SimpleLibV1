@@ -20,7 +20,7 @@
 namespace Simple
 {
 
-bool IsControlInDesignMode(IUnknown* pControl);
+bool SIMPLEAPI IsControlInDesignMode(IUnknown* pControl);
 
 
 }	// namespace Simple

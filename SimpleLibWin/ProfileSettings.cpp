@@ -30,17 +30,17 @@ CUniString  g_strCompanyName;
 CUniString  g_strAppName;
 
 
-const wchar_t* SlxGetCompanyName()
+const wchar_t* SIMPLEAPI SlxGetCompanyName()
 {
 	return g_strCompanyName;
 }
 
-const wchar_t* SlxGetAppName()
+const wchar_t* SIMPLEAPI SlxGetAppName()
 {
 	return g_strAppName;
 }
 
-void SlxInitProfile(const wchar_t* pszCompanyName, const wchar_t* pszAppName)
+void SIMPLEAPI SlxInitProfile(const wchar_t* pszCompanyName, const wchar_t* pszAppName)
 {
 	g_strCompanyName=pszCompanyName;
 	g_strAppName=pszAppName;
@@ -49,7 +49,7 @@ void SlxInitProfile(const wchar_t* pszCompanyName, const wchar_t* pszAppName)
 }
 
 
-bool SlxUpgradeProfile(const wchar_t* pszOldCompanyName, const wchar_t* pszOldAppName)
+bool SIMPLEAPI SlxUpgradeProfile(const wchar_t* pszOldCompanyName, const wchar_t* pszOldAppName)
 {
 	// Quit if key already exists
 	CSmartHandle<HKEY> key;
@@ -64,7 +64,7 @@ bool SlxUpgradeProfile(const wchar_t* pszOldCompanyName, const wchar_t* pszOldAp
 						HKEY_CURRENT_USER, Format(L"Software\\%s\\%s", pszOldCompanyName, pszOldAppName))==ERROR_SUCCESS;
 }
 
-int SlxGetProfileInt(const wchar_t* pszSection, const wchar_t* pszEntry, int nDefault)
+int SIMPLEAPI SlxGetProfileInt(const wchar_t* pszSection, const wchar_t* pszEntry, int nDefault)
 {
 	ASSERT(!IsEmptyString(g_strAppName));
 
@@ -75,7 +75,7 @@ int SlxGetProfileInt(const wchar_t* pszSection, const wchar_t* pszEntry, int nDe
 	return int(dw);
 }
 
-bool SlxSetProfileInt(const wchar_t* pszSection, const wchar_t* pszEntry, int nValue)
+bool SIMPLEAPI SlxSetProfileInt(const wchar_t* pszSection, const wchar_t* pszEntry, int nValue)
 {
 	ASSERT(!IsEmptyString(g_strAppName));
 
@@ -87,7 +87,7 @@ bool SlxSetProfileInt(const wchar_t* pszSection, const wchar_t* pszEntry, int nV
 	return true;
 }
 
-CUniString SlxGetProfileString(const wchar_t* pszSection, const wchar_t* pszEntry, const wchar_t* pszDefault)
+CUniString SIMPLEAPI SlxGetProfileString(const wchar_t* pszSection, const wchar_t* pszEntry, const wchar_t* pszDefault)
 {
 	ASSERT(!IsEmptyString(g_strAppName));
 
@@ -99,7 +99,7 @@ CUniString SlxGetProfileString(const wchar_t* pszSection, const wchar_t* pszEntr
 }
 
 
-bool SlxSetProfileString(const wchar_t* pszSection, const wchar_t* pszEntry, const wchar_t* pszValue)
+bool SIMPLEAPI SlxSetProfileString(const wchar_t* pszSection, const wchar_t* pszEntry, const wchar_t* pszValue)
 {
 	ASSERT(!IsEmptyString(g_strAppName));
 
@@ -114,24 +114,24 @@ bool SlxSetProfileString(const wchar_t* pszSection, const wchar_t* pszEntry, con
 }
 
 
-void SlxDeleteProfileSection(const wchar_t* pszSection)
+void SIMPLEAPI SlxDeleteProfileSection(const wchar_t* pszSection)
 {
 	RegNukeKey(HKEY_CURRENT_USER, SlxGetProfileKey(pszSection));
 }
 
-bool SlxEnumProfileValues(const wchar_t* pszSection, CVector<CUniString>& vec)
+bool SIMPLEAPI SlxEnumProfileValues(const wchar_t* pszSection, CVector<CUniString>& vec)
 {
 	return RegEnumAllValues(HKEY_CURRENT_USER, SlxGetProfileKey(pszSection), vec)==ERROR_SUCCESS;
 }
 
-bool SlxEnumProfileSections(const wchar_t* pszSection, CVector<CUniString>& vec)
+bool SIMPLEAPI SlxEnumProfileSections(const wchar_t* pszSection, CVector<CUniString>& vec)
 {
 	return RegEnumAllKeys(HKEY_CURRENT_USER, SlxGetProfileKey(pszSection), vec)==ERROR_SUCCESS;
 }
 
 
 
-CUniString SlxGetProfileKey(const wchar_t* pszSuffix)
+CUniString SIMPLEAPI SlxGetProfileKey(const wchar_t* pszSuffix)
 {
 	ASSERT(!g_strAppName.IsEmpty());
 	if (pszSuffix)

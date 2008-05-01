@@ -23,7 +23,7 @@
 namespace Simple
 {
 
-HRESULT SetupComErrorInfo(
+HRESULT SIMPLEAPI SetupComErrorInfo(
 					HMODULE hModule,
 					HRESULT hr, 
 					CLSID clsid,

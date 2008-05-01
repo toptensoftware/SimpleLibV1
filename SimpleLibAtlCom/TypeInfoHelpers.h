@@ -238,22 +238,22 @@ protected:
 	CComPtr<ITypeInfo> m_spTypeInfo;
 };
 
-inline bool operator==(const CType& a, const CType& b)
+inline bool SIMPLEAPI operator==(const CType& a, const CType& b)
 {
 	return a.IsEqual(b);
 }
 
-inline bool operator!=(const CType& a, const CType& b)
+inline bool SIMPLEAPI operator!=(const CType& a, const CType& b)
 {
 	return !a.IsEqual(b);
 }
 
-inline bool operator==(const CType& a, VARTYPE vt)
+inline bool SIMPLEAPI operator==(const CType& a, VARTYPE vt)
 {
 	return a.GetVarType()==vt && !a.IsPointer();
 }
 
-inline bool operator!=(const CType& a, VARTYPE vt)
+inline bool SIMPLEAPI operator!=(const CType& a, VARTYPE vt)
 {
 	return !(a==vt);
 }

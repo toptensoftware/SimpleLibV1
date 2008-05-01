@@ -33,7 +33,7 @@ namespace Simple
 #define DT_HIDEPREFIX               0x00100000
 #endif
 
-static void FillRect(HDC hDC, int l, int t, int r, int b, HBRUSH hbr)
+static void SIMPLEAPI FillRect(HDC hDC, int l, int t, int r, int b, HBRUSH hbr)
 {
 	RECT rc;
 	SetRect(&rc, l, t, r, b);
@@ -120,7 +120,7 @@ HINSTANCE CThemeLib::Load()
 // LoadThemeLib implementation
 
 static CThemeLib g_ThemeLib;
-HINSTANCE LoadThemeLib()
+HINSTANCE SIMPLEAPI LoadThemeLib()
 {
 	return g_ThemeLib.Load();
 }
@@ -177,7 +177,7 @@ void CThemeData::Close()
 // DrawThemedButton
 
 // Draw themed XP style button
-void DrawThemedButton(CThemeData& theme, HDC hDC, LPCRECT prc, LPCWSTR pszText, UINT uState, int iIndent)
+void SIMPLEAPI DrawThemedButton(CThemeData& theme, HDC hDC, LPCRECT prc, LPCWSTR pszText, UINT uState, int iIndent)
 {
 	// Work out text flags
 	UINT dwDrawText=DT_VCENTER|DT_SINGLELINE|DT_WORD_ELLIPSIS;
@@ -266,7 +266,7 @@ void DrawThemedButton(CThemeData& theme, HDC hDC, LPCRECT prc, LPCWSTR pszText, 
 		}
 }
 
-void DrawThemedButton(HWND hWnd, HDC hDC, LPCRECT prc, LPCWSTR pszText, UINT uState, int iIndent)
+void SIMPLEAPI DrawThemedButton(HWND hWnd, HDC hDC, LPCRECT prc, LPCWSTR pszText, UINT uState, int iIndent)
 {
 	CThemeData theme;
 	theme.Open(hWnd, L"Button");
@@ -289,7 +289,7 @@ void DrawThemedButton(HWND hWnd, HDC hDC, LPCRECT prc, LPCWSTR pszText, UINT uSt
 
 
 // Draw themed XP style button
-void DrawThemedToolBarButton(CThemeData& theme, HDC hDC, LPCRECT prc, LPCWSTR pszText, 
+void SIMPLEAPI DrawThemedToolBarButton(CThemeData& theme, HDC hDC, LPCRECT prc, LPCWSTR pszText, 
 					UINT uState, HIMAGELIST hImageList, int iImage)
 {
 	// Work out text flags
@@ -438,7 +438,7 @@ void DrawThemedToolBarButton(CThemeData& theme, HDC hDC, LPCRECT prc, LPCWSTR ps
 }
 
 
-void DrawThemedToolBarButton(HWND hWnd, HDC hDC, LPCRECT prc, LPCWSTR pszText, 
+void SIMPLEAPI DrawThemedToolBarButton(HWND hWnd, HDC hDC, LPCRECT prc, LPCWSTR pszText, 
 					UINT uState, HIMAGELIST hImageList, int iImage)
 {
 	CThemeData theme;

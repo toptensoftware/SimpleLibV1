@@ -23,7 +23,7 @@ namespace Simple
 {
 
 // Split a command line, removing quotes as we go...
-void SplitCommandLine(const wchar_t* pszCommandLine, CVector<CUniString>& Args)
+void SIMPLEAPI SplitCommandLine(const wchar_t* pszCommandLine, CVector<CUniString>& Args)
 {
 	const wchar_t* p=pszCommandLine;
 	while (p[0])

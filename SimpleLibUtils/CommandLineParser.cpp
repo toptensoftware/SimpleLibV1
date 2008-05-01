@@ -156,7 +156,7 @@ bool CCommandLineParser::ParseFile(const wchar_t* pszFileName)
 
 	// Load text file
 	CUniString strResponseText;
-	if (LoadTextFile<wchar_t>(strResponseFile, strResponseText))
+	if (!LoadTextFile<wchar_t>(strResponseFile, strResponseText))
 		{
 		m_strErrorMessage=Format(L"Failed to load response file '%s'", strResponseFile);
 		return false;

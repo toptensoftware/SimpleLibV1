@@ -23,7 +23,7 @@ namespace Simple
 
 
 // Compare two object for same identity
-BOOL IsSameObject(IUnknown* pObject1, IUnknown* pObject2)
+BOOL SIMPLEAPI IsSameObject(IUnknown* pObject1, IUnknown* pObject2)
 {
 	// Both NULL?
 	if (!pObject1 && !pObject2)

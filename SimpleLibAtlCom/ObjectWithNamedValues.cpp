@@ -167,7 +167,7 @@ STDMETHODIMP IObjectWithNamedValuesImpl::RemoveListener(LPCOLESTR pszName, IObje
 // Helpers for working with named values
 
 // Copy all named values from one named values collection to another...
-HRESULT CopyNamedValues(IObjectWithNamedValues* pDest, IObjectWithNamedValues* pSource, bool bAll)
+HRESULT SIMPLEAPI CopyNamedValues(IObjectWithNamedValues* pDest, IObjectWithNamedValues* pSource, bool bAll)
 {
 	// Get other collection count
 	int iCount;
@@ -190,7 +190,7 @@ HRESULT CopyNamedValues(IObjectWithNamedValues* pDest, IObjectWithNamedValues* p
 }
 
 // Check if any named value in the collection should be persisted...
-bool AnyPersistedNamedValues(IObjectWithNamedValues* pNamedValues)
+bool SIMPLEAPI AnyPersistedNamedValues(IObjectWithNamedValues* pNamedValues)
 {
 	// Get other collection count
 	int iCount;
@@ -212,7 +212,7 @@ bool AnyPersistedNamedValues(IObjectWithNamedValues* pNamedValues)
 
 
 // Load/save all the values in a named values collection
-HRESULT SerializeNamedValues(IObjectWithNamedValues* pNamedValues, CXMLArchive& ar, LPCOLESTR pszExcludeOnLoad, LPCOLESTR pszElementName)
+HRESULT SIMPLEAPI SerializeNamedValues(IObjectWithNamedValues* pNamedValues, CXMLArchive& ar, LPCOLESTR pszExcludeOnLoad, LPCOLESTR pszElementName)
 {
 	// Quit if saving and nothing to save...
 	if (ar.IsStoring() && !AnyPersistedNamedValues(pNamedValues))

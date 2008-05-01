@@ -21,24 +21,24 @@ namespace Simple
 {
 
 // Check if a variant parameter was "missing"
-BOOL IsParameterSpecified(VARIANT& var);
+BOOL SIMPLEAPI IsParameterSpecified(VARIANT& var);
 
 // Convert a variant to either an integer or a string
-HRESULT VariantToStringOrInt(VARIANT& Item, int& i, CComBSTR& bstr);
-HRESULT VariantToStringOrIntOrObject(VARIANT& Item, int* pi, BSTR* pbstrVal, IUnknown** pVal);
+HRESULT SIMPLEAPI VariantToStringOrInt(VARIANT& Item, int& i, CComBSTR& bstr);
+HRESULT SIMPLEAPI VariantToStringOrIntOrObject(VARIANT& Item, int* pi, BSTR* pbstrVal, IUnknown** pVal);
 
-HRESULT GetOptionalString(CComBSTR& bstr, VARIANT& var, LPCOLESTR pszDefault);
-HRESULT GetOptionalShort(short& i, VARIANT& var, short iDefault);
-HRESULT GetOptionalUShort(unsigned short& i, VARIANT& var, unsigned short iDefault);
-HRESULT GetOptionalInt(int& i, VARIANT& var, int iDefault);
-HRESULT GetOptionalUInt(unsigned int& i, VARIANT& var, unsigned int iDefault);
-inline HRESULT GetOptionalULong(unsigned long& i, VARIANT& var, unsigned long iDefault)
+HRESULT SIMPLEAPI GetOptionalString(CComBSTR& bstr, VARIANT& var, LPCOLESTR pszDefault);
+HRESULT SIMPLEAPI GetOptionalShort(short& i, VARIANT& var, short iDefault);
+HRESULT SIMPLEAPI GetOptionalUShort(unsigned short& i, VARIANT& var, unsigned short iDefault);
+HRESULT SIMPLEAPI GetOptionalInt(int& i, VARIANT& var, int iDefault);
+HRESULT SIMPLEAPI GetOptionalUInt(unsigned int& i, VARIANT& var, unsigned int iDefault);
+inline HRESULT SIMPLEAPI GetOptionalULong(unsigned long& i, VARIANT& var, unsigned long iDefault)
 {
 	ASSERT(sizeof(unsigned long)==sizeof(unsigned int));
 	return GetOptionalUInt((unsigned int&)i, var, (unsigned int)iDefault);
 }
-HRESULT GetOptionalObject(VARIANT& var, REFIID riid, void** ppvObject);
-HRESULT GetOptionalDouble(double& dbl, VARIANT& var, double dblDefault);
+HRESULT SIMPLEAPI GetOptionalObject(VARIANT& var, REFIID riid, void** ppvObject);
+HRESULT SIMPLEAPI GetOptionalDouble(double& dbl, VARIANT& var, double dblDefault);
 
 
 }	// namespace Simple

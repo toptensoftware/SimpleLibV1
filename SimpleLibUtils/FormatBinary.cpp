@@ -25,12 +25,12 @@ namespace Simple
 
 
 
-wchar_t ToHex(int iNibble)
+wchar_t SIMPLEAPI ToHex(int iNibble)
 {
 	return iNibble<10 ? (L'0' + iNibble) : (L'A' + iNibble -10);
 }
 
-unsigned char FromHex(wchar_t ch)
+unsigned char SIMPLEAPI FromHex(wchar_t ch)
 {
 	if (ch>=L'0' && ch<='9')
 		return ch-L'0';
@@ -45,7 +45,7 @@ unsigned char FromHex(wchar_t ch)
 	return 0;
 }
 
-CUniString FormatBinaryData(unsigned char* pData, size_t cb, int iBytesPerLine)
+CUniString SIMPLEAPI FormatBinaryData(unsigned char* pData, size_t cb, int iBytesPerLine)
 {
 	// How many carriage returns 
 	int iCRs=int(iBytesPerLine ? cb/iBytesPerLine : 0);
@@ -74,7 +74,7 @@ CUniString FormatBinaryData(unsigned char* pData, size_t cb, int iBytesPerLine)
 	return str;
 }
 
-bool UnformatBinaryData(const wchar_t* psz, unsigned char** ppData, size_t* pcb)
+bool SIMPLEAPI UnformatBinaryData(const wchar_t* psz, unsigned char** ppData, size_t* pcb)
 {
 	// How long is the string
 	int iByteLen=int(wcslen(psz)/2);
@@ -88,7 +88,7 @@ bool UnformatBinaryData(const wchar_t* psz, unsigned char** ppData, size_t* pcb)
 	return true;
 }
 
-size_t UnformatBinaryData(const wchar_t* psz, unsigned char* pData1, size_t cbData)
+size_t SIMPLEAPI UnformatBinaryData(const wchar_t* psz, unsigned char* pData1, size_t cbData)
 {
 	// Write each byte to the stream
 	const wchar_t* p=psz;

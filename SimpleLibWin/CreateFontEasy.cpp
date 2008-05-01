@@ -12,7 +12,7 @@ namespace Simple
 
 
 
-HFONT CreateFontEasy(const wchar_t* pszName, float Size, bool bBold, bool bItalic, bool bClearType)
+HFONT SIMPLEAPI CreateFontEasy(const wchar_t* pszName, float Size, bool bBold, bool bItalic, bool bClearType)
 {
 	// Work out size
 	HDC hDC=CreateIC(L"Display", NULL, NULL, NULL);

@@ -28,12 +28,12 @@ namespace Simple
 // Message sent to window to get its state
 #define WM_COMMANDSTATE		WM_AFXLAST		// Unlikely clash for WM_COMMAND state
 
-HMENU CommandStateGetMenu();
-int CommandStateGetMenuIndex();
+HMENU SIMPLEAPI CommandStateGetMenu();
+int SIMPLEAPI CommandStateGetMenuIndex();
 
-void CommandStateUpdateMenu(HWND hWnd, HMENU hMenu);
-void CommandStateUpdateToolBar(HWND hWnd, HWND hWndToolBar, int iFirst=0, int iLast=-1);
-void CommandStateSetMenuText(const wchar_t* psz);
+void SIMPLEAPI CommandStateUpdateMenu(HWND hWnd, HMENU hMenu);
+void SIMPLEAPI CommandStateUpdateToolBar(HWND hWnd, HWND hWndToolBar, int iFirst=0, int iLast=-1);
+void SIMPLEAPI CommandStateSetMenuText(const wchar_t* psz);
 
 // LRESULT OnCommandState(WORD wID, BOOL& bHandled);
 

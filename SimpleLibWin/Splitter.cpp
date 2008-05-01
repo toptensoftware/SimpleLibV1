@@ -39,7 +39,7 @@ LRESULT CALLBACK TransEdgeProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 	return lRetv;
 }
 
-void MakeNCTransparent(HWND hWnd)
+void SIMPLEAPI MakeNCTransparent(HWND hWnd)
 {
 #ifdef _WIN64
 	SetProp(hWnd, L"PreTransProc", (HANDLE)GetWindowLongPtr(hWnd, GWLP_WNDPROC));

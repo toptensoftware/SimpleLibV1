@@ -22,13 +22,13 @@ namespace Simple
 {
 
 // Miscellaneous parser utilities
-int ParseHexChar(wchar_t ch);
-bool ParseHexU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverflow);
-bool ParseIntU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverflow);
-bool IsDoubleU(const wchar_t* p);
-bool ParseDoubleU(const wchar_t*& p, double& dblVal, bool& bOverflow);
-bool ParseDouble(const wchar_t*& psz, double& dblVal, bool& bError);
-bool ParseInt64(const wchar_t*& psz, __int64& iVal, bool& bError);
+int SIMPLEAPI ParseHexChar(wchar_t ch);
+bool SIMPLEAPI ParseHexU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverflow);
+bool SIMPLEAPI ParseIntU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverflow);
+bool SIMPLEAPI IsDoubleU(const wchar_t* p);
+bool SIMPLEAPI ParseDoubleU(const wchar_t*& p, double& dblVal, bool& bOverflow);
+bool SIMPLEAPI ParseDouble(const wchar_t*& psz, double& dblVal, bool& bError);
+bool SIMPLEAPI ParseInt64(const wchar_t*& psz, __int64& iVal, bool& bError);
 
 
 // Tokens

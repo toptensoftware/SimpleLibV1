@@ -20,7 +20,7 @@
 namespace Simple
 {
 
-HRESULT SlxGetIDsOfName(IDispatch* pDisp, LPCOLESTR psz, DISPID* pVal);
+HRESULT SIMPLEAPI SlxGetIDsOfName(IDispatch* pDisp, LPCOLESTR psz, DISPID* pVal);
 
 class CDISPID
 {
@@ -54,9 +54,9 @@ public:
 	CComBSTR	m_bstr;
 };
 
-HRESULT SlxGetProperty(IDispatch* pDisp, const CDISPID& DispID, VARIANT* pVar);
-HRESULT SlxPutProperty(IDispatch* pDisp, const CDISPID& DispID, VARIANT newVal);
-HRESULT SlxInitProperty(IDispatch* pDisp, const CDISPID& DispID, VARIANT newVal);
+HRESULT SIMPLEAPI SlxGetProperty(IDispatch* pDisp, const CDISPID& DispID, VARIANT* pVar);
+HRESULT SIMPLEAPI SlxPutProperty(IDispatch* pDisp, const CDISPID& DispID, VARIANT newVal);
+HRESULT SIMPLEAPI SlxInitProperty(IDispatch* pDisp, const CDISPID& DispID, VARIANT newVal);
 
 
 }	// namespace Simple

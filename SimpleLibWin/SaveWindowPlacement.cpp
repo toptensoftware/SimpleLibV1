@@ -25,7 +25,7 @@ namespace Simple
 {
 
 
-void SaveWindowPlacement(HWND hWnd, const wchar_t* pszSection, const wchar_t* pszPrefix, WINDOWPLACEMENT* pOverride)
+void SIMPLEAPI SaveWindowPlacement(HWND hWnd, const wchar_t* pszSection, const wchar_t* pszPrefix, WINDOWPLACEMENT* pOverride)
 {
 	// Get placement
 	WINDOWPLACEMENT wp;
@@ -57,7 +57,7 @@ void SaveWindowPlacement(HWND hWnd, const wchar_t* pszSection, const wchar_t* ps
 	}
 }
 
-int LoadWindowPlacement(HWND hWnd, const wchar_t* pszSection, const wchar_t* pszPrefix)
+int SIMPLEAPI LoadWindowPlacement(HWND hWnd, const wchar_t* pszSection, const wchar_t* pszPrefix)
 {
 	// Get current placement
 	WINDOWPLACEMENT wp;

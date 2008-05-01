@@ -37,7 +37,7 @@ typedef WINUSERAPI BOOL (WINAPI* PFNSLWA)(HWND hwnd, COLORREF crKey, BYTE bAlpha
 
 
 
-BOOL SetLayeredWindowAttributesEx(HWND hWnd, COLORREF rgbKeyColor, BYTE bOpacity, BOOL bRedraw)
+BOOL SIMPLEAPI SetLayeredWindowAttributesEx(HWND hWnd, COLORREF rgbKeyColor, BYTE bOpacity, BOOL bRedraw)
 {
 	// Doesn't work on child windows
 	ASSERT((GetWindowLong(hWnd, GWL_STYLE) & WS_CHILD)==0);

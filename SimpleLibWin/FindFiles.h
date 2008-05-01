@@ -20,8 +20,8 @@
 namespace Simple
 {
 
-void FindFiles(const wchar_t* pszSpec, CVector<CUniString>& Files, bool bFullPath);
-void FindSubFolders(const wchar_t* pszFolder, CVector<CUniString>& Folders, bool bFullPath);
+void SIMPLEAPI FindFiles(const wchar_t* pszSpec, CVector<CUniString>& Files, bool bFullPath);
+void SIMPLEAPI FindSubFolders(const wchar_t* pszFolder, CVector<CUniString>& Folders, bool bFullPath);
 
 }	// namespace Simple
 

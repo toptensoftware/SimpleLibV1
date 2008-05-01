@@ -80,7 +80,7 @@ static void CALLBACK CallbackTimerProc(HWND hWnd, UINT uMsg, UINT_PTR idEvent, D
 		}
 }
 
-HCALLBACKTIMER SetCallbackTimer(UINT nPeriod, DWORD dwFlags, CALLBACKTIMERPROC pfnCallback, LPARAM lUserData)
+HCALLBACKTIMER SIMPLEAPI SetCallbackTimer(UINT nPeriod, DWORD dwFlags, CALLBACKTIMERPROC pfnCallback, LPARAM lUserData)
 {
 	// Allocate a thunk
 	TIMERTHUNK* pThunk=new TIMERTHUNK;
@@ -111,7 +111,7 @@ HCALLBACKTIMER SetCallbackTimer(UINT nPeriod, DWORD dwFlags, CALLBACKTIMERPROC p
 	return (HCALLBACKTIMER)pThunk;
 }
 
-void KillCallbackTimer(HCALLBACKTIMER hTimer)
+void SIMPLEAPI KillCallbackTimer(HCALLBACKTIMER hTimer)
 {
 	TIMERTHUNK* pThunk=(TIMERTHUNK*)hTimer;
 	if (!pThunk)

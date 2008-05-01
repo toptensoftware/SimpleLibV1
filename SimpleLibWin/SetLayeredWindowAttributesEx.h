@@ -22,7 +22,7 @@ namespace Simple
 
 // Pass rgbKeyColor==0xFFFFFFFF for non keyed
 // Pass bOpacity=255 for opaque
-BOOL SetLayeredWindowAttributesEx(HWND hWnd, COLORREF rgbKeyColor, BYTE bOpacity, BOOL bRedraw);
+BOOL SIMPLEAPI SetLayeredWindowAttributesEx(HWND hWnd, COLORREF rgbKeyColor, BYTE bOpacity, BOOL bRedraw);
 
 
 }	// namespace Simple

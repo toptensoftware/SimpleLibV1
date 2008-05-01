@@ -23,21 +23,21 @@
 namespace Simple
 {
 
-bool IsMouseMessage(UINT msg)
+bool SIMPLEAPI IsMouseMessage(UINT msg)
 {
 	if ((msg>=WM_MOUSEFIRST) && (msg<=WM_MOUSELAST)) return true;
 	if ((msg>=WM_NCMOUSEFIRST) && (msg<=WM_NCMOUSELAST)) return true;
 	return false;
 }
 
-bool IsKeyboardMessage(UINT msg)
+bool SIMPLEAPI IsKeyboardMessage(UINT msg)
 {
 	if ((msg>=WM_KEYFIRST) && (msg<=WM_KEYLAST)) return true;
 	if ((msg>=WM_SYSKEYFIRST) && (msg<=WM_SYSKEYLAST)) return true;
 	return false;
 }
 
-bool IsInputMessage(UINT msg)
+bool SIMPLEAPI IsInputMessage(UINT msg)
 {
 	return IsMouseMessage(msg) || IsKeyboardMessage(msg);
 }

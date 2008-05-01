@@ -25,7 +25,7 @@ namespace Simple
 
 
 
-HRESULT StandardError(HRESULT hr)
+HRESULT SIMPLEAPI StandardError(HRESULT hr)
 {
 	SetErrorInfo(0, NULL);
 	return hr;

@@ -9,8 +9,8 @@ namespace Simple
 
 class CProfileEntry;
 
-HRESULT CreateProfileStream(CProfileEntry* pEntry, IStream** pVal);
-HRESULT OpenProfileStream(CProfileEntry* pEntry, IStream** pVal);
+HRESULT SIMPLEAPI CreateProfileStream(CProfileEntry* pEntry, IStream** pVal);
+HRESULT SIMPLEAPI OpenProfileStream(CProfileEntry* pEntry, IStream** pVal);
 
 }	// namespace Simple
 

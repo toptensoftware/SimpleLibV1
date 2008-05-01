@@ -23,12 +23,12 @@ namespace Simple
 {
 
 
-bool IsEOL(wchar_t ch)
+bool SIMPLEAPI IsEOL(wchar_t ch)
 {
 	return ch==L'\r' || ch==L'\n';
 }
 
-bool SkipEOL(const wchar_t*& p)
+bool SIMPLEAPI SkipEOL(const wchar_t*& p)
 {
 	if (IsEOL(p[0]))
 		{
@@ -40,19 +40,19 @@ bool SkipEOL(const wchar_t*& p)
 	return false;
 }
 
-void SkipToEOL(const wchar_t*& p)
+void SIMPLEAPI SkipToEOL(const wchar_t*& p)
 {
 	while (p[0] && !IsEOL(p[0]))
 		p++;
 }
 
-void SkipToNextLine(const wchar_t*& p)
+void SIMPLEAPI SkipToNextLine(const wchar_t*& p)
 {
 	SkipToEOL(p);
 	SkipEOL(p);
 }
 
-bool DoesMatch(const wchar_t* p, const wchar_t* psz, bool bEndWord)
+bool SIMPLEAPI DoesMatch(const wchar_t* p, const wchar_t* psz, bool bEndWord)
 {
 	if (!psz)
 		return false;
@@ -65,7 +65,7 @@ bool DoesMatch(const wchar_t* p, const wchar_t* psz, bool bEndWord)
 	return false;
 }
 
-bool SkipMatch(const wchar_t*& p, const wchar_t* psz, bool bEndWord)
+bool SIMPLEAPI SkipMatch(const wchar_t*& p, const wchar_t* psz, bool bEndWord)
 {
 	if (!psz)
 		return false;
@@ -79,7 +79,7 @@ bool SkipMatch(const wchar_t*& p, const wchar_t* psz, bool bEndWord)
 	return false;
 }
 
-bool DoesMatchI(const wchar_t* p, const wchar_t* psz, bool bEndWord)
+bool SIMPLEAPI DoesMatchI(const wchar_t* p, const wchar_t* psz, bool bEndWord)
 {
 	if (!psz)
 		return false;
@@ -92,7 +92,7 @@ bool DoesMatchI(const wchar_t* p, const wchar_t* psz, bool bEndWord)
 	return false;
 }
 
-bool SkipMatchI(const wchar_t*& p, const wchar_t* psz, bool bEndWord)
+bool SIMPLEAPI SkipMatchI(const wchar_t*& p, const wchar_t* psz, bool bEndWord)
 {
 	if (!psz)
 		return false;
@@ -106,7 +106,7 @@ bool SkipMatchI(const wchar_t*& p, const wchar_t* psz, bool bEndWord)
 	return false;
 }
 
-bool SkipWhiteSpace(const wchar_t*& p)
+bool SIMPLEAPI SkipWhiteSpace(const wchar_t*& p)
 {
 	if (!IsWhiteSpace(p[0]))
 		return false;
@@ -143,22 +143,22 @@ bool CanWordBreakHere(const wchar_t* pszStart, int iPos)
 
 
 
-bool IsLineEndChar(wchar_t ch)
+bool SIMPLEAPI IsLineEndChar(wchar_t ch)
 {
 	return ch==L'\r' || ch==L'\n';
 }
 
-bool IsLineSpace(wchar_t ch)
+bool SIMPLEAPI IsLineSpace(wchar_t ch)
 {
 	return ch==' ' || ch=='\t';
 }
 
-bool IsWhiteSpace(wchar_t ch)
+bool SIMPLEAPI IsWhiteSpace(wchar_t ch)
 {
 	return IsLineSpace(ch) || IsLineEndChar(ch);
 }
 
-bool IsIdentifierLeadChar(wchar_t ch, const wchar_t* pszExtraChars)
+bool SIMPLEAPI IsIdentifierLeadChar(wchar_t ch, const wchar_t* pszExtraChars)
 {
 	if (pszExtraChars && wcschr(pszExtraChars, ch)!=NULL)
 		return true;
@@ -166,7 +166,7 @@ bool IsIdentifierLeadChar(wchar_t ch, const wchar_t* pszExtraChars)
 	return (ch>='a' && ch<='z') || (ch>='A' && ch<='Z') || ch==L'_';
 }
 
-bool IsIdentifierChar(wchar_t ch, const wchar_t* pszExtraChars)
+bool SIMPLEAPI IsIdentifierChar(wchar_t ch, const wchar_t* pszExtraChars)
 {
 	if (pszExtraChars && wcschr(pszExtraChars, ch)!=NULL)
 		return true;
@@ -174,7 +174,7 @@ bool IsIdentifierChar(wchar_t ch, const wchar_t* pszExtraChars)
 	return (ch>='0' && ch<='9') || IsIdentifierLeadChar(ch);
 }
 
-bool SkipLineSpace(const wchar_t*& p)
+bool SIMPLEAPI SkipLineSpace(const wchar_t*& p)
 {
 	if (!IsLineSpace(p[0]))
 		return false;
@@ -186,7 +186,7 @@ bool SkipLineSpace(const wchar_t*& p)
 	return true;
 }
 
-bool SkipLineEnd(const wchar_t*& p)
+bool SIMPLEAPI SkipLineEnd(const wchar_t*& p)
 {
 	if (!IsEOL(p[0]))
 		return false;
@@ -199,7 +199,7 @@ bool SkipLineEnd(const wchar_t*& p)
 	return true;
 }
 
-bool SkipIdentifier(const wchar_t*& p, CUniString& str, const wchar_t* pszExtraLeadChars, const wchar_t* pszExtraChars)
+bool SIMPLEAPI SkipIdentifier(const wchar_t*& p, CUniString& str, const wchar_t* pszExtraLeadChars, const wchar_t* pszExtraChars)
 {
 	// Store start
 	const wchar_t* pszIdentifier=p;
@@ -228,7 +228,7 @@ bool SkipIdentifier(const wchar_t*& p, CUniString& str, const wchar_t* pszExtraL
 }
 
 // Read an integer from an wchar_t buffer
-bool ReadInt(const wchar_t*& p, int* pi)
+bool SIMPLEAPI ReadInt(const wchar_t*& p, int* pi)
 {
 	const wchar_t* pszOrig=p;
 
@@ -258,7 +258,7 @@ bool ReadInt(const wchar_t*& p, int* pi)
 	return true;
 }
 
-bool ReadDoubleU(const wchar_t*& p, double* pdblVal)
+bool SIMPLEAPI ReadDoubleU(const wchar_t*& p, double* pdblVal)
 {
 	// Clear out values
 	pdblVal[0]=0;
@@ -290,7 +290,7 @@ bool ReadDoubleU(const wchar_t*& p, double* pdblVal)
 	return true;
 }
 
-bool ReadDouble(const wchar_t*& psz, double* pdblVal)
+bool SIMPLEAPI ReadDouble(const wchar_t*& psz, double* pdblVal)
 {
 	// Use local ptr
 	const wchar_t* p=psz;

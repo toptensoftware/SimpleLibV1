@@ -25,11 +25,11 @@ namespace Simple
 
 #include "SimpleLibRes.h"
 
-void SelectSingleItem(ATLControls::CListViewCtrl& ListView, int iItem);
-void SelectAllItems(ATLControls::CListViewCtrl& ListView);
-void ToggleCheckState(ATLControls::CListViewCtrl& ListView);
-void LoadColumnWidths(ATLControls::CListViewCtrl& ListView, const wchar_t* pszSection, const wchar_t* pszPrefix);
-void SaveColumnWidths(ATLControls::CListViewCtrl& ListView, const wchar_t* pszSection, const wchar_t* pszPrefix);
+void SIMPLEAPI SelectSingleItem(ATLControls::CListViewCtrl& ListView, int iItem);
+void SIMPLEAPI SelectAllItems(ATLControls::CListViewCtrl& ListView);
+void SIMPLEAPI ToggleCheckState(ATLControls::CListViewCtrl& ListView);
+void SIMPLEAPI LoadColumnWidths(ATLControls::CListViewCtrl& ListView, const wchar_t* pszSection, const wchar_t* pszPrefix);
+void SIMPLEAPI SaveColumnWidths(ATLControls::CListViewCtrl& ListView, const wchar_t* pszSection, const wchar_t* pszPrefix);
 
 // CListViewSorter Class
 class CListViewSorter

@@ -21,14 +21,14 @@
 namespace Simple
 {
 
-LONG RegNukeKey(HKEY hKey, const wchar_t* pszSubKey);
-LONG RegGetString(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValue, CUniString& str);
-LONG RegSetString(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValueName, const wchar_t* pszValue);
-LONG RegGetDWORD(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValue, DWORD* pVal);
-LONG RegSetDWORD(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValueName, DWORD dwValue);
-LONG RegEnumAllValues(HKEY hKey, const wchar_t* pszSubKey, CVector<CUniString>& vec);
-LONG RegEnumAllKeys(HKEY hKey, const wchar_t* pszSubKey, CVector<CUniString>& vec);
-LONG RegCopyKey(HKEY hDestKey, const wchar_t* pszDestSubKey, HKEY hSrcKey, const wchar_t* pszSrcSubKey);
+LONG SIMPLEAPI RegNukeKey(HKEY hKey, const wchar_t* pszSubKey);
+LONG SIMPLEAPI RegGetString(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValue, CUniString& str);
+LONG SIMPLEAPI RegSetString(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValueName, const wchar_t* pszValue);
+LONG SIMPLEAPI RegGetDWORD(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValue, DWORD* pVal);
+LONG SIMPLEAPI RegSetDWORD(HKEY hKey, const wchar_t* pszSubKey, const wchar_t* pszValueName, DWORD dwValue);
+LONG SIMPLEAPI RegEnumAllValues(HKEY hKey, const wchar_t* pszSubKey, CVector<CUniString>& vec);
+LONG SIMPLEAPI RegEnumAllKeys(HKEY hKey, const wchar_t* pszSubKey, CVector<CUniString>& vec);
+LONG SIMPLEAPI RegCopyKey(HKEY hDestKey, const wchar_t* pszDestSubKey, HKEY hSrcKey, const wchar_t* pszSrcSubKey);
 
 }	// namespace Simple
 

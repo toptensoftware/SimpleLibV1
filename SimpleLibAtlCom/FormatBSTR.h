@@ -22,8 +22,8 @@ namespace Simple
 {
 
 // Possibly elsewhere useful helpers required by FormatBSTR
-void CharString(OLECHAR ch, int iLen, BSTR* pVal);
-void FormatHex(DWORD dwValue, int iPrecision, bool bUpperCase, BSTR* pVal);
+void SIMPLEAPI CharString(OLECHAR ch, int iLen, BSTR* pVal);
+void SIMPLEAPI FormatHex(DWORD dwValue, int iPrecision, bool bUpperCase, BSTR* pVal);
 
 // Format into a BSTR!!
 // Supports most format specifiers, doesn't require C runtime library!
@@ -62,14 +62,14 @@ void FormatHex(DWORD dwValue, int iPrecision, bool bUpperCase, BSTR* pVal);
 
 // If on enter, pVal points to an existing string it will be SysFreeString'd
 
-int FormatBSTR(CUniString& buf, LPCOLESTR pszFormat, va_list args);
-int FormatBSTR(BSTR* pVal, LPCOLESTR pszFormat, va_list args);
-int FormatBSTR(BSTR* pVal, LPCOLESTR pszFormat, ...);
-CComBSTR FormatBSTR(LPCOLESTR pszFormat, ...);
+int SIMPLEAPI FormatBSTR(CUniString& buf, LPCOLESTR pszFormat, va_list args);
+int SIMPLEAPI FormatBSTR(BSTR* pVal, LPCOLESTR pszFormat, va_list args);
+int SIMPLEAPI FormatBSTR(BSTR* pVal, LPCOLESTR pszFormat, ...);
+CComBSTR SIMPLEAPI FormatBSTR(LPCOLESTR pszFormat, ...);
 
-int FormatBSTR(BSTR* pVal, UINT nResIDFormat, va_list args);
-int FormatBSTR(BSTR* pVal, UINT nResIDFormat, ...);
-CComBSTR FormatBSTR(UINT nResIDFormat, ...);
+int SIMPLEAPI FormatBSTR(BSTR* pVal, UINT nResIDFormat, va_list args);
+int SIMPLEAPI FormatBSTR(BSTR* pVal, UINT nResIDFormat, ...);
+CComBSTR SIMPLEAPI FormatBSTR(UINT nResIDFormat, ...);
 
 }	// namespace Simple
 

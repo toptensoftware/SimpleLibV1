@@ -38,7 +38,7 @@ bool IsVista()
 	return !!iIsVista;
 }
 
-bool GetModuleVersionInfo(const wchar_t* pszModuleName, VS_FIXEDFILEINFO* pInfo)
+bool SIMPLEAPI GetModuleVersionInfo(const wchar_t* pszModuleName, VS_FIXEDFILEINFO* pInfo)
 {
 	// Get verion info size
 	DWORD dwHandle;
@@ -65,7 +65,7 @@ bool GetModuleVersionInfo(const wchar_t* pszModuleName, VS_FIXEDFILEINFO* pInfo)
 	return true;
 }
 
-bool GetModuleVersionInfo(HMODULE hModule, VS_FIXEDFILEINFO* pInfo)
+bool SIMPLEAPI GetModuleVersionInfo(HMODULE hModule, VS_FIXEDFILEINFO* pInfo)
 {
 	// Get module file name
 	wchar_t szFileName[MAX_PATH];
@@ -76,7 +76,7 @@ bool GetModuleVersionInfo(HMODULE hModule, VS_FIXEDFILEINFO* pInfo)
 
 
 
-DWORD GetModuleVersion(const wchar_t* pszModuleName, CUniString& str)
+DWORD SIMPLEAPI GetModuleVersion(const wchar_t* pszModuleName, CUniString& str)
 {
 	// Get verion info size
 	DWORD dwHandle;
@@ -119,7 +119,7 @@ DWORD GetModuleVersion(const wchar_t* pszModuleName, CUniString& str)
 	return TRUE;
 }
 
-DWORD GetModuleVersion(HMODULE hModule, CUniString& str)
+DWORD SIMPLEAPI GetModuleVersion(HMODULE hModule, CUniString& str)
 {
 	// Get module file name
 	wchar_t szFileName[MAX_PATH];
@@ -128,7 +128,7 @@ DWORD GetModuleVersion(HMODULE hModule, CUniString& str)
 	return GetModuleVersion(szFileName, str);
 }
 
-DWORD GetDllVersion(const wchar_t* pszDllName)
+DWORD SIMPLEAPI GetDllVersion(const wchar_t* pszDllName)
 {
 	HINSTANCE hInstDll = GetModuleHandle(pszDllName);
 	if (!hInstDll)
@@ -152,7 +152,7 @@ DWORD GetDllVersion(const wchar_t* pszDllName)
 	return MAKELONG(dvi.dwMinorVersion, dvi.dwMajorVersion);
 }
 
-DWORD GetCommonControlsVersion()
+DWORD SIMPLEAPI GetCommonControlsVersion()
 {
 	static DWORD dwVer=0;
 	if (!dwVer)
