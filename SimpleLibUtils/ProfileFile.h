@@ -171,6 +171,8 @@ public:
 
 	void SetMode(const wchar_t* pszMode);
 	CUniString GetMode();
+	CUniString GetFileName() { return m_strFileName; };
+	void SetFileName(const wchar_t* psz) { m_strFileName=psz; };
 
 protected:
 	CUniString		m_strFileName;

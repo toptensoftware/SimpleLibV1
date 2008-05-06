@@ -1121,7 +1121,17 @@ void CProfileFile::WriteSectionHeirarchial(CUniString& buf, CProfileSection* pSe
 	for (int i=0; i<pSection->GetSize(); i++)
 	{
 		buf.Append(pszTabs, iIndent+1);
-		buf.Append(pSection->GetAt(i)->GetName());
+		CUniString strName=pSection->GetAt(i)->GetName();
+		if (wcschr(strName, L' ') || wcschr(strName, L'='))
+		{
+			buf.Append(L"\"");
+			buf.Append(strName);
+			buf.Append(L"\"");
+		}
+		else
+		{
+			buf.Append(strName);
+		}
 		buf.Append(L"=\"");
 		buf.Append(pSection->GetAt(i)->GetValue());
 		buf.Append(L"\";\r\n");
