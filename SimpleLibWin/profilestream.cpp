@@ -153,7 +153,7 @@ HRESULT SIMPLEAPI CreateProfileStream(CProfileEntry* pEntry, const wchar_t* pszS
 		return E_UNEXPECTED;
 
 	if (!pszSpec)
-		pszSpec=L"Streams\Stream%.4i.bin";
+		pszSpec=L"Streams\\Stream%.4i.bin";
 
 	CProfileFile* pFile=pEntry->GetOwningFile();
 	if (pFile && pFile->CreateOrOpenStream(pEntry, true, pszSpec, pVal))
