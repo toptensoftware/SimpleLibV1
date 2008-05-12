@@ -24,6 +24,7 @@
 #include "SplitString.h"
 #include "Tokenizer.h"
 #include "PathLibrary.h"
+#include "StringReplace.h"
 
 namespace Simple
 {
@@ -138,6 +139,11 @@ size_t CProfileEntry::GetItemData() const
 void CProfileEntry::SetItemData(size_t lParam)
 {
 	m_lParam=lParam;
+}
+
+CProfileFile* CProfileEntry::GetOwningFile()
+{ 
+	return m_pOwner ? m_pOwner->GetOwningFile() : NULL; 
 }
 
 
@@ -1132,8 +1138,14 @@ void CProfileFile::WriteSectionHeirarchial(CUniString& buf, CProfileSection* pSe
 		{
 			buf.Append(strName);
 		}
+		CUniString strClean=StringReplace(pSection->GetAt(i)->GetValue(), L"\\", L"\\\\", true);
+		strClean=StringReplace(strClean, L"\n", L"\\n", true);
+		strClean=StringReplace(strClean, L"\r", L"\\r", true);
+		strClean=StringReplace(strClean, L"\t", L"\\t", true);
+		strClean=StringReplace(strClean, L"\"", L"\\\"", true);
+
 		buf.Append(L"=\"");
-		buf.Append(pSection->GetAt(i)->GetValue());
+		buf.Append(strClean);
 		buf.Append(L"\";\r\n");
 	}
 

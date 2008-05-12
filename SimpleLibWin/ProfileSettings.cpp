@@ -137,7 +137,7 @@ static void _SlxConvertProfileRegKey(const wchar_t* pszRegKey, CProfileSection* 
 					if (SUCCEEDED(OpenRegistryStream(Key, NULL, szName, &spStreamSrc)))
 					{
 						CAutoPtr<IStream, SRefCounted> spStreamDest;
-						if (SUCCEEDED(CreateProfileStream(pSection->CreateEntry(szName), &spStreamDest)))
+						if (SUCCEEDED(CreateProfileStream(pSection->CreateEntry(szName), NULL, &spStreamDest)))
 						{
 							CopyStream(spStreamDest, spStreamSrc);
 						}

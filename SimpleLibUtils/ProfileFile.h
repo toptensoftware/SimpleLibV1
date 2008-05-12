@@ -34,6 +34,7 @@ public:
 	virtual ~CProfileOwner() {};
 
 	virtual CProfileSection* AsSection() { return NULL; };
+	virtual CProfileFile* GetOwningFile() { return NULL; };
 	virtual const wchar_t* GetModeInternal()=0;
 };
 
@@ -58,6 +59,7 @@ public:
 	void SetItemData(size_t size_t);
 
 	CProfileSection* GetOwningSection() { return m_pOwner; };
+	CProfileFile* GetOwningFile();
 
 protected:
 	CUniString			m_strName;
@@ -114,6 +116,7 @@ public:
 	void CopyFrom(const CProfileSection* pSection);
 
 	CProfileSection* GetOwningSection() { return m_pOwner->AsSection(); };
+	CProfileFile* GetOwningFile() { return m_pOwner ? m_pOwner->GetOwningFile() : NULL; }
 
 	virtual CProfileSection* AsSection() { return this; };
 	virtual const wchar_t* GetModeInternal() { return m_pOwner->GetModeInternal(); };
@@ -174,6 +177,9 @@ public:
 	CUniString GetFileName() { return m_strFileName; };
 	void SetFileName(const wchar_t* psz) { m_strFileName=psz; };
 
+	// Overrideable for creating/opening streams
+	virtual bool CreateOrOpenStream(CProfileEntry* pEntry, bool bCreate, const wchar_t* pszSpec, struct IStream** pVal) { return false; };
+
 protected:
 	CUniString		m_strFileName;
 	CUniString		m_strParseError;
@@ -185,6 +191,11 @@ protected:
 	void WriteSectionHeirarchial(CUniString& buf, CProfileSection* pSection, int iIndent) const;
 
 	bool ParseStructuredContent(CCppTokenizer& tokens);
+
+	virtual CProfileFile* GetOwningFile()
+	{
+		return this;
+	}
 
 	virtual const wchar_t* GetModeInternal()
 	{

@@ -147,10 +147,19 @@ public:
 	};
 };
 
-HRESULT SIMPLEAPI CreateProfileStream(CProfileEntry* pEntry, IStream** pVal)
+HRESULT SIMPLEAPI CreateProfileStream(CProfileEntry* pEntry, const wchar_t* pszSpec, IStream** pVal)
 {
 	if (!pEntry)
 		return E_UNEXPECTED;
+
+	if (!pszSpec)
+		pszSpec=L"Streams\Stream%.4i.bin";
+
+	CProfileFile* pFile=pEntry->GetOwningFile();
+	if (pFile && pFile->CreateOrOpenStream(pEntry, true, pszSpec, pVal))
+	{
+		return pVal[0] ? S_OK : E_FAIL;
+	}
 
 	// Create an instance of ProfileStream object
 	CProfileStream* pStream=new CRefCountedStream<CProfileStream>();
@@ -167,6 +176,12 @@ HRESULT SIMPLEAPI OpenProfileStream(CProfileEntry* pEntry, IStream** pVal)
 {
 	if (!pEntry)
 		return E_UNEXPECTED;
+
+	CProfileFile* pFile=pEntry->GetOwningFile();
+	if (pFile && pFile->CreateOrOpenStream(pEntry, false, NULL, pVal))
+	{
+		return pVal[0] ? S_OK : E_FAIL;
+	}
 
 	// Create an instance of ProfileStream object
 	CProfileStream* pStream=new CRefCountedStream<CProfileStream>();
