@@ -1115,6 +1115,69 @@ void CProfileFile::WriteSection(CUniString& buf, CProfileSection* pSection, cons
 
 const wchar_t pszTabs[]=L"\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
+CUniString EscapeString(const wchar_t* psz, bool bValue)
+{
+	if (IsEmptyString(psz))
+		return L"\"\"";
+
+	if (bValue)
+	{
+		// Check if all digits
+		const wchar_t* p=psz;
+		while (p[0])
+		{
+			if (!iswdigit(p[0]))
+				break;
+			p++;
+		}
+
+		// Yes!
+		if (!p[0])
+			return psz;
+	}
+
+	CUniString str;
+
+	bool bNeedQuotes=!!iswdigit(psz[0]);
+
+	const wchar_t* p=psz;
+	while (p[0])
+	{
+		if (!iswalnum(p[0]))
+			bNeedQuotes=true;
+
+		switch (p[0])
+		{
+			case L'\\':
+				str+=L"\\\\";
+				break;
+
+			case L'\n':
+				str+=L"\\n";
+				break;
+
+			case L'\r':
+				str+=L"\\n";
+				break;
+
+			case L'\t':
+				str+=L"\\t";
+				break;
+
+			default:
+				str.Append(p, 1);
+				break;
+		}
+
+		p++;
+	}
+
+	if (bNeedQuotes)
+		str=Format(L"\"%s\"", str);
+
+	return str;
+}
+
 void CProfileFile::WriteSectionHeirarchial(CUniString& buf, CProfileSection* pSection, int iIndent) const
 {
 	buf.Append(pszTabs, iIndent);
@@ -1127,26 +1190,10 @@ void CProfileFile::WriteSectionHeirarchial(CUniString& buf, CProfileSection* pSe
 	for (int i=0; i<pSection->GetSize(); i++)
 	{
 		buf.Append(pszTabs, iIndent+1);
-		CUniString strName=pSection->GetAt(i)->GetName();
-		if (wcschr(strName, L' ') || wcschr(strName, L'=') || iswdigit(strName[0]))
-		{
-			buf.Append(L"\"");
-			buf.Append(strName);
-			buf.Append(L"\"");
-		}
-		else
-		{
-			buf.Append(strName);
-		}
-		CUniString strClean=StringReplace(pSection->GetAt(i)->GetValue(), L"\\", L"\\\\", true);
-		strClean=StringReplace(strClean, L"\n", L"\\n", true);
-		strClean=StringReplace(strClean, L"\r", L"\\r", true);
-		strClean=StringReplace(strClean, L"\t", L"\\t", true);
-		strClean=StringReplace(strClean, L"\"", L"\\\"", true);
-
-		buf.Append(L"=\"");
-		buf.Append(strClean);
-		buf.Append(L"\";\r\n");
+		buf.Append(EscapeString(pSection->GetAt(i)->GetName(), false));
+		buf.Append(L"=");
+		buf.Append(EscapeString(pSection->GetAt(i)->GetValue(), true));
+		buf.Append(L";\r\n");
 	}
 
 	// Write sub sections
