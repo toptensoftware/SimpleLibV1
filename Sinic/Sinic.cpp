@@ -9,10 +9,14 @@ CCommandLineParser cl;
 // Main entry point
 int _tmain(int argc, _TCHAR* argv[])
 {
+	//printf("CL:%S\n", GetCommandLine());
+	//return 0;
+
 	// Add command line alias'
 	cl.AddAlias(L"h", L"?");
 	cl.AddAlias(L"help", L"?");
-	cl.AddAlias(L"d", L"decompile");
+	cl.AddAlias(L"x", L"extract");
+	cl.AddAlias(L"o", L"out");
 
 	// Parse command line
 	cl.Parse(GetCommandLine(), true);
@@ -20,7 +24,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	// Display logo...
 	if (!cl.GetSwitch(L"nolong"))
 	{
-		wprintf(L"Structured Ini File Compiler v1.0\nCopyright (C) 2007 Topten Software.  All Rights Reserved\n\n");
+		wprintf(L"Structured Ini File Compiler v1.1\nCopyright (C) 2007 Topten Software.  All Rights Reserved\n\n");
 	}
 
 	// Display help
@@ -29,25 +33,34 @@ int _tmain(int argc, _TCHAR* argv[])
 		cl.BuildHelp(L"nologo", L"Suppress display of copyright and version info", NULL, clOptional);
 		cl.BuildHelp(L"?|h|help", L"Display help information", NULL, clOptional);
 		cl.BuildHelp(L"i", L"Include path", L"path", clMulti|clValue|clOptional);
-		cl.BuildHelp(L"d|decompile", L"Decompile", NULL, clOptional);
+		cl.BuildHelp(L"x|extract", L"Extract (decompile)", NULL, clOptional);
 		cl.BuildHelp(L"unicode", L"Decompile to unicode", NULL, clOptional);
 		cl.BuildHelp(L"flat", L"Decompile to flat", NULL, clOptional);
+		cl.BuildHelp(L"o|out", L"Output File", NULL, clOptional);
 		cl.BuildHelp(L"InputFile", L"File to be processed", NULL, clPlaced);
-		cl.BuildHelp(L"OutputFile", L"Output file name", NULL, clPlaced|clOptional);
 		wprintf(cl.GetHelp(L"Sinic"));
 		return 7;
 	}
 
 	// Compile or decompile
-	bool bDecompile=cl.GetSwitch(L"decompile");
+	bool bDecompile=cl.GetSwitch(L"extract");
 	bool bUnicode=cl.GetSwitch(L"unicode");
 	bool bFlat=cl.GetSwitch(L"flat");
 
 	// Get input value
 	CUniString strInputFile;
 	cl.GetPlacedValue(0, L"InputFile", strInputFile);
+	strInputFile=QualifyPath(strInputFile);
+
+	// Get output file
 	CUniString strOutputFile;
-	cl.GetOptionalPlacedValue(1, L"OutputFile", ChangeFileExtension(strInputFile.IsEmpty() ? L"" : strInputFile, bDecompile ? L"sini" : L"bini"), strOutputFile);
+	cl.GetValue(L"out", strOutputFile);
+	if (strOutputFile.IsEmpty())
+	{
+		strOutputFile=ChangeFileExtension(strInputFile.IsEmpty() ? L"" : strInputFile, bDecompile ? L"sini" : L"bini");
+	}
+	strOutputFile=QualifyPath(strOutputFile);
+
 
 	// Setup file content provider with include paths
 	CFileContentProvider fp;
@@ -59,6 +72,10 @@ int _tmain(int argc, _TCHAR* argv[])
 		fp.AddIncludePath(str);
 	}
 
+	// Get defines
+	CVector<CUniString> vecDefines;
+	cl.GetMultiValue(L"d", vecDefines);
+
 	// Error handling...
 	cl.CheckNoUnknownArgs();
 	if (cl.HasError())
@@ -68,14 +85,18 @@ int _tmain(int argc, _TCHAR* argv[])
 		return 7;
 	}
 
-	// Qualify files
-	strInputFile=QualifyPath(strInputFile);
-	strOutputFile=QualifyPath(strOutputFile);
-
 	if (!bDecompile)
 	{
 		// Load the input file
 		CProfileFile file;
+		for (int i=0; i<vecDefines.GetSize(); i++)
+		{
+			CUniString strName, strValue;
+			SplitString(vecDefines[i], L"=", strName, strValue);
+			printf("#define %S %S\n", strName, strValue);
+			file.Define(strName, strValue);
+		}
+
 		if (!file.Load(strInputFile, &fp))
 		{
 			HRESULT hr=HRESULT_FROM_WIN32(GetLastError());
@@ -140,7 +161,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	}
 
-	wprintf(L"OK\n\n");
+	wprintf(L"%s - OK\n\n", strOutputFile);
 
 	return 0;
 }

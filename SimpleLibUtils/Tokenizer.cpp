@@ -1489,6 +1489,17 @@ void CCppTokenizer::SetExtraIdentifierChars(const wchar_t* pszLeadChars, const w
 
 }
 
+void CCppTokenizer::Define(const wchar_t* pszMacro, const wchar_t* pszDef)
+{
+	CMacro* pMacro=new CMacro;
+	pMacro->m_bExpanding=false;
+	pMacro->m_strDefinition=pszDef;
+	pMacro->m_strName=pszMacro;
+	pMacro->m_bHasParens=false;
+	m_mapMacros.Add(pszMacro, pMacro);
+}
+
+
 void CCppTokenizer::FormatError(int iError, ...)
 {
 	if (!IsEmptyString(m_strError))

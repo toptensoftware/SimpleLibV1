@@ -446,6 +446,11 @@ CProfileFile::~CProfileFile()
 {
 }
 
+void CProfileFile::Define(const wchar_t* pszName, const wchar_t* pszValue)
+{
+	m_ExternalDefines.Add(pszName, pszValue);
+}
+
 void CProfileFile::Reset(bool bFlat)
 {
 	m_bFlat=bFlat;
@@ -626,6 +631,11 @@ bool CProfileFile::ParseStructured(const wchar_t* pszContent, const wchar_t* psz
 	tokens.AddOperator(L";", tokenSemiColon);
 	tokens.AddOperator(L"->", tokenPointer);
 	tokens.AddOperator(L"|", tokenOr);
+
+	for (int i=0; i<m_ExternalDefines.GetSize(); i++)
+	{
+		tokens.Define(m_ExternalDefines[i].Key, m_ExternalDefines[i].Value);
+	}
 
 	// Initialize tokenizer
 	tokens.ParseString(pszContent, pszFileName);

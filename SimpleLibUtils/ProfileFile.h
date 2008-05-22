@@ -146,6 +146,7 @@ public:
 	virtual ~CProfileFile();
 
 // Operations
+	void Define(const wchar_t* pszName, const wchar_t* pszValue);
 	void Reset(bool bFlat);
 	bool Parse(const wchar_t* pszContent, const wchar_t* pszFileName=NULL, CContentProvider* pContentProvider=NULL);
 	bool ParseClassic(const wchar_t* pszContent);
@@ -185,6 +186,7 @@ protected:
 	CUniString		m_strParseError;
 	CUniString		m_strMode;
 	bool			m_bFlat;
+	CMap<CUniString, CUniString>	m_ExternalDefines;
 
 	void WriteEntry(CUniString& buf, CProfileEntry* pEntry) const;
 	void WriteSection(CUniString& buf, CProfileSection* pSection, const wchar_t* pszParent) const;

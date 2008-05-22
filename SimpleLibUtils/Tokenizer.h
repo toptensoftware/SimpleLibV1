@@ -156,6 +156,7 @@ public:
 	bool GetTokenDescription(int iToken, CUniString& pVal);
 	int GetCurrentPosition(CUniString& strFileName);
 	void SetExtraIdentifierChars(const wchar_t* pszLeadChars, const wchar_t* pszOtherChars);
+	void Define(const wchar_t* pszMacro, const wchar_t* pszDef);
 
 // CTokenizer
 	virtual int CurrentToken();
