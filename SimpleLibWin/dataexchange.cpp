@@ -327,7 +327,15 @@ void SIMPLEAPI ADX_LimitUInt(CADXExchange* pDX, unsigned int Value, unsigned int
 void SIMPLEAPI ADX_RangeDouble(CADXExchange* pDX, double dblValue, double dblMin, double dblMax)
 {
 	if (!pDX->m_bSave)
+	{
+		// Try to set range on spinner control that follows
+		HWND hWndBuddy=GetBuddyControl(pDX->m_hWndCurrent);
+
+		// Send it...
+		if (hWndBuddy)
+			SendMessage(hWndBuddy, UDM_SETRANGE32, int(dblMin), int(dblMax));
 		return;
+	}
 
 	if (dblValue<dblMin || dblValue>dblMax)
 		{
