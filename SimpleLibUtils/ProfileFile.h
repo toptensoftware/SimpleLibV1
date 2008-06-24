@@ -53,6 +53,8 @@ public:
 	void SetValue(const CUniString& strValue);
 	int GetIntValue(int iDefault) const;
 	void SetIntValue(int iValue);
+	__int64 GetInt64Value(__int64 iDefault) const;
+	void SetInt64Value(__int64 iValue);
 	double GetDoubleValue(double dblDefault) const;
 	void SetDoubleValue(double dbl);
 	size_t GetItemData() const;
@@ -99,10 +101,12 @@ public:
 	void SetValue(const CUniString& strName, const CUniString& strValue);
 	const wchar_t* GetValue(const wchar_t* pszName, const wchar_t* pszDefault) const;
 
-	void SetIntValue(const wchar_t* pszName, int iValue);
 	int GetIntValue(const wchar_t* pszName, int iDefault) const;
-	void SetDoubleValue(const wchar_t* pszName, double dblValue);
+	void SetIntValue(const wchar_t* pszName, int iValue);
+	__int64 GetInt64Value(const wchar_t* pszName, __int64 iDefault) const;
+	void SetInt64Value(const wchar_t* pszName, __int64 iValue);
 	double GetDoubleValue(const wchar_t* pszName, double dblDefault) const;
+	void SetDoubleValue(const wchar_t* pszName, double dblValue);
 
 // Sub-sections
 	int FindSectionIndexRaw(const wchar_t* pszName, int iStartAfter=-1) const;
@@ -170,6 +174,8 @@ public:
 	const wchar_t* GetValue(const wchar_t* pszSection, const wchar_t* pszName, const wchar_t* pszDefault=NULL) const;
 	void SetIntValue(const CUniString& strSection, const CUniString& strName, int iValue);
 	int GetIntValue(const wchar_t* pszSection, const wchar_t* pszName, int iDefault=0) const;
+	void SetInt64Value(const CUniString& strSection, const CUniString& strName, __int64 iValue);
+	__int64 GetInt64Value(const wchar_t* pszSection, const wchar_t* pszName, __int64 iDefault=0) const;
 	void SetDoubleValue(const CUniString& strSection, const CUniString& strName, double dblValue);
 	double GetDoubleValue(const wchar_t* pszSection, const wchar_t* strName, double dblDefault=0) const;
 

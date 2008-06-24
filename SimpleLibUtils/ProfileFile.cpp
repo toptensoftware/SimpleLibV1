@@ -93,6 +93,29 @@ const wchar_t* ParseInt(const wchar_t* psz, int* piValue)
 }
 
 
+const wchar_t* ParseInt64(const wchar_t* psz, __int64* piValue)
+{
+	while (psz[0]==' ' || psz[0]=='\t')
+		psz++;
+
+	// Negative
+	__int64 iNeg=1;
+	if (psz[0]==L'-')
+		{
+		iNeg=-1;
+		psz++;
+		}
+
+	// Read integer
+	if (!ReadInt64(psz, piValue))
+		return NULL;
+
+	// Parse it
+	*piValue*=iNeg;
+	return psz;
+}
+
+
 
 int CProfileEntry::GetIntValue(int iDefault) const
 {
@@ -110,6 +133,24 @@ int CProfileEntry::GetIntValue(int iDefault) const
 void CProfileEntry::SetIntValue(int iValue)
 {
 	SetValue(Format(L"%i", iValue));
+}
+
+__int64 CProfileEntry::GetInt64Value(__int64 iDefault) const
+{
+	if (!this)
+		return iDefault;
+
+	__int64 iValue;
+	const wchar_t* psz=ParseInt64(GetValue(), &iValue);
+	if (psz && (psz[0]==' ' || psz[0]=='\t' || psz[0]=='\0' || psz[0]==';'))
+		return iValue;
+
+	return iDefault;
+}
+
+void CProfileEntry::SetInt64Value(__int64 iValue)
+{
+	SetValue(Format(L"%I64i", iValue));
 }
 
 double CProfileEntry::GetDoubleValue(double dblDefault) const
@@ -409,6 +450,24 @@ int CProfileSection::GetIntValue(const wchar_t* pszName, int iDefault) const
 		return iDefault;
 	else
 		return pEntry->GetIntValue(iDefault);
+}
+
+__int64 CProfileSection::GetInt64Value(const wchar_t* pszName, __int64 iDefault) const
+{
+	CProfileEntry* pEntry=FindEntry(pszName);
+	if (!pEntry)
+		return iDefault;
+	else
+		return pEntry->GetInt64Value(iDefault);
+}
+
+void CProfileSection::SetInt64Value(const wchar_t* pszName, __int64 iValue)
+{
+	CProfileEntry* pEntry=FindEntry(pszName);
+	if (pEntry)
+		pEntry->SetInt64Value(iValue);
+	else
+		CreateEntry(pszName)->SetInt64Value(iValue);
 }
 
 
@@ -1252,6 +1311,20 @@ int CProfileFile::GetIntValue(const wchar_t* pszSection, const wchar_t* pszName,
 		return iDefault;
 	else
 		return pSection->GetIntValue(pszName, iDefault);
+}
+
+void CProfileFile::SetInt64Value(const CUniString& strSection, const CUniString& strName, __int64 iValue)
+{
+	CreateSection(strSection)->SetInt64Value(strName, iValue);
+}
+
+__int64 CProfileFile::GetInt64Value(const wchar_t* pszSection, const wchar_t* pszName, __int64 iDefault) const
+{
+	CProfileSection* pSection=FindSection(pszSection);
+	if (!pSection)
+		return iDefault;
+	else
+		return pSection->GetInt64Value(pszName, iDefault);
 }
 
 void CProfileFile::SetDoubleValue(const CUniString& strSection, const CUniString& strName, double dblValue)

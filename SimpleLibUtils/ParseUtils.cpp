@@ -258,6 +258,37 @@ bool SIMPLEAPI ReadInt(const wchar_t*& p, int* pi)
 	return true;
 }
 
+// Read an integer from an wchar_t buffer
+bool SIMPLEAPI ReadInt64(const wchar_t*& p, __int64* pi)
+{
+	const wchar_t* pszOrig=p;
+
+	bool bNegative=false;
+	if (p[0]=='-')
+	{
+		p++;
+		bNegative=true;
+	}
+
+	if (!iswdigit(p[0]))
+	{
+		p=pszOrig;
+		return false;
+	}
+
+	*pi=0;
+	while (iswdigit(p[0]))
+		{
+		*pi=(*pi)*10 + (p[0]-L'0');
+		p++;
+		}
+
+	if (bNegative)
+		pi[0]=-pi[0];
+
+	return true;
+}
+
 bool SIMPLEAPI ReadDoubleU(const wchar_t*& p, double* pdblVal)
 {
 	// Clear out values
