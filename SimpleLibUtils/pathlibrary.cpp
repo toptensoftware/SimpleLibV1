@@ -240,6 +240,10 @@ CUniString SIMPLEAPI CanonicalizePath(const wchar_t* pszPath)
 						p++;
 					}
 				}
+				else
+				{
+					str+=*p++;
+				}
 			}
 		}
 	}
