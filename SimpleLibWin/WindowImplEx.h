@@ -141,6 +141,8 @@ public:
 
 }	// namespace Simple
 
+// Comment
+
 #endif	// __ATLWIN_H__
 
 #endif	// __WINDOWIMPLEEX_H
