@@ -26,6 +26,8 @@ namespace Simple
 static unsigned __int32 g_dwCRCTable[256];
 static bool  g_bInitialized=false;
 
+// Another comment
+
 // Reflection is a requirement for the official CRC-32 standard.
 // You can create CRCs without it, but they won't conform to the standard.
 static unsigned __int32 CrcReflect(unsigned __int32 ref, char ch)
