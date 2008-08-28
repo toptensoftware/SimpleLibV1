@@ -48,6 +48,7 @@
 #include "SimpleLibWin\GdiText.h"
 #include "SimpleLibWin\GeoOps.h"
 #include "SimpleLibWin\IsInputMessage.h"
+#include "SimpleLibWin\LoadSaveTextStream.h"
 #include "SimpleLibWin\MessageLoop.h"
 #include "SimpleLibWin\MRUFileList.h"
 #include "SimpleLibWin\MouseTracker.h"
