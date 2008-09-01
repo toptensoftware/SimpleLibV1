@@ -57,8 +57,6 @@ const T* SIMPLEAPI FindOneOf(const T* psz, const T* pszDelims)
 	return NULL;
 }
 
-using namespace Simple;
-
 class CSimpleParser
 {
 public:

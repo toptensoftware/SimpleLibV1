@@ -5402,7 +5402,7 @@ public:
 	DWORD GetSystemTime(LPSYSTEMTIME lpSysTime) const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
-		return ::SendMessage(m_hWnd, DTM_GETSYSTEMTIME, 0, (LPARAM)lpSysTime);
+		return (DWORD)::SendMessage(m_hWnd, DTM_GETSYSTEMTIME, 0, (LPARAM)lpSysTime);
 	}
 	BOOL SetSystemTime(DWORD dwFlags, LPSYSTEMTIME lpSysTime)
 	{
