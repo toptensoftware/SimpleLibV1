@@ -17,8 +17,6 @@
 #ifndef __GDIMISCEX_H
 #define __GDIMISCEX_H
 
-#include <gdiplus.h>
-
 namespace Simple
 {
 
@@ -46,6 +44,10 @@ BYTE SIMPLEAPI AlphaBlendColor(BYTE b1, BYTE b2, BYTE bAlpha);
 COLORREF SIMPLEAPI AlphaBlendColor(COLORREF rgb1, COLORREF rgb2, BYTE bAlpha);
 
 // Convert a gdi plus bitmap to a Win32 bitmap, preserving alpha channel
+namespace Gdiplus 
+{
+	class Bitmap;
+};
 HBITMAP SIMPLEAPI BitmapFromGdiplusBitmap(Gdiplus::Bitmap& bmSrc);
 
 // Load a png resource.  Resource Type should be "PNG"
