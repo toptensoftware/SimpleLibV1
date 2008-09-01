@@ -62,6 +62,8 @@ HRESULT SIMPLEAPI LoadTextStream(IStream* pStream, TString& str)
 	}
 }
 
+#pragma warning(disable:4127)	 // conditional expression is constant
+
 template <class TString>
 HRESULT SIMPLEAPI SaveTextStream(IStream* pStream, const TString* psz)
 {
@@ -75,6 +77,8 @@ HRESULT SIMPLEAPI SaveTextStream(IStream* pStream, const TString* psz)
 	// Write the stirng
 	return pStream->Write(psz, CString<TString>::len(psz) * sizeof(TString), NULL);
 }
+
+#pragma warning(default:4127)
 
 inline HRESULT SIMPLEAPI SaveTextStream(IStream* pStream, const char* psz) 
 	{ return SaveTextStream<char>(pStream, psz); };
