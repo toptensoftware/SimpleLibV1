@@ -133,7 +133,7 @@ inline bool SIMPLEAPI SaveTextFile(const char* pszFileName, const wchar_t* psz)
 inline bool SIMPLEAPI SaveTextFile(const wchar_t* pszFileName, const wchar_t* psz) 
 	{ return SaveTextFile<wchar_t, wchar_t>(pszFileName, psz); };
 
-}	// namespace Simple
+}	//  namespace Simple
 
 #endif	// __LOADSAVETEXTFILE_H
 
