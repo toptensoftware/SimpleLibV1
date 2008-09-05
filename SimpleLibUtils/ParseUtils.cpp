@@ -344,6 +344,53 @@ bool SIMPLEAPI ReadDouble(const wchar_t*& psz, double* pdblVal)
 
 
 
+const wchar_t* SIMPLEAPI ParseInt(const wchar_t* psz, int* piValue)
+{
+	while (psz[0]==' ' || psz[0]=='\t')
+		psz++;
+
+	// Negative
+	int iNeg=1;
+	if (psz[0]==L'-')
+		{
+		iNeg=-1;
+		psz++;
+		}
+
+	// Read integer
+	if (!ReadInt(psz, piValue))
+		return NULL;
+
+	// Parse it
+	*piValue*=iNeg;
+	return psz;
+}
+
+
+const wchar_t* SIMPLEAPI ParseInt64(const wchar_t* psz, __int64* piValue)
+{
+	while (psz[0]==' ' || psz[0]=='\t')
+		psz++;
+
+	// Negative
+	__int64 iNeg=1;
+	if (psz[0]==L'-')
+		{
+		iNeg=-1;
+		psz++;
+		}
+
+	// Read integer
+	if (!ReadInt64(psz, piValue))
+		return NULL;
+
+	// Parse it
+	*piValue*=iNeg;
+	return psz;
+}
+
+
+
 
 
 }

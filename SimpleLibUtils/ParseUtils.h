@@ -43,6 +43,8 @@ bool SIMPLEAPI SkipIdentifier(const wchar_t*& p, CUniString& str, const wchar_t*
 bool SIMPLEAPI ReadInt(const wchar_t*& p, int* pi);
 bool SIMPLEAPI ReadInt64(const wchar_t*& p, __int64* pi);
 bool SIMPLEAPI ReadDouble(const wchar_t*& psz, double* pdblVal);
+const wchar_t* SIMPLEAPI ParseInt(const wchar_t* psz, int* piValue);
+const wchar_t* SIMPLEAPI ParseInt64(const wchar_t* psz, __int64* piValue);
 
 
 template <class T>

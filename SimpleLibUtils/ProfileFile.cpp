@@ -70,53 +70,6 @@ void CProfileEntry::SetValue(const CUniString& strValue)
 	m_strValue=strValue;
 }
 
-const wchar_t* ParseInt(const wchar_t* psz, int* piValue)
-{
-	while (psz[0]==' ' || psz[0]=='\t')
-		psz++;
-
-	// Negative
-	int iNeg=1;
-	if (psz[0]==L'-')
-		{
-		iNeg=-1;
-		psz++;
-		}
-
-	// Read integer
-	if (!ReadInt(psz, piValue))
-		return NULL;
-
-	// Parse it
-	*piValue*=iNeg;
-	return psz;
-}
-
-
-const wchar_t* ParseInt64(const wchar_t* psz, __int64* piValue)
-{
-	while (psz[0]==' ' || psz[0]=='\t')
-		psz++;
-
-	// Negative
-	__int64 iNeg=1;
-	if (psz[0]==L'-')
-		{
-		iNeg=-1;
-		psz++;
-		}
-
-	// Read integer
-	if (!ReadInt64(psz, piValue))
-		return NULL;
-
-	// Parse it
-	*piValue*=iNeg;
-	return psz;
-}
-
-
-
 int CProfileEntry::GetIntValue(int iDefault) const
 {
 	if (!this)
