@@ -1179,7 +1179,7 @@ CUniString EscapeString(const wchar_t* psz, bool bValue)
 				break;
 
 			case L'\r':
-				str+=L"\\n";
+				str+=L"\\r";
 				break;
 
 			case L'\t':
