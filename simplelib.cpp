@@ -2520,33 +2520,33 @@ typename CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::CKeyPair CMap<TKey, TV
 	{
 		m_iIterPos=0;
 		m_pIterNode=m_pFirst;
-		return CKeyPair(m_pIterNode->m_Key, m_pIterNode->m_Value);
+		return CKeyPair(m_pIterNode->m_KeyPair.m_Key, m_pIterNode->m_KeyPair.m_Value);
 	}
 	
 	if (iIndex==m_iSize-1)
 	{
 		m_iIterPos=m_iSize-1;
 		m_pIterNode=m_pLast;
-		return CKeyPair(m_pIterNode->m_Key, m_pIterNode->m_Value);
+		return CKeyPair(m_pIterNode->m_KeyPair.m_Key, m_pIterNode->m_KeyPair.m_Value);
 	}
 
 	if (iIndex==m_iIterPos)
 	{
-		return CKeyPair(m_pIterNode->m_Key, m_pIterNode->m_Value);
+		return CKeyPair(m_pIterNode->m_KeyPair.m_Key, m_pIterNode->m_KeyPair.m_Value);
 	}
 
 	if (iIndex==m_iIterPos+1)
 	{
 		m_iIterPos=iIndex;
 		m_pIterNode=m_pIterNode->m_pNext;
-		return CKeyPair(m_pIterNode->m_Key, m_pIterNode->m_Value);
+		return CKeyPair(m_pIterNode->m_KeyPair.m_Key, m_pIterNode->m_KeyPair.m_Value);
 	}
 
 	if (iIndex==m_iIterPos-1)
 	{
 		m_iIterPos=iIndex;
 		m_pIterNode=m_pIterNode->m_pPrev;
-		return CKeyPair(m_pIterNode->m_Key, m_pIterNode->m_Value);
+		return CKeyPair(m_pIterNode->m_KeyPair.m_Key, m_pIterNode->m_KeyPair.m_Value);
 	}
 
 	int iDistanceFromIterPos=abs(m_iIterPos-iIndex);
@@ -2589,7 +2589,7 @@ typename CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::CKeyPair CMap<TKey, TV
 #ifdef _DEBUG_CHECKS
 	CheckAll();
 #endif
-	return CKeyPair(m_pIterNode->m_Key, m_pIterNode->m_Value);
+	return CKeyPair(m_pIterNode->m_KeyPair.m_Key, m_pIterNode->m_KeyPair.m_Value);
 }
 
 
@@ -2603,7 +2603,7 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::Add(const TKey& Key, const
 	while (pNode != &m_Leaf)
 	{
 		pParent = pNode;
-		iCompare = TKeySem::Compare(Key, pNode->m_Key);
+		iCompare = TKeySem::Compare(Key, pNode->m_KeyPair.m_Key);
 		
 		if (iCompare < 0)
 			pNode = pNode->m_pLeft;
@@ -2613,10 +2613,10 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::Add(const TKey& Key, const
 		{
 			// Found a duplicate, replace it. We replace the key too, since
 			// equivalence is not always exact (e.g. case insensitive strings)
-			TKeySem::OnRemove(pNode->m_Key, this);
-			TValueSem::OnRemove(pNode->m_Value, this);
-			pNode->m_Value = TValueSem::OnAdd(Value, this);
-			pNode->m_Key = TKeySem::OnAdd(Key, this);
+			TKeySem::OnRemove(pNode->m_KeyPair.m_Key, this);
+			TValueSem::OnRemove(pNode->m_KeyPair.m_Value, this);
+			pNode->m_KeyPair.m_Value = TValueSem::OnAdd(Value, this);
+			pNode->m_KeyPair.m_Key = TKeySem::OnAdd(Key, this);
 			#ifdef _DEBUG_CHECKS
 			CheckAll();
 			#endif
@@ -2629,8 +2629,8 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::Add(const TKey& Key, const
 	pNew->m_pLeft = &m_Leaf;
 	pNew->m_pRight = &m_Leaf;
 	pNew->m_bRed = true;
-	pNew->m_Value = TValueSem::OnAdd(Value, this);
-	pNew->m_Key = TKeySem::OnAdd(Key, this);
+	pNew->m_KeyPair.m_Value = TValueSem::OnAdd(Value, this);
+	pNew->m_KeyPair.m_Key = TKeySem::OnAdd(Key, this);
 	
 	if (pParent)
 	{
@@ -2671,7 +2671,7 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::Add(const TKey& Key, const
 
 	if (m_pIterNode)
 	{
-		int iCompare=TKeySem::Compare(Key, m_pIterNode->m_Key);
+		int iCompare=TKeySem::Compare(Key, m_pIterNode->m_KeyPair.m_Key);
 
 		ASSERT(iCompare!=0);
 
@@ -2770,7 +2770,7 @@ const TValue& CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::Get(const TKeyArg
 	if (!pNode)
 		return Default;
 
-	return pNode->m_Value;
+	return pNode->m_KeyPair.m_Value;
 }
 
 template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyArg>
@@ -2779,7 +2779,7 @@ bool CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::Find(const TKeyArg& Key, T
 	CNode* pNode=FindNode(Key);
 	if (!pNode)
 		return false;
-	Value=pNode->m_Value;
+	Value=pNode->m_KeyPair.m_Value;
 	return true;
 }
 
@@ -2825,7 +2825,7 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::CheckChain()
 			if (pNode->m_pNext)
 			{
 				// Check order
-				int iCompare=TKeySem::Compare(pNode->m_Key, pNode->m_pNext->m_Key);
+				int iCompare=TKeySem::Compare(pNode->m_KeyPair.m_Key, pNode->m_pNext->m_KeyPair.m_Key);
 				ASSERT(iCompare<0);
 
 				ASSERT(pNode->m_pNext->m_pPrev==pNode);
@@ -2882,8 +2882,8 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::FreeNode(CNode* pNode)
 	{
 		FreeNode(pNode->m_pLeft);
 		FreeNode(pNode->m_pRight);
-		TKeySem::OnRemove(pNode->m_Key, this);
-		TValueSem::OnRemove(pNode->m_Value, this);
+		TKeySem::OnRemove(pNode->m_KeyPair.m_Key, this);
+		TValueSem::OnRemove(pNode->m_KeyPair.m_Value, this);
 		m_NodePlex.Free(pNode);
 	}
 }
@@ -2990,7 +2990,7 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::RemoveOrDetach(const TKeyA
 
 	while (z != &m_Leaf)
 	{
-		int iCompare = TKeySem::Compare(Key, z->m_Key);
+		int iCompare = TKeySem::Compare(Key, z->m_KeyPair.m_Key);
 
 		if (iCompare < 0)
 			z = z->m_pLeft;
@@ -3025,30 +3025,30 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::RemoveOrDetach(const TKeyA
 
 	if (m_pIterNode)
 	{
-		int iCompare=TKeySem::Compare(Key, m_pIterNode->m_Key);
+		int iCompare=TKeySem::Compare(Key, m_pIterNode->m_KeyPair.m_Key);
 		if (iCompare<=0)
 		{
 			m_pIterNode=m_pIterNode->m_pNext;
 		}
 	}
 
-	TKeySem::OnRemove(z->m_Key, this);
+	TKeySem::OnRemove(z->m_KeyPair.m_Key, this);
 	if (!pvalDetached)
 	{
-		TValueSem::OnRemove(z->m_Value, this);
+		TValueSem::OnRemove(z->m_KeyPair.m_Value, this);
 	}
 	else
 	{
-		TValueSem::OnDetach(z->m_Value, this);
-		*pvalDetached=z->m_Value;
+		TValueSem::OnDetach(z->m_KeyPair.m_Value, this);
+		*pvalDetached=z->m_KeyPair.m_Value;
 	}
 
 		
 	if (y != z)
 	{
 		// deleting value in z, but keeping z node and moving value from y node
-		z->m_Key = y->m_Key;
-		z->m_Value = y->m_Value;
+		z->m_KeyPair.m_Key = y->m_KeyPair.m_Key;
+		z->m_KeyPair.m_Value = y->m_KeyPair.m_Value;
 		z->m_pNext = y->m_pNext;
 		if (z->m_pNext)
 			z->m_pNext->m_pPrev=z;
@@ -3195,7 +3195,7 @@ typename CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::CNode* CMap<TKey, TVal
 
 	while (pNode != &m_Leaf)
 	{
-		int iCompare = TKeySem::Compare(Key, pNode->m_Key);
+		int iCompare = TKeySem::Compare(Key, pNode->m_KeyPair.m_Key);
 		
 		if (iCompare < 0)
 			pNode = pNode->m_pLeft;
@@ -3324,7 +3324,7 @@ typename CHashMap<TKey,TValue,TKeySem,TValueSem,TKeyArg,THash>::CKeyPair CHashMa
 	CNode* pNode=m_List.GetAt(iIndex);
 
 	// Create key pair
-	return CKeyPair(pNode->m_Key, pNode->m_Value);
+	return CKeyPair(pNode->m_KeyPair.m_Key, pNode->m_KeyPair.m_Value);
 }
 
 template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyArg, class THash>
@@ -3358,7 +3358,7 @@ void CHashMap<TKey,TValue,TKeySem,TValueSem,TKeyArg,THash>::Rehash(int iNewSize)
 	while (pNode)
 	{
 		// Hash the key
-		unsigned int nHash = THash::Hash(pNode->m_Key) & m_nHashMask;
+		unsigned int nHash = THash::Hash(pNode->m_KeyPair.m_Key) & m_nHashMask;
 		
 		// Add to table
 		pNode->m_pHashNext=m_Table[nHash];
@@ -3384,13 +3384,13 @@ void CHashMap<TKey,TValue,TKeySem,TValueSem,TKeyArg,THash>::Add(const TKey& Key,
 	CNode* pNode=m_Table[nHash];
 	while (pNode)
 	{
-		if (TKeySem::Compare(Key, pNode->m_Key)==0)
+		if (TKeySem::Compare(Key, pNode->m_KeyPair.m_Key)==0)
 		{
 			// Replace value
-			TKeySem::OnRemove(pNode->m_Key, this);
-			TValueSem::OnRemove(pNode->m_Value, this);
-			pNode->m_Value = TValueSem::OnAdd(Value, this);
-			pNode->m_Key = TKeySem::OnAdd(Key, this);
+			TKeySem::OnRemove(pNode->m_KeyPair.m_Key, this);
+			TValueSem::OnRemove(pNode->m_KeyPair.m_Value, this);
+			pNode->m_KeyPair.m_Value = TValueSem::OnAdd(Value, this);
+			pNode->m_KeyPair.m_Key = TKeySem::OnAdd(Key, this);
 			return;
 		}
 
@@ -3401,8 +3401,8 @@ void CHashMap<TKey,TValue,TKeySem,TValueSem,TKeyArg,THash>::Add(const TKey& Key,
 
 	// Create a new node
 	CNode* pNew = m_NodePlex.Alloc();
-	pNew->m_Value = TValueSem::OnAdd(Value, this);
-	pNew->m_Key = TKeySem::OnAdd(Key, this);
+	pNew->m_KeyPair.m_Value = TValueSem::OnAdd(Value, this);
+	pNew->m_KeyPair.m_Key = TKeySem::OnAdd(Key, this);
 
 	// Setup collision chain
 	pNew->m_pHashNext=m_Table[nHash];
@@ -3439,7 +3439,7 @@ const TValue& CHashMap<TKey,TValue,TKeySem,TValueSem,TKeyArg,THash>::Get(const T
 	if (!pNode)
 		return Default;
 
-	return pNode->m_Value;
+	return pNode->m_KeyPair.m_Value;
 }
 
 template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyArg, class THash>
@@ -3448,7 +3448,7 @@ bool CHashMap<TKey,TValue,TKeySem,TValueSem,TKeyArg,THash>::Find(const TKeyArg& 
 	CNode* pNode=FindNode(Key);
 	if (!pNode)
 		return false;
-	Value=pNode->m_Value;
+	Value=pNode->m_KeyPair.m_Value;
 	return true;
 }
 
@@ -3471,7 +3471,7 @@ typename CHashMap<TKey, TValue, TKeySem, TValueSem, TKeyArg, THash>::CNode* CHas
 	CNode* pNode=m_Table[nHash];
 	while (pNode)
 	{
-		if (TKeySem::Compare(Key, pNode->m_Key)==0)
+		if (TKeySem::Compare(Key, pNode->m_KeyPair.m_Key)==0)
 			return pNode;
 
 		pNode=pNode->m_pHashNext;
@@ -3496,18 +3496,18 @@ void CHashMap<TKey,TValue,TKeySem,TValueSem,TKeyArg,THash>::RemoveOrDetach(const
 	while (pNode)
 	{
 		// Match?
-		if (TKeySem::Compare(Key, pNode->m_Key)==0)
+		if (TKeySem::Compare(Key, pNode->m_KeyPair.m_Key)==0)
 		{
 			// Do release semantics
-			TKeySem::OnRemove(pNode->m_Key, this);
+			TKeySem::OnRemove(pNode->m_KeyPair.m_Key, this);
 			if (!pvalDetached)
 			{
-				TValueSem::OnRemove(pNode->m_Value, this);
+				TValueSem::OnRemove(pNode->m_KeyPair.m_Value, this);
 			}
 			else
 			{
-				TValueSem::OnDetach(pNode->m_Value, this);
-				*pvalDetached=pNode->m_Value;
+				TValueSem::OnDetach(pNode->m_KeyPair.m_Value, this);
+				*pvalDetached=pNode->m_KeyPair.m_Value;
 			}
 
 			// Remove from hash list
@@ -3538,8 +3538,8 @@ void CHashMap<TKey,TValue,TKeySem,TValueSem,TKeyArg,THash>::RemoveAll()
 	CNode* pNode;
 	while (pNode=m_List.GetFirst())
 	{
-		TKeySem::OnRemove(pNode->m_Key, this);
-		TValueSem::OnRemove(pNode->m_Value, this);
+		TKeySem::OnRemove(pNode->m_KeyPair.m_Key, this);
+		TValueSem::OnRemove(pNode->m_KeyPair.m_Value, this);
 		m_List.Remove(pNode);
 		m_NodePlex.Free(pNode);
 	}
@@ -3561,13 +3561,13 @@ CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::CIndex()
 template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyArg>
 CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::~CIndex()
 {
+	RemoveAll();
 }
 
 template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyArg>
 int CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::GetSize() const
 {
-	ASSERT(m_vecKeys.GetSize()==m_vecValues.GetSize());
-	return m_vecKeys.GetSize();
+	return m_Entries.GetSize();
 }
 
 template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyArg>
@@ -3580,22 +3580,20 @@ template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyAr
 typename CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::CKeyPair CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::operator[](int iIndex) const
 {
 	ASSERT(iIndex>=0 && iIndex<GetSize());
-	return CKeyPair(m_vecKeys[iIndex], m_vecValues[iIndex]);
+	return CKeyPair(m_Entries[iIndex]);
 }
 
 template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyArg>
 void CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::Add(const TKey& Key, const TValue& Value)
 {
 	int iPos;
-	if (m_vecKeys.QuickSearch(Key, iPos))
+	if (m_Entries.QuickSearchKey<TKeyArg>(Key, &CEntry::CompareKey, iPos))
 	{
-		m_vecKeys.ReplaceAt(iPos, Key);
-		m_vecValues.ReplaceAt(iPos, Value);
+		m_Entries.ReplaceAt(iPos, CEntry(TKeySem::OnAdd(Key, this), TValueSem::OnAdd(Value, this)));
 	}
 	else
 	{
-		m_vecKeys.InsertAt(iPos, Key);
-		m_vecValues.InsertAt(iPos, Value);
+		m_Entries.InsertAt(iPos, CEntry(TKeySem::OnAdd(Key, this), TValueSem::OnAdd(Value, this)));
 	}
 }
 
@@ -3603,10 +3601,11 @@ template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyAr
 void CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::Remove(const TKeyArg& Key)
 {
 	int iPos;
-	if (m_vecKeys.QuickSearch(Key, iPos))
+	if (m_Entries.QuickSearchKey<TKeyArg>(Key, &CEntry::CompareKey, iPos))
 	{
-		m_vecKeys.RemoveAt(iPos);
-		m_vecValues.RemoveAt(iPos);
+		TKeySem::OnRemove(m_Entries[iPos].m_Key,this);
+		TValueSem::OnRemove(m_Entries[iPos].m_Value,this);
+		m_Entries.RemoveAt(iPos);
 	}
 
 }
@@ -3614,18 +3613,25 @@ void CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::Remove(const TKeyArg& Key)
 template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyArg>
 void CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::RemoveAll()
 {
-	m_vecKeys.RemoveAll();
-	m_vecValues.RemoveAll();
+	for (int i=0; i<m_Entries.GetSize(); i++)
+	{
+		TKeySem::OnRemove(m_Entries[i].m_Key,this);
+		TValueSem::OnRemove(m_Entries[i].m_Value,this);
+	}
+	m_Entries.RemoveAll();
 }
 
 template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyArg>
 TValue CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::Detach(const TKeyArg& Key)
 {
 	int iPos;
-	if (m_vecKeys.QuickSearch(Key, iPos))
+	if (m_Entries.QuickSearchKey<TKeyArg>(Key, &CEntry::CompareKey, iPos))
 	{
-		m_vecKeys.RemoveAt(iPos);
-		return m_vecValues.DetachAt(iPos);
+		TValue v=m_Entries[iPos].m_Value;
+		TKeySem::OnRemove(m_Entries[iPos].m_Key,this);
+		TValueSem::OnDetach(m_Entries[iPos].m_Value,this);
+		m_Entries.RemoveAt(iPos);
+		return v;
 	}
 	return TValue();
 }
@@ -3634,9 +3640,9 @@ template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyAr
 const TValue& CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::Get(const TKeyArg& Key, const TValue& Default) const
 {
 	int iPos;
-	if (m_vecKeys.QuickSearch(Key, iPos))
+	if (m_Entries.QuickSearchKey<TKeyArg>(Key, &CEntry::CompareKey, iPos))
 	{
-		return m_vecValues[iPos];
+		return m_Entries[iPos].m_Value;
 	}
 	else
 	{
@@ -3648,9 +3654,9 @@ template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyAr
 bool CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::Find(const TKeyArg& Key, TValue& Value) const
 {
 	int iPos;
-	if (m_vecKeys.QuickSearch(Key, iPos))
+	if (m_Entries.QuickSearchKey<TKeyArg>(Key, &CEntry::CompareKey, iPos))
 	{
-		Value=m_vecValues[iPos];
+		Value=m_Entries[iPos].m_Value;
 		return true;
 	}
 	else
@@ -3663,8 +3669,11 @@ template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyAr
 bool CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::HasKey(const TKeyArg& Key) const
 {
 	int iPos;
-	return m_vecKeys.QuickSearch(Key, iPos);
+	return m_Entries.QuickSearchKey<TKeyArg>(Key, &CEntry::CompareKey, iPos);
 }
+
+
+
 
 
 

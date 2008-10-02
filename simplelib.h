@@ -1076,10 +1076,14 @@ public:
 // Implementation
 protected:
 // CNode
-	struct CNode
+	struct CKeyPairInternal
 	{
 		TKey	m_Key;
 		TValue	m_Value;
+	};
+	struct CNode
+	{
+		CKeyPairInternal	m_KeyPair;
 		CNode*	m_pParent;
 		CNode*	m_pLeft;
 		CNode*	m_pRight;
@@ -1134,13 +1138,37 @@ public:
 // Types
 	typedef CIndex<TKey, TValue, TKeySem, TValueSem, TKeyArg> _CIndex;
 
+	class CEntry
+	{
+	public:
+		CEntry(const TKey& key, const TValue& value) : 
+			m_Key(key),
+			m_Value(value)
+		{
+		}
+		~CEntry()
+		{
+		}
+		TKey		m_Key;
+		TValue		m_Value;
+
+		static int Compare(const CEntry& a, const CEntry& b)
+		{
+			return TKeySem::Compare(a.m_Key, b.m_Key);
+		}
+		static int CompareKey(CEntry const& a, TKeyArg b)
+		{
+			return TKeySem::Compare(a.m_Key, b);
+		}
+	};
+
 // Type used as return value from operator[]
 	class CKeyPair
 	{
 	public:
-		CKeyPair(const TKey& Key, TValue& Value) : 
-			Key(Key),
-			Value(Value)
+		CKeyPair(CEntry& e) : 
+			Key(e.m_Key),
+			Value(e.m_Value)
 		{
 		}
 		CKeyPair(const CKeyPair& Other) : 
@@ -1173,10 +1201,8 @@ public:
 	bool Find(const TKeyArg& Key, TValue& Value) const;
 	bool HasKey(const TKeyArg& Key) const;
 
-
 protected:
-	CVector<TKey, TKeySem, TKeyArg>		m_vecKeys;
-	CVector<TValue, TValueSem>			m_vecValues;
+	CVector<CEntry, SValue>			m_Entries;
 
 private:
 // Unsupported
@@ -1300,10 +1326,14 @@ public:
 
 	// Implementation
 protected:
-	struct CNode
+	struct CKeyPairInternal
 	{
 		TKey			m_Key;
 		TValue			m_Value;
+	};
+	struct CNode
+	{
+		CKeyPairInternal	m_KeyPair;
 		CNode*			m_pHashNext;
 		CChain<CNode>	m_Chain;
 	};
@@ -1768,6 +1798,143 @@ void Normalize(T& a, T& b)
 
 // Implementation of templates is here!
 #include "SimpleLib.cpp"
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Visual Studio 2005/2008 autoexp.dat definitions
+
+// Copy paste the following into <vsdir>\Common7\Packages\Debugger\autoexp.dat
+//	in the [Visualizer] section.
+// Currently doesn't work for CHashMap or CIndex, due to problems interating
+//  intrusive lists where the next/prev pointers are in an embedded struct.
+
+/*
+
+;------------------------------------------------------------------------------
+; SimpleLib
+;------------------------------------------------------------------------------
+
+Simple::CString<char>{
+		preview			(#if($e.m_psz==0) ("<null>") #else ([$e.m_psz,s]))
+		stringview		([$e.m_psz,sb])
+}
+
+Simple::CString<wchar_t>{
+		preview			(#if($e.m_psz==0) ("<null>") #else ([$e.m_psz,su]))
+		stringview		([$e.m_psz,sub])
+}
+Simple::CVector<*>|Simple::CSortedVector<*>|Simple::CUniStringVector{
+	children
+	(
+		#array
+		(
+			expr :		($e.m_pData)[$i],
+			size :		$e.m_iSize
+		)
+	)
+	preview
+	(
+		#if($e.m_iSize==0) ("<empty>") #else (
+		#(
+			"[", $e.m_iSize , "](",
+			#array
+			(
+				expr :	($e.m_pData)[$i],
+				size :	$e.m_iSize
+			),
+			")"
+		)
+		)
+	)
+}
+
+Simple::CMap<*>::CKeyPairInternal{
+		preview			(#("[",$e.m_Key,"] = ", $e.m_Value))
+}
+Simple::CMap<*>{
+	children
+	(
+		#tree
+		(
+			head : $e.m_pRoot,
+			skip : &$e.m_Leaf,
+			size : $e.m_iSize,
+			left : m_pLeft,
+			right : m_pRight
+		) : $e.m_KeyPair
+	)
+	preview
+	(
+		#(
+			"[", $e.m_iSize, "](",
+			#tree
+			(
+				head : $e.m_pRoot,
+				skip : &$e.m_Leaf,
+				size : $e.m_iSize,
+				left : m_pLeft,
+				right : m_pRight
+			) : $e.m_KeyPair,
+			")"
+		)
+	)
+}
+
+
+Simple::CIndex<*>::CEntry{
+		preview			(#("[",$e.m_Key,"] = ", $e.m_Value))
+}
+Simple::CIndex<*>{
+	children
+	(
+		#array
+		(
+			expr :		($e.m_Entries.m_pData)[$i],
+			size :		$e.m_Entries.m_iSize
+		)
+	)
+	preview
+	(
+		#(
+			"[", $e.m_Entries.m_iSize, "](",
+			#array
+			(
+				expr :		($e.m_Entries.m_pData)[$i],
+				size :		$e.m_Entries.m_iSize
+			),
+			")"
+		)
+	)
+}
+
+Simple::CRingBuffer<*>{
+	preview
+	(
+		#if($e.m_iSize==0) ("<empty>") #else (
+		#(
+			"[", $e.m_iSize , "](",
+			#array
+			(
+				expr :		($e.m_pMem)[(($e.m_pReadPos - $e.m_pMem) + $i) % $e.m_iCapacity],
+				size :		$e.m_iSize
+			),
+			")"
+		)
+		)
+	)
+	children
+	(
+		#array
+		(
+			expr :		($e.m_pMem)[(($e.m_pReadPos - $e.m_pMem) + $i) % $e.m_iCapacity],
+			size :		$e.m_iSize
+		)
+	)
+}
+
+*/
+
 
 #endif	// __SIMPLELIB_H
 
