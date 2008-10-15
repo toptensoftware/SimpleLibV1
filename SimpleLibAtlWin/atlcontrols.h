@@ -1220,7 +1220,7 @@ public:
 	{
 		ATLASSERT(m_hImageList == NULL);
 		USES_CONVERSION;
-		m_hImageList = ImageList_LoadBitmap(_AtlBaseModule.GetModuleInstance(), W2T(lpszBitmapID), cx, nGrow, crMask);
+		m_hImageList = ImageList_LoadBitmap(_AtlBaseModule.GetModuleInstance(), W2CT(lpszBitmapID), cx, nGrow, crMask);
 		return (m_hImageList != NULL) ? TRUE : FALSE;
 	}
 	BOOL Merge(HIMAGELIST hImageList1, int nImage1, HIMAGELIST hImageList2, int nImage2, int dx, int dy)
