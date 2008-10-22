@@ -1219,7 +1219,8 @@ public:
 	BOOL Create(const wchar_t* lpszBitmapID, int cx, int nGrow, COLORREF crMask)
 	{
 		ATLASSERT(m_hImageList == NULL);
-		m_hImageList = ImageList_LoadBitmap(_AtlBaseModule.GetModuleInstance(), lpszBitmapID, cx, nGrow, crMask);
+		USES_CONVERSION;
+		m_hImageList = ImageList_LoadBitmap(_AtlBaseModule.GetModuleInstance(), W2CT(lpszBitmapID), cx, nGrow, crMask);
 		return (m_hImageList != NULL) ? TRUE : FALSE;
 	}
 	BOOL Merge(HIMAGELIST hImageList1, int nImage1, HIMAGELIST hImageList2, int nImage2, int dx, int dy)
