@@ -597,22 +597,12 @@ public:
 	void RemoveAt(int iPosition);
 	void RemoveAt(int iPosition, int iCount);
 	T DetachAt(int iPosition);
-	void Detach(const TArg& val);
-	void DetachAll();
 	void RemoveAll();
 	T& GetAt(int iPosition) const;
 	T& operator[](int iPosition) const;
 	T* GetBuffer() const;
 	int GetSize() const;
 	bool IsEmpty() const;
-
-	template <class TSem2, class TArg2>
-	void Add(CVector<T, TSem2, TArg2>& vec);
-
-	template <class TSem2, class TArg2>
-	void InsertAt(int iPosition, CVector<T, TSem2, TArg2>& vec);
-
-
 
 // Search and sort
 	int Find(const TArg& val, int iStartAfter=-1) const;
