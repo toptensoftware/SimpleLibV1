@@ -989,6 +989,19 @@ void CVector<T,TSem,TArg>::InsertAt(int iPosition, const T& val)
 	InsertAtInternal(iPosition, &val, 1);
 }
 
+template <class T, class TSem, class TArg> template <class TSem2, class TArg2>
+void CVector<T,TSem,TArg>::Add(CVector<T, TSem2, TArg2>& vec)
+{
+	InsertAtInternal(GetSize(), vec.GetBuffer(), vec.GetSize());
+}
+
+template <class T, class TSem, class TArg> template <class TSem2, class TArg2>
+void CVector<T,TSem,TArg>::InsertAt(int iPosition, CVector<T, TSem2, TArg2>& vec)
+{
+	InsertAtInternal(iPosition, vec.GetBuffer(), vec.GetSize());
+}
+
+
 // ReplaceAt
 template <class T, class TSem, class TArg>
 void CVector<T,TSem,TArg>::ReplaceAt(int iPosition, const T& val)
@@ -1157,6 +1170,22 @@ T CVector<T,TSem,TArg>::DetachAt(int iPosition)
 
 	return temp;
 }
+
+template <class T, class TSem, class TArg>
+void CVector<T,TSem,TArg>::Detach(const TArg& val)
+{
+	int iIndex=Find(val);
+	ASSERT(iIndex>=0);
+	DetachAt(iIndex);
+}
+
+template <class T, class TSem, class TArg>
+void CVector<T,TSem,TArg>::DetachAll()
+{
+	for (int i=GetSize()-1; i>=0; i--)
+		DetachAt(i);
+}
+
 
 // RemoveAll
 template <class T, class TSem, class TArg>
