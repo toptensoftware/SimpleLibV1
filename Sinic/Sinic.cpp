@@ -9,7 +9,7 @@ CCommandLineParser cl;
 // Main entry point
 int _tmain(int argc, _TCHAR* argv[])
 {
-	//printf("CL:%S\n", GetCommandLine());
+	printf("CL:%S\n", GetCommandLine());
 	//return 0;
 
 	// Add command line alias'
