@@ -1219,6 +1219,7 @@ public:
 	BOOL Create(const wchar_t* lpszBitmapID, int cx, int nGrow, COLORREF crMask)
 	{
 		ATLASSERT(m_hImageList == NULL);
+
 		USES_CONVERSION;
 		m_hImageList = ImageList_LoadBitmap(_AtlBaseModule.GetModuleInstance(), W2CT(lpszBitmapID), cx, nGrow, crMask);
 		return (m_hImageList != NULL) ? TRUE : FALSE;

@@ -2628,7 +2628,7 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::Add(const TKey& Key, const
 	CNode* pNode = m_pRoot;
 	CNode* pParent = NULL;
 	
-	int iCompare;
+	int iCompare=0;
 	while (pNode != &m_Leaf)
 	{
 		pParent = pNode;
