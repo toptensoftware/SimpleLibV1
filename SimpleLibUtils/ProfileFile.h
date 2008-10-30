@@ -118,6 +118,7 @@ public:
 	CProfileSection* GetSubSection(int iIndex) const;
 
 	void CopyFrom(const CProfileSection* pSection);
+	void AddSection(const CProfileSection* pSection);
 
 	CProfileSection* GetOwningSection() { return m_pOwner->AsSection(); };
 	CProfileFile* GetOwningFile() { return m_pOwner ? m_pOwner->GetOwningFile() : NULL; }
