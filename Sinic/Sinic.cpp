@@ -22,7 +22,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	cl.Parse(GetCommandLine(), true);
 
 	// Display logo...
-	if (!cl.GetSwitch(L"nolong"))
+	if (!cl.GetSwitch(L"nologo"))
 	{
 		wprintf(L"Structured Ini File Compiler v1.1\nCopyright (C) 2007 Topten Software.  All Rights Reserved\n\n");
 	}

@@ -341,7 +341,11 @@ T* CString<T>::GetBuffer(int iBufSize)
 	CHeader* pHeader=GetHeader();
 
 	if (iBufSize<0)
+	{
 		iBufSize=pHeader->m_iLength;
+		if (iBufSize<0)
+			iBufSize=GetLength()+1;
+	}
 
 	// Copy on write...
 	if (pHeader && pHeader->m_iRef>1)
@@ -2628,7 +2632,7 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::Add(const TKey& Key, const
 	CNode* pNode = m_pRoot;
 	CNode* pParent = NULL;
 	
-	int iCompare;
+	int iCompare=0;
 	while (pNode != &m_Leaf)
 	{
 		pParent = pNode;
