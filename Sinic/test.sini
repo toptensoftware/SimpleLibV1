@@ -1,0 +1,10 @@
+Data
+{
+	Val1="Hello";
+	Val2="World";
+	Val3="Goodbye";
+}
+Sinic
+{
+	EncryptionKey=0x0012bace;
+}

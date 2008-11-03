@@ -6,6 +6,7 @@
 
 CCommandLineParser cl;
 
+
 // Main entry point
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -22,7 +23,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	cl.Parse(GetCommandLine(), true);
 
 	// Display logo...
-	if (!cl.GetSwitch(L"nolong"))
+	if (!cl.GetSwitch(L"nologo"))
 	{
 		wprintf(L"Structured Ini File Compiler v1.1\nCopyright (C) 2007 Topten Software.  All Rights Reserved\n\n");
 	}
@@ -104,6 +105,18 @@ int _tmain(int argc, _TCHAR* argv[])
 			return 7;
 		}
 
+		// Extract encryption key
+		DWORD dwEncryptionKey=0;
+		CProfileSection* pSection=file.FindSection(L"Sinic");
+		if (pSection)
+		{
+			// Save the key
+			dwEncryptionKey=pSection->GetIntValue(L"EncryptionKey", 0);
+
+			// Remove the "sinic" section
+			file.Remove(pSection);
+		}
+
 		// Create output file
 		CFileStream OutStream;
 		if (!OutStream.Create(strOutputFile))
@@ -114,7 +127,17 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 
 		// Save as binary file
-		HRESULT hr=SaveBinaryProfile(file, &OutStream);
+		HRESULT hr;
+		if (dwEncryptionKey)
+		{
+			CAutoPtr<IStream, SRefCounted> spEncStream;
+			CreateCryptorStream(&OutStream, CCryptorKey(dwEncryptionKey), &spEncStream);
+			hr=SaveBinaryProfile(file, spEncStream);
+		}
+		else
+		{
+			hr=SaveBinaryProfile(file, &OutStream);
+		}
 		OutStream.Close();
 		if (FAILED(hr))
 		{

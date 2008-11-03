@@ -31,6 +31,7 @@
 #include "SimpleLibWin\CommandState.h"
 #include "SimpleLibWin\CopyStream.h"
 #include "SimpleLibWin\CreateFontEasy.h"
+#include "SimpleLibWin\CryptorStream.h"
 #include "SimpleLibWin\FadeWindow.h"
 #include "SimpleLibWin\FileUtils.h"
 #include "SimpleLibWin\FindFiles.h"

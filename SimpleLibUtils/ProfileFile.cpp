@@ -355,6 +355,13 @@ void CProfileSection::CopyFrom(const CProfileSection* pSection)
 	}
 }
 
+void CProfileSection::AddSection(const CProfileSection* pSection)
+{
+	CProfileSection* pNew=CreateSection(pSection->GetName());
+	pNew->CopyFrom(pSection);
+}
+
+
 
 bool CProfileSection::DeleteValue(const wchar_t* pszName)
 {
@@ -968,22 +975,16 @@ int CProfileFile::FindSectionIndex(const wchar_t* pszName, int iStartAfter) cons
 void CProfileFile::Merge(CProfileFile* pOther)
 {
 	for (int i=0; i<pOther->GetSize(); i++)
-		{
+	{
 		CProfileSection* pSection=pOther->GetAt(i);
-		Merge(pOther->GetAt(i));
-		}
+		Add(pOther->GetAt(i));
+	}
 }
 
 void CProfileFile::Merge(CProfileSection* pSection)
 {
 	CProfileSection* pDest=CreateSection(pSection->GetName());
-
-	for (int i=0; i<pSection->GetSize(); i++)
-		{
-		CProfileEntry* pEntry=pSection->GetAt(i);
-		if (!IsEmptyString(pEntry->GetName()))
-			pDest->SetValue(pEntry->GetName(), pEntry->GetValue());
-		}
+	pDest->CopyFrom(pSection);
 }
 
 
