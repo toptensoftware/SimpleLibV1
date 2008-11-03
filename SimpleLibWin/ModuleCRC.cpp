@@ -44,8 +44,8 @@ CRCCONTROLBLOCK* LocateCRCControlBlock(LPBYTE p, unsigned int dwLen)
 
 unsigned int CalculateModuleCRC(void* pModuleData, unsigned int dwLen, void* pCRCBlock)
 {
-	ASSERT(pCRCBlock!=NULL);
-	ASSERT(reinterpret_cast<LPBYTE>(pCRCBlock)-reinterpret_cast<LPBYTE>(pModuleData)<(int)dwLen);
+//	ASSERT(pCRCBlock!=NULL);
+//	ASSERT(reinterpret_cast<LPBYTE>(pCRCBlock)-reinterpret_cast<LPBYTE>(pModuleData)<(int)dwLen);
 
 	unsigned int dwCRC=0;
 
@@ -60,11 +60,12 @@ unsigned int CalculateModuleCRC(void* pModuleData, unsigned int dwLen, void* pCR
 	return dwCRC;
 }
 
+struct CRCCONTROLBLOCK CrcControlBlock =
+	{ CRC_SIG_START, 0, 0, 0, CRC_SIG_END };
+
 // Check module CRC
-bool CheckModuleCRC(HINSTANCE hInstanceThis, bool* pbTamperFlag)
+bool CheckModuleCRC(HINSTANCE hInstanceThis)
 {
-	static struct CRCCONTROLBLOCK ControlBloc =
-		{ CRC_SIG_START, 0, 0, 0, CRC_SIG_END };
 
 	// Get the module's file name
 	WCHAR szModulePath[MAX_PATH];
@@ -93,7 +94,7 @@ bool CheckModuleCRC(HINSTANCE hInstanceThis, bool* pbTamperFlag)
 			if (pControlBlock && pControlBlock->dwModuleLength<=dwLen)
 			{
 				// Calculate CRC
-				unsigned int dwCRC=CalculateModuleCRC(pModuleData, pControlBlock->dwModuleLength, pControlBlock);
+				unsigned int dwCRC=CalculateModuleCRC(pModuleData, dwLen, pControlBlock);
 				if (dwCRC==pControlBlock->dwCRC)
 				{
 					// Close file

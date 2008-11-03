@@ -39,6 +39,7 @@ struct CRCCONTROLBLOCK
 
 CRCCONTROLBLOCK* LocateCRCControlBlock(LPBYTE p, unsigned int dwLen);
 unsigned int CalculateModuleCRC(void* pModuleData, unsigned int dwLen, void* pCRCBlock);
+bool CheckModuleCRC(HINSTANCE hInstanceThis);
 
 
 }	// namespace Simple
