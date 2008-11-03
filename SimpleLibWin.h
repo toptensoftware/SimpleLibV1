@@ -52,6 +52,7 @@
 #include "SimpleLibWin\LoadSaveTextStream.h"
 #include "SimpleLibWin\MessageLoop.h"
 #include "SimpleLibWin\MRUFileList.h"
+#include "SimpleLibWin\ModuleCRC.h"
 #include "SimpleLibWin\MouseTracker.h"
 #include "SimpleLibWin\NotifyIcon.h"
 #include "SimpleLibWin\PostableObject.h"

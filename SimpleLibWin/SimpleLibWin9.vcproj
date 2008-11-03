@@ -755,6 +755,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ModuleCRC.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MouseTracker.cpp"
 				>
 			</File>
@@ -1041,6 +1045,10 @@
 			</File>
 			<File
 				RelativePath=".\MessageLoop.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ModuleCRC.h"
 				>
 			</File>
 			<File
