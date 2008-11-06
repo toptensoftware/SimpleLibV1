@@ -341,7 +341,11 @@ T* CString<T>::GetBuffer(int iBufSize)
 	CHeader* pHeader=GetHeader();
 
 	if (iBufSize<0)
+	{
 		iBufSize=pHeader->m_iLength;
+		if (iBufSize<0)
+			iBufSize=GetLength()+1;
+	}
 
 	// Copy on write...
 	if (pHeader && pHeader->m_iRef>1)

@@ -15,5 +15,5 @@
 #include <windows.h>
 #include <shlobj.h>
 
-#include <SimpleLibWin.h>
+#include "../SimpleLibWin.h"
 using namespace Simple;

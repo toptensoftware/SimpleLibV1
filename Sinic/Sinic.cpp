@@ -6,6 +6,29 @@
 
 CCommandLineParser cl;
 
+
+int CountCRCControlBlocks(LPBYTE p, DWORD dwLen)
+{
+	int iCount=0;
+	while ((dwLen--)>sizeof(CRCCONTROLBLOCK))
+	{
+		// Cast to control block pointer
+		CRCCONTROLBLOCK* pBlock=(CRCCONTROLBLOCK*)p;
+
+		// Signatures match?
+		if ((pBlock->dwCRCStartSig==CRC_SIG_START) &&
+
+		(pBlock->dwCRCEndSig==CRC_SIG_END))
+		iCount++;
+
+		// Move on
+		p++;
+	}
+
+	return iCount;
+}
+
+
 // Main entry point
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -22,7 +45,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	cl.Parse(GetCommandLine(), true);
 
 	// Display logo...
-	if (!cl.GetSwitch(L"nolong"))
+	if (!cl.GetSwitch(L"nologo"))
 	{
 		wprintf(L"Structured Ini File Compiler v1.1\nCopyright (C) 2007 Topten Software.  All Rights Reserved\n\n");
 	}
@@ -38,19 +61,117 @@ int _tmain(int argc, _TCHAR* argv[])
 		cl.BuildHelp(L"flat", L"Decompile to flat", NULL, clOptional);
 		cl.BuildHelp(L"o|out", L"Output File", NULL, clOptional);
 		cl.BuildHelp(L"InputFile", L"File to be processed", NULL, clPlaced);
+		cl.BuildHelp(L"crcstamp", L"CRC Stamp Module", NULL, clOptional);
 		wprintf(cl.GetHelp(L"Sinic"));
 		return 7;
 	}
-
-	// Compile or decompile
-	bool bDecompile=cl.GetSwitch(L"extract");
-	bool bUnicode=cl.GetSwitch(L"unicode");
-	bool bFlat=cl.GetSwitch(L"flat");
 
 	// Get input value
 	CUniString strInputFile;
 	cl.GetPlacedValue(0, L"InputFile", strInputFile);
 	strInputFile=QualifyPath(strInputFile);
+
+	// Module CRC Stamp?
+	if (cl.GetSwitch(L"crcstamp"))
+	{
+		// Work out output file
+		CUniString strOutputFile;
+		cl.GetValue(L"out", strOutputFile);
+		if (strOutputFile.IsEmpty())
+			strOutputFile=strInputFile;
+
+		// Error handling...
+		cl.CheckNoUnknownArgs();
+		if (cl.HasError())
+		{
+			wprintf(cl.GetErrorMessage());
+			wprintf(L"\n\n");
+			return 7;
+		}
+
+		// Open file for read/write
+		FILE* pFile;
+		if (_wfopen_s(&pFile, strInputFile, L"rb")!=0)
+		{
+			printf("Error: Can't open file '%s'\n", strInputFile);
+			return 7;
+		}
+
+		// Get file size
+		fseek(pFile, 0, SEEK_END);
+		DWORD dwLength=ftell(pFile);
+		fseek(pFile, 0, SEEK_SET);
+
+		// Check has length
+		if (dwLength==0)
+		{
+			fclose(pFile);
+			printf("Error: Zero length file\n");
+			return 7;
+		}
+
+		// Load file into memory
+		LPBYTE pFileData=(LPBYTE)malloc(dwLength);
+
+		// Read data
+		if (fread(pFileData, dwLength, 1, pFile)!=1)
+		{
+			free(pFileData);
+			fclose(pFile);
+			printf("Error: Error reading file\n");
+			return 7;
+		}
+
+		// Close the file
+		fclose(pFile);
+
+		if (CountCRCControlBlocks(pFileData, dwLength)>1)
+			{
+			free(pFileData);
+			fclose(pFile);
+			printf("Error: File contains multiple CRC Control blocks!\n");
+			return 7;
+			}
+			
+
+		// Locate CRC Control block
+		CRCCONTROLBLOCK* pCRCBlock=LocateCRCControlBlock(pFileData, dwLength);
+		if (!pCRCBlock)
+		{
+			free(pFileData);
+			fclose(pFile);
+			printf("Error: File doesn't contain CRC Control block!\n");
+			return 7;
+		}
+
+		printf("CRC Control Block located at offset: 0x%.8x\n", reinterpret_cast<LPBYTE>(pCRCBlock)-pFileData);
+
+		// Calculate the CRC upto start of control block
+		pCRCBlock->dwCRC=CalculateModuleCRC(pFileData, dwLength, pCRCBlock);
+		pCRCBlock->dwModuleLength=dwLength;
+				
+		pFile=NULL;
+		if (_wfopen_s(&pFile, strOutputFile, L"wb")!=0)
+		{
+			printf("Error: Can't open output file '%s'\n", strOutputFile);
+			return 7;
+		}
+
+		// Write CRC stamped
+		fwrite(pFileData, dwLength, 1, pFile);
+
+		// Clean up
+		free(pFileData);
+
+		wprintf(L"CRC Stamped %s - OK\n\n", strOutputFile);
+		return 0;
+	}
+
+
+	// Compile or decompile
+	bool bDecompile=cl.GetSwitch(L"extract");
+	bool bUnicode=cl.GetSwitch(L"unicode");
+	bool bFlat=cl.GetSwitch(L"flat");
 
 	// Get output file
 	CUniString strOutputFile;
@@ -104,6 +225,18 @@ int _tmain(int argc, _TCHAR* argv[])
 			return 7;
 		}
 
+		// Extract encryption key
+		DWORD dwEncryptionKey=0;
+		CProfileSection* pSection=file.FindSection(L"Sinic");
+		if (pSection)
+		{
+			// Save the key
+			dwEncryptionKey=pSection->GetIntValue(L"EncryptionKey", 0);
+
+			// Remove the "sinic" section
+			file.Remove(pSection);
+		}
+
 		// Create output file
 		CFileStream OutStream;
 		if (!OutStream.Create(strOutputFile))
@@ -114,7 +247,17 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 
 		// Save as binary file
-		HRESULT hr=SaveBinaryProfile(file, &OutStream);
+		HRESULT hr;
+		if (dwEncryptionKey)
+		{
+			CAutoPtr<IStream, SRefCounted> spEncStream;
+			CreateCryptorStream(&OutStream, CCryptorKey(dwEncryptionKey), &spEncStream);
+			hr=SaveBinaryProfile(file, spEncStream);
+		}
+		else
+		{
+			hr=SaveBinaryProfile(file, &OutStream);
+		}
 		OutStream.Close();
 		if (FAILED(hr))
 		{

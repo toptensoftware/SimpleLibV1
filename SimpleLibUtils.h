@@ -21,6 +21,7 @@
 // Include files from SimpleLibUtils
 #include "SimpleLibUtils\CalcCRC.h"
 #include "SimpleLibUtils\CommandLineParser.h"
+#include "SimpleLibUtils\Cryptor.h"
 #include "SimpleLibUtils\FormatBinary.h"
 #include "SimpleLibUtils\IncrementString.h"
 #include "SimpleLibUtils\ParseUtils.h"

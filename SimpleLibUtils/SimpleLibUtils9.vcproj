@@ -667,6 +667,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Cryptor.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\FormatBinary.cpp"
 				>
 			</File>
@@ -933,6 +937,10 @@
 			</File>
 			<File
 				RelativePath=".\CommandLineParser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Cryptor.h"
 				>
 			</File>
 			<File

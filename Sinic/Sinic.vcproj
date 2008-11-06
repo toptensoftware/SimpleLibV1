@@ -218,6 +218,10 @@
 			RelativePath=".\ReadMe.txt"
 			>
 		</File>
+		<File
+			RelativePath=".\test.sini"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
