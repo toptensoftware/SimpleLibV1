@@ -348,7 +348,6 @@ T* CString<T>::GetBuffer(int iBufSize)
 	{
 
 		// Allocate new header
-		int iSize1=sizeof(CHeader)+sizeof(T)*iBufSize;
 		pHeader=(CHeader*)malloc(sizeof(CHeader)+sizeof(T)*iBufSize);
 		if (!pHeader)
 			return NULL;
