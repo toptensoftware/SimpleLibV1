@@ -49,7 +49,7 @@ public:
 void SIMPLEAPI ADX_Text(CADXExchange* pDX, int nIDC, CUniString& str);
 void SIMPLEAPI ADX_Text(CADXExchange* pDX, int nIDC, int& iVal);
 void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, unsigned int& iVal);
-void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, double& dblVal);
+void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, double& dblVal, int iDP=-1);
 void SIMPLEAPI ADX_CheckBox(CADXExchange* pDX, int nIDC, int& iValue);
 void SIMPLEAPI ADX_CheckBox(CADXExchange* pDX, int nIDC, VARIANT_BOOL& bValue);
 void SIMPLEAPI ADX_CheckBox(CADXExchange* pDX, int nIDC, bool& bValue);
@@ -67,8 +67,8 @@ void SIMPLEAPI ADX_RangeInt(CADXExchange* pDX, int iValue, int iMin, int iMax);
 void SIMPLEAPI ADX_RangeUInt(CADXExchange* pDX, unsigned int iValue, unsigned int iMin, unsigned int iMax);
 void SIMPLEAPI ADX_LimitInt(CADXExchange* pDX, int Value, int iLimit, bool bMustBeGreater, bool bInclusive);
 void SIMPLEAPI ADX_LimitUInt(CADXExchange* pDX, unsigned int Value, unsigned int iLimit, bool bMustBeGreater, bool bInclusive);
-void SIMPLEAPI ADX_RangeDouble(CADXExchange* pDX, double dblValue, double dblMin, double dblMax);
-void SIMPLEAPI ADX_LimitDouble(CADXExchange* pDX, double Value, double dblLimit, bool bMustBeGreater, bool bInclusive);
+void SIMPLEAPI ADX_RangeDouble(CADXExchange* pDX, double dblValue, double dblMin, double dblMax, int iDP=-1);
+void SIMPLEAPI ADX_LimitDouble(CADXExchange* pDX, double Value, double dblLimit, bool bMustBeGreater, bool bInclusive, int iDP=-1);
 void SIMPLEAPI ADX_Validate(CADXExchange* pDX, int nIDC, bool bCondition, const wchar_t* pszMessage);
 
 

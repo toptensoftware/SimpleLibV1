@@ -723,6 +723,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FormatUserNumber.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\GdiMisc.cpp"
 				>
 			</File>
@@ -1005,6 +1009,10 @@
 			</File>
 			<File
 				RelativePath=".\FormatError.h"
+				>
+			</File>
+			<File
+				RelativePath=".\FormatUserNumber.h"
 				>
 			</File>
 			<File

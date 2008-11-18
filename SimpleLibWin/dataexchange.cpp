@@ -17,6 +17,7 @@
 
 #include "DataExchange.h"
 #include "MessageBox.h"
+#include "FormatUserNumber.h"
 
 namespace Simple
 {
@@ -105,10 +106,7 @@ void SIMPLEAPI ADX_Text(CADXExchange* pDX, int nIDC, int& iVal)
 
 	if (!pDX->m_bSave)
 		{
-		BSTR bstr=NULL;
-		VarBstrFromI4(iVal, pDX->m_lcid, 0, &bstr);
-		str=bstr;
-		SysFreeString(bstr);
+		str=FormatUserI4(iVal);
 		}
 
 	ADX_Text(pDX, nIDC, str);
@@ -122,7 +120,7 @@ void SIMPLEAPI ADX_Text(CADXExchange* pDX, int nIDC, int& iVal)
 		else
 			{
 			ASSERT(sizeof(long)==sizeof(int));
-			if (FAILED(VarI4FromStr(const_cast<OLECHAR*>(str.sz()), pDX->m_lcid, 0, (long*)&iVal)))
+			if (!ParseUserI4(str, &iVal))
 				pDX->Error(L"Invalid value");
 			}
 		}
@@ -135,10 +133,7 @@ void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, unsigned int& iVal
 
 	if (!pDX->m_bSave)
 		{
-		BSTR bstr=NULL;
-		VarBstrFromUI4(iVal, pDX->m_lcid, 0, &bstr);
-		str=bstr;
-		SysFreeString(bstr);
+		str=FormatUserUI4(iVal);
 		}
 
 	ADX_Text(pDX, nIDC, str);
@@ -152,7 +147,7 @@ void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, unsigned int& iVal
 		else
 			{
 			ASSERT(sizeof(unsigned long)==sizeof(unsigned int));
-			if (FAILED(VarUI4FromStr(const_cast<OLECHAR*>(str.sz()), pDX->m_lcid, 0, (unsigned long*)&iVal)))
+			if (!ParseUserUI4(str, &iVal))
 				pDX->Error(L"Invalid value");
 			}
 		}
@@ -160,16 +155,13 @@ void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, unsigned int& iVal
 
 
 // Double text exchange
-void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, double& dblVal)
+void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, double& dblVal, int iDP)
 {
 	CUniString str;
 
 	if (!pDX->m_bSave)
 		{
-		BSTR bstr=NULL;
-		VarBstrFromR8(dblVal, pDX->m_lcid, 0, &bstr);
-		str=bstr;
-		SysFreeString(bstr);
+		str=FormatUserR8(dblVal, iDP);
 		}
 
 	ADX_Text(pDX, nIDC, str);
@@ -182,7 +174,7 @@ void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, double& dblVal)
 			}
 		else
 			{
-			if (FAILED(VarR8FromStr(const_cast<OLECHAR*>(str.sz()), pDX->m_lcid, 0, &dblVal)))
+			if (!ParseUserR8(str, &dblVal))
 				pDX->Error(L"Invalid value");
 			}
 		}
@@ -247,7 +239,7 @@ void SIMPLEAPI ADX_RangeInt(CADXExchange* pDX, int iValue, int iMin, int iMax)
 
 	if (iValue<iMin || iValue>iMax)
 		{
-		pDX->Error(Format(L"Value out of range.  Please enter a number between %i and %i", iMin, iMax));
+		pDX->Error(Format(L"Value out of range.  Please enter a number between %s and %s", FormatUserI4(iMin), FormatUserI4(iMax)));
 		}
 }
 
@@ -267,7 +259,7 @@ void SIMPLEAPI ADX_RangeUInt(CADXExchange* pDX, unsigned int iValue, unsigned in
 
 	if (iValue<iMin || iValue>iMax)
 		{
-		pDX->Error(Format(L"Value out of range.  Please enter a number between %u and %u", iMin, iMax));
+		pDX->Error(Format(L"Value out of range.  Please enter a number between %s and %s", FormatUserUI4(iMin), FormatUserUI4(iMax)));
 		}
 }
 
@@ -292,7 +284,7 @@ void SIMPLEAPI ADX_LimitInt(CADXExchange* pDX, int Value, int iLimit, bool bMust
 	if (bInclusive)
 		str+=L"or equal to ";
 
-	str+=Format(L"%i.", iLimit);
+	str+=Format(L"%s.", FormatUserI4(iLimit));
 
 	pDX->Error(str);
 }
@@ -318,13 +310,13 @@ void SIMPLEAPI ADX_LimitUInt(CADXExchange* pDX, unsigned int Value, unsigned int
 	if (bInclusive)
 		str+=L"or equal to ";
 
-	str+=Format(L"%u.", iLimit);
+	str+=Format(L"%s.", FormatUserUI4(iLimit));
 
 	pDX->Error(str);
 }
 
 // Check that a double value is within range
-void SIMPLEAPI ADX_RangeDouble(CADXExchange* pDX, double dblValue, double dblMin, double dblMax)
+void SIMPLEAPI ADX_RangeDouble(CADXExchange* pDX, double dblValue, double dblMin, double dblMax, int iDP)
 {
 	if (!pDX->m_bSave)
 	{
@@ -339,12 +331,12 @@ void SIMPLEAPI ADX_RangeDouble(CADXExchange* pDX, double dblValue, double dblMin
 
 	if (dblValue<dblMin || dblValue>dblMax)
 		{
-		pDX->Error(Format(L"Value out of range.  Please enter a number between %f and %f", dblMin, dblMax));
+		pDX->Error(Format(L"Value out of range.  Please enter a number between %s and %s", FormatUserR8(dblMin, iDP), FormatUserR8(dblMax, iDP)));
 		}
 }
 
 // Check that a double number is greater than/less than and/or equal to a value
-void SIMPLEAPI ADX_LimitDouble(CADXExchange* pDX, double Value, double dblLimit, bool bMustBeGreater, bool bInclusive)
+void SIMPLEAPI ADX_LimitDouble(CADXExchange* pDX, double Value, double dblLimit, bool bMustBeGreater, bool bInclusive, int iDP)
 {
 	if (!pDX->m_bSave)
 		return;
@@ -363,7 +355,7 @@ void SIMPLEAPI ADX_LimitDouble(CADXExchange* pDX, double Value, double dblLimit,
 	str+=L"than ";
 	if (bInclusive)
 		str+=L"or equal to ";
-	str+=Format(L"%g.", dblLimit);
+	str+=Format(L"%s.", FormatUserR8(dblLimit, iDP));
 
 	pDX->Error(str);
 }
