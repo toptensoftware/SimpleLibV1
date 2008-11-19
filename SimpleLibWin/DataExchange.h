@@ -50,6 +50,7 @@ void SIMPLEAPI ADX_Text(CADXExchange* pDX, int nIDC, CUniString& str);
 void SIMPLEAPI ADX_Text(CADXExchange* pDX, int nIDC, int& iVal);
 void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, unsigned int& iVal);
 void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, double& dblVal, int iDP=-1);
+void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, float& fltVal, int iDP=-1);
 void SIMPLEAPI ADX_CheckBox(CADXExchange* pDX, int nIDC, int& iValue);
 void SIMPLEAPI ADX_CheckBox(CADXExchange* pDX, int nIDC, VARIANT_BOOL& bValue);
 void SIMPLEAPI ADX_CheckBox(CADXExchange* pDX, int nIDC, bool& bValue);

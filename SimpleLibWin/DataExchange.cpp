@@ -180,6 +180,35 @@ void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, double& dblVal, in
 		}
 };
 
+// Double text exchange
+void SIMPLEAPI ADX_Text(CADXExchange* pDX, unsigned int nIDC, float& fltVal, int iDP)
+{
+	CUniString str;
+
+	if (!pDX->m_bSave)
+		{
+		str=FormatUserR8(fltVal, iDP);
+		}
+
+	ADX_Text(pDX, nIDC, str);
+
+	if (pDX->m_bSave)
+		{
+		if (str.IsEmpty())
+			{
+			fltVal=0;
+			}
+		else
+			{
+			double dblVal;
+			if (!ParseUserR8(str, &dblVal))
+				pDX->Error(L"Invalid value");
+
+			fltVal=(float)dblVal;
+			}
+		}
+};
+
 
 // Check that a string has been entered
 void SIMPLEAPI ADX_Required(CADXExchange* pDX, const wchar_t* psz)
