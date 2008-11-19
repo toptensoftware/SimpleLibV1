@@ -36,6 +36,7 @@
 #include "SimpleLibWin\FileUtils.h"
 #include "SimpleLibWin\FindFiles.h"
 #include "SimpleLibWin\FormatError.h"
+#include "SimpleLibWin\FormatUserNumber.h"
 #include "SimpleLibWin\LoadString.h"
 #include "SimpleLibWin\MessageBox.h"
 #include "SimpleLibWin\DataExchange.h"
