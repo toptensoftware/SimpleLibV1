@@ -174,9 +174,8 @@ bool SIMPLEAPI SlxUpgradeProfile(const wchar_t* pszOldCompanyName, const wchar_t
 		// Quit if key already exists
 		CSmartHandle<HKEY> key;
 		if (RegOpenKeyEx(HKEY_CURRENT_USER, SlxGetProfileKey(), 0, KEY_READ, &key)==ERROR_SUCCESS)
-			{
 			return false;
-			}
+
 		key.Release();
 
 		// Copy from old key...
@@ -309,6 +308,32 @@ void SIMPLEAPI SlxDeleteProfileSection(const wchar_t* pszSection)
 	}
 }
 
+void SIMPLEAPI SlxDeleteProfileValue(const wchar_t* pszSection, const wchar_t* pszEntry)
+{
+	if (g_bFileBased)
+	{
+		// Find section
+		CProfileSection* pSection=g_ProfileFile.FindSection(pszSection);
+
+		// If exists, delete value
+		if (pSection)
+			pSection->DeleteValue(pszEntry);
+
+		SlxProfileFileSetModified();
+	}
+	else
+	{
+		// Open key
+		CSmartHandle<HKEY> Key;
+		if (RegOpenKeyEx(HKEY_CURRENT_USER, Format(L"Software\\%s\\%s\\%s", g_strCompanyName, g_strAppName, pszSection), 0, KEY_READ|KEY_WRITE, &Key)!=ERROR_SUCCESS)
+			return;
+
+		// Delete value
+		RegDeleteValue(Key, pszEntry);
+	}
+}
+
+
 bool SIMPLEAPI SlxEnumProfileValues(const wchar_t* pszSection, CVector<CUniString>& vec)
 {
 	if (g_bFileBased)
@@ -322,6 +347,10 @@ bool SIMPLEAPI SlxEnumProfileValues(const wchar_t* pszSection, CVector<CUniStrin
 	}
 	else
 	{
+		CSmartHandle<HKEY> Key;
+		if (RegCreateKey(HKEY_CURRENT_USER, Format(L"Software\\%s\\%s\\%s", g_strCompanyName, g_strAppName, pszSection), &Key)!=ERROR_SUCCESS)
+			return false;
+
 		return RegEnumAllValues(HKEY_CURRENT_USER, SlxGetProfileKey(pszSection), vec)==ERROR_SUCCESS;
 	}
 }
@@ -355,6 +384,21 @@ CUniString SIMPLEAPI SlxGetProfileKey(const wchar_t* pszSuffix)
 	else
 		return Format(L"Software\\%s\\%s", g_strCompanyName, g_strAppName);
 }
+
+CProfileSection* SIMPLEAPI SlxGetProfileSection(const wchar_t* pszSection)
+{
+	ASSERT(g_bFileBased);
+	return g_ProfileFile.FindSection(pszSection);
+}
+
+CProfileSection* SIMPLEAPI SlxCreateProfileSection(const wchar_t* pszSection)
+{
+	ASSERT(g_bFileBased);
+	CProfileSection* pSection=g_ProfileFile.CreateSection(pszSection);
+	SlxProfileFileSetModified();
+	return pSection;
+}
+
 
 void CALLBACK ProfileFlushProc(LPARAM lUnused)
 {
