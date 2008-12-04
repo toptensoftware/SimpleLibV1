@@ -111,7 +111,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\simplelib.cpp"
+			RelativePath="..\Simplelib.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -147,7 +147,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\simplelib.h"
+			RelativePath="..\SimpleLib.h"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
