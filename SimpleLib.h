@@ -1435,54 +1435,6 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CThreadSafeRingBuffer
-
-#ifndef _SIMPLELIB_NO_COMPAREANDEXCHANGE
-
-// CThreadSafeRingBuffer Class
-template <class T, class TSem=SValue>
-class CThreadSafeRingBuffer
-{
-public:
-// Construction
-			CThreadSafeRingBuffer(int iCapacity);
-	virtual ~CThreadSafeRingBuffer();
-
-// Types
-	typedef CThreadSafeRingBuffer<T,TSem> _CThreadSafeRingBuffer;
-
-// Operations
-	void Reset(int iNewCapacity=0);
-	bool IsEmpty() const;
-	bool IsFull() const;
-	bool IsOverflow() const;
-	bool Enqueue(const T& t);
-	bool Dequeue(T& t);
-	void RemoveAll();
-	int GetCapacity() const;
-
-// Implementation
-protected:
-// Attributes
-	T*	m_pMem;
-	T*	m_pWritePosA;
-	T*	m_pWritePosB;
-	T*	m_pReadPosA;
-	T*	m_pReadPosB;
-	int	m_iCapacity;
-	bool	m_bOverflow;
-
-// Operations
-	T* AdvancePtr(T* p)	const;
-
-private:
-// Unsupported
-	CThreadSafeRingBuffer(const CThreadSafeRingBuffer& Other);
-	CThreadSafeRingBuffer& operator=(const CThreadSafeRingBuffer& Other);
-};
-
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // CPool
