@@ -27,6 +27,8 @@ CUniString SIMPLEAPI SlxGetSystemDirectory();
 CUniString SIMPLEAPI SlxGetModuleFileName(HMODULE hModule);
 CUniString SIMPLEAPI SlxGetModuleFolder(HMODULE hModule);
 
+bool SIMPLEAPI CopyFolder(const wchar_t* pszDest, const wchar_t* pszSource, bool bContinueOnError, bool bFailIfExists);
+
 }	// namespace Simple
 
 #endif	// __FILEUTILS_H
