@@ -287,6 +287,9 @@ bool CProfileSection::DeleteSection(const wchar_t* pszName)
 
 CProfileSection* CProfileSection::FindSection(const wchar_t* pszName) const
 {
+	if (!this)
+		return NULL;
+
 	CUniString strSection, strChild;
 	if (m_bFlat)
 		strSection=pszName;
@@ -327,7 +330,7 @@ CProfileSection* CProfileSection::CreateSection(const wchar_t* pszName)
 	if (strChild.IsEmpty())
 		return pSection;
 	else
-		return pSection->CreateSection(pszName);
+		return pSection->CreateSection(strChild);
 }
 
 int CProfileSection::GetSubSectionCount() const
@@ -1204,7 +1207,7 @@ CUniString EscapeString(const wchar_t* psz, bool bValue)
 void CProfileFile::WriteSectionHeirarchial(CUniString& buf, CProfileSection* pSection, int iIndent) const
 {
 	buf.Append(pszTabs, iIndent);
-	buf.Append(pSection->GetName());
+	buf.Append(EscapeString(pSection->GetName(), false));
 	buf.Append(L"\r\n");
 	buf.Append(pszTabs, iIndent);
 	buf.Append(L"{\r\n");

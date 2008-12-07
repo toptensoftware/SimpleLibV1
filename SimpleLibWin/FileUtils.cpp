@@ -144,7 +144,7 @@ bool SIMPLEAPI CopyFolder(const wchar_t* pszDest, const wchar_t* pszSource, bool
 		// Is it a directory?
 		if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
-			if (!IsEqualString(fd.cFileName, L".") && IsEqualString(fd.cFileName, L".."))
+			if (!IsEqualString(fd.cFileName, L".") && !IsEqualString(fd.cFileName, L".."))
 			{
 				// Copy sub-folder
 				if (!CopyFolder(SimplePathAppend(pszDest, fd.cFileName), SimplePathAppend(pszSource, fd.cFileName), bContinueOnError, bFailIfExists))

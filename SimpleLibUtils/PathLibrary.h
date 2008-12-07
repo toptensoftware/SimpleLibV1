@@ -42,6 +42,8 @@ CUniString SIMPLEAPI ChangeFileName(const wchar_t* pszFileName, const wchar_t* p
 CUniString SIMPLEAPI ChangeFileExtension(const wchar_t* pszFileName, const wchar_t* pszNewExtension);
 CUniString SIMPLEAPI ExtractDrive(const wchar_t* pszPath);
 CUniString SIMPLEAPI FindRelativePath(const wchar_t* pszPath1, const wchar_t* pszPath2);
+CUniString SIMPLEAPI ExtractFolder(const wchar_t* pszFileName);
+CUniString SIMPLEAPI ExtractFileName(const wchar_t* pszFileName);
 
 }	// namespace Simple
 

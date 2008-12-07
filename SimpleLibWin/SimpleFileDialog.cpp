@@ -20,6 +20,7 @@
 #include "SimpleFileDialog.h"
 #include "RegistryUtils.h"
 #include "FileUtils.h"
+#include "ProfileSettings.h"
 
 namespace Simple
 {
@@ -31,6 +32,9 @@ namespace Simple
 CSimpleFileDialog::CSimpleFileDialog(bool bSave, const wchar_t* pszFilter, const wchar_t* pszDefExt, const wchar_t* pszFileName, 
 							DWORD dwFlags)
 {
+
+	m_bInitialDirProfile=false;
+
 	// Initialise OPENFILENAME
 #if (_WIN32_WINNT < 0x0500)
 	int iExtra=IsPlacesBarSupported() ? EXTRA_SIZEOF_OFN : 0;
@@ -76,6 +80,7 @@ CSimpleFileDialog::~CSimpleFileDialog()
 void CSimpleFileDialog::SetInitialDirKey(const wchar_t* pszKey, const wchar_t* pszValue, const wchar_t* pszDefault)
 {
 	// Store key
+	m_bInitialDirProfile=false;
 	m_strInitialDirKey=pszKey;
 	m_strInitialDirValue=pszValue;
 
@@ -91,6 +96,22 @@ void CSimpleFileDialog::SetInitialDirKey(const wchar_t* pszKey, const wchar_t* p
 	if (!IsEmptyString(strFolder))
 		SetInitialDir(strFolder);
 }
+
+void CSimpleFileDialog::SetInitialDir(const wchar_t* pszSection, const wchar_t* pszEntry, const wchar_t* pszDefault)
+{
+	// Store key
+	m_bInitialDirProfile=true;
+	m_strInitialDirKey=pszSection;
+	m_strInitialDirValue=pszEntry;
+
+	// Get last folder
+	CUniString strFolder=SlxGetProfileString(pszSection, pszEntry, pszDefault);
+
+	// Set it
+	if (!IsEmptyString(strFolder))
+		SetInitialDir(strFolder);
+}
+
 
 void CSimpleFileDialog::SetInitialDir(const wchar_t* pszInitialDir)
 {
@@ -125,7 +146,7 @@ int CSimpleFileDialog::DoModal(HWND hWndParent)
 
 	// Save directory as initial directory for next time
 	if (!IsEmptyString(m_strInitialDirKey))
-		{
+	{
 		// Start with folder name
 		CUniString strFolder;	
 
@@ -147,9 +168,16 @@ int CSimpleFileDialog::DoModal(HWND hWndParent)
 			// Split folder
 			SplitPath(m_szFileName, &strFolder, NULL);
 			}
-		
-		RegSetString(HKEY_CURRENT_USER, m_strInitialDirKey, m_strInitialDirValue, strFolder);
+
+		if (m_bInitialDirProfile)
+		{
+			SlxSetProfileString(m_strInitialDirKey, m_strInitialDirValue, strFolder);
 		}
+		else
+		{
+			RegSetString(HKEY_CURRENT_USER, m_strInitialDirKey, m_strInitialDirValue, strFolder);
+		}
+	}
 
 
 	return IDOK;

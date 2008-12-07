@@ -37,6 +37,8 @@ void SIMPLEAPI SlxProfileFileSetModified();
 bool SIMPLEAPI SlxFlushProfileFile();
 CProfileSection* SIMPLEAPI SlxGetProfileSection(const wchar_t* pszSection);
 CProfileSection* SIMPLEAPI SlxCreateProfileSection(const wchar_t* pszSection);
+CUniString SIMPLEAPI SlxGetProfileFileName();
+CUniString SIMPLEAPI SlxGetProfileFolderName();
 
 }	// namespace Simple
 

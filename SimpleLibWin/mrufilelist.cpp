@@ -118,6 +118,35 @@ void CMRUFileList::Load(LPCOLESTR pszSubKey, LPCOLESTR pszKey)
 	SetMaxSize(dwCount);
 }
 
+void CMRUFileList::Save(CProfileSection* pSection)
+{
+	pSection->RemoveAll();
+	for (int i=0; i<GetSize(); i++)
+	{
+		pSection->SetValue(Format(L"File%i", i), GetAt(i));
+	}
+	pSection->SetIntValue(L"MaxCount", m_iMaxSize);
+}
+
+void CMRUFileList::Load(CProfileSection* pSection)
+{
+	RemoveAll();
+
+	if (!pSection)
+		return;
+
+	for (int i=0; i<pSection->GetSize(); i++)
+	{
+		if (!IsEqualString(pSection->GetAt(i)->GetName(), L"MaxCount"))
+		{
+			_CVector::Add(pSection->GetAt(i)->GetValue());
+		}
+	}
+
+	SetMaxSize(pSection->GetIntValue(L"MaxCount", 4));
+}
+
+
 bool FindMenuItem(HMENU hMenu, UINT nID, HMENU* phMenuFound, int* piPos)
 {
 	int iCount=GetMenuItemCount(hMenu);

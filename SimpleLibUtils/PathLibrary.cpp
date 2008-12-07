@@ -483,6 +483,20 @@ CUniString SIMPLEAPI FindRelativePath(const wchar_t* pszPath1, const wchar_t* ps
 	return strRelative;
 }
 
+CUniString SIMPLEAPI ExtractFolder(const wchar_t* pszFileName)
+{
+	CUniString strFolder;
+	SplitPath(pszFileName, &strFolder, NULL);
+	return strFolder;
+}
+
+CUniString SIMPLEAPI ExtractFileName(const wchar_t* pszFileName)
+{
+	CUniString strFileName;
+	SplitPath(pszFileName, NULL, &strFileName);
+	return strFileName;
+}
+
 }	// namespace Simple
 
 

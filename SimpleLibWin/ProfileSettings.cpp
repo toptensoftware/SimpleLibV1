@@ -26,6 +26,7 @@
 #include "ProfileStream.h"
 #include "CopyStream.h"
 #include "CallbackTimer.h"
+#include "MessageBox.h"
 #include <shlobj.h>
 
 namespace Simple
@@ -86,7 +87,14 @@ void SIMPLEAPI SlxInitProfile(const wchar_t* pszCompanyName, const wchar_t* pszA
 		if (!g_ProfileFile.Load(strSettingsFile))
 		{
 			// Save immediately to attach file name with CProfileFile
+			g_ProfileFile.Reset(false);
 			g_ProfileFile.SetFileName(strSettingsFile);
+
+			if (DoesFileExist(strSettingsFile))
+			{
+				SlxMessageBox(Format(L"Failed to load settings, resetting everything to default (%s)", g_ProfileFile.GetParseError()), MB_OK|MB_ICONWARNING);
+				g_ProfileFile.Reset(false);
+			}
 		}
 
 		// Not modified
@@ -196,6 +204,18 @@ bool SIMPLEAPI SlxUpgradeProfile(const wchar_t* pszOldCompanyName, const wchar_t
 			for (int i=0; i<vec.GetSize(); i++)
 			{
 				_SlxConvertProfileRegKey(Format(L"Software\\%s\\%s\\%s", pszOldCompanyName, pszOldAppName, vec[i]), g_ProfileFile.CreateSection(vec[i]));
+			}
+
+			// Delete registry if just "moving" from registry to file
+			if (IsEqualString(g_strCompanyName, pszOldCompanyName) &&
+				IsEqualString(g_strAppName, pszOldAppName) &&
+				g_bFileBased)
+			{
+				// Flush file first
+				SlxFlushProfileFile();
+
+				// Nuke it
+				RegNukeKey(HKEY_CURRENT_USER, Format(L"Software\\%s\\%s", pszOldCompanyName, pszOldAppName));
 			}
 		}
 		else
@@ -339,9 +359,12 @@ bool SIMPLEAPI SlxEnumProfileValues(const wchar_t* pszSection, CVector<CUniStrin
 	if (g_bFileBased)
 	{
 		CProfileSection* pSection=g_ProfileFile.FindSection(pszSection);
-		for (int i=0; i<pSection->GetSize(); i++)
+		if (pSection)
 		{
-			vec.Add(pSection->GetAt(i)->GetName());
+			for (int i=0; i<pSection->GetSize(); i++)
+			{
+				vec.Add(pSection->GetAt(i)->GetName());
+			}
 		}
 		return true;
 	}
@@ -437,6 +460,20 @@ bool SIMPLEAPI SlxFlushProfileFile()
 	g_bProfileFileDirty=false;
 
 	return true;
+}
+
+CUniString SIMPLEAPI SlxGetProfileFileName()
+{
+	ASSERT(g_bFileBased);
+	return g_ProfileFile.GetFileName();
+}
+
+CUniString SIMPLEAPI SlxGetProfileFolderName()
+{
+	ASSERT(g_bFileBased);
+	CUniString str;
+	SplitPath(g_ProfileFile.GetFileName(), &str, NULL);
+	return str;
 }
 
 }	// namespace Simple
