@@ -30,10 +30,15 @@ CUniString SIMPLEAPI SlxGetProfileString(const wchar_t* pszSection, const wchar_
 bool SIMPLEAPI SlxSetProfileString(const wchar_t* pszSection, const wchar_t* pszEntry, const wchar_t* pszValue);
 CUniString SIMPLEAPI SlxGetProfileKey(const wchar_t* pszSuffix=NULL);
 void SIMPLEAPI SlxDeleteProfileSection(const wchar_t* pszSection);
+void SIMPLEAPI SlxDeleteProfileValue(const wchar_t* pszSection, const wchar_t* pszEntry);
 bool SIMPLEAPI SlxEnumProfileValues(const wchar_t* pszSection, CVector<CUniString>& vec);
 bool SIMPLEAPI SlxEnumProfileSections(const wchar_t* pszSection, CVector<CUniString>& vec);
 void SIMPLEAPI SlxProfileFileSetModified();
 bool SIMPLEAPI SlxFlushProfileFile();
+CProfileSection* SIMPLEAPI SlxGetProfileSection(const wchar_t* pszSection);
+CProfileSection* SIMPLEAPI SlxCreateProfileSection(const wchar_t* pszSection);
+CUniString SIMPLEAPI SlxGetProfileFileName();
+CUniString SIMPLEAPI SlxGetProfileFolderName();
 
 }	// namespace Simple
 

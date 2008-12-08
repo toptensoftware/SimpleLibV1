@@ -26,6 +26,7 @@
 #include "ProfileStream.h"
 #include "CopyStream.h"
 #include "CallbackTimer.h"
+#include "MessageBox.h"
 #include <shlobj.h>
 
 namespace Simple
@@ -86,7 +87,14 @@ void SIMPLEAPI SlxInitProfile(const wchar_t* pszCompanyName, const wchar_t* pszA
 		if (!g_ProfileFile.Load(strSettingsFile))
 		{
 			// Save immediately to attach file name with CProfileFile
+			g_ProfileFile.Reset(false);
 			g_ProfileFile.SetFileName(strSettingsFile);
+
+			if (DoesFileExist(strSettingsFile))
+			{
+				SlxMessageBox(Format(L"Failed to load settings, resetting everything to default (%s)", g_ProfileFile.GetParseError()), MB_OK|MB_ICONWARNING);
+				g_ProfileFile.Reset(false);
+			}
 		}
 
 		// Not modified
@@ -174,9 +182,8 @@ bool SIMPLEAPI SlxUpgradeProfile(const wchar_t* pszOldCompanyName, const wchar_t
 		// Quit if key already exists
 		CSmartHandle<HKEY> key;
 		if (RegOpenKeyEx(HKEY_CURRENT_USER, SlxGetProfileKey(), 0, KEY_READ, &key)==ERROR_SUCCESS)
-			{
 			return false;
-			}
+
 		key.Release();
 
 		// Copy from old key...
@@ -197,6 +204,18 @@ bool SIMPLEAPI SlxUpgradeProfile(const wchar_t* pszOldCompanyName, const wchar_t
 			for (int i=0; i<vec.GetSize(); i++)
 			{
 				_SlxConvertProfileRegKey(Format(L"Software\\%s\\%s\\%s", pszOldCompanyName, pszOldAppName, vec[i]), g_ProfileFile.CreateSection(vec[i]));
+			}
+
+			// Delete registry if just "moving" from registry to file
+			if (IsEqualString(g_strCompanyName, pszOldCompanyName) &&
+				IsEqualString(g_strAppName, pszOldAppName) &&
+				g_bFileBased)
+			{
+				// Flush file first
+				SlxFlushProfileFile();
+
+				// Nuke it
+				RegNukeKey(HKEY_CURRENT_USER, Format(L"Software\\%s\\%s", pszOldCompanyName, pszOldAppName));
 			}
 		}
 		else
@@ -309,19 +328,52 @@ void SIMPLEAPI SlxDeleteProfileSection(const wchar_t* pszSection)
 	}
 }
 
+void SIMPLEAPI SlxDeleteProfileValue(const wchar_t* pszSection, const wchar_t* pszEntry)
+{
+	if (g_bFileBased)
+	{
+		// Find section
+		CProfileSection* pSection=g_ProfileFile.FindSection(pszSection);
+
+		// If exists, delete value
+		if (pSection)
+			pSection->DeleteValue(pszEntry);
+
+		SlxProfileFileSetModified();
+	}
+	else
+	{
+		// Open key
+		CSmartHandle<HKEY> Key;
+		if (RegOpenKeyEx(HKEY_CURRENT_USER, Format(L"Software\\%s\\%s\\%s", g_strCompanyName, g_strAppName, pszSection), 0, KEY_READ|KEY_WRITE, &Key)!=ERROR_SUCCESS)
+			return;
+
+		// Delete value
+		RegDeleteValue(Key, pszEntry);
+	}
+}
+
+
 bool SIMPLEAPI SlxEnumProfileValues(const wchar_t* pszSection, CVector<CUniString>& vec)
 {
 	if (g_bFileBased)
 	{
 		CProfileSection* pSection=g_ProfileFile.FindSection(pszSection);
-		for (int i=0; i<pSection->GetSize(); i++)
+		if (pSection)
 		{
-			vec.Add(pSection->GetAt(i)->GetName());
+			for (int i=0; i<pSection->GetSize(); i++)
+			{
+				vec.Add(pSection->GetAt(i)->GetName());
+			}
 		}
 		return true;
 	}
 	else
 	{
+		CSmartHandle<HKEY> Key;
+		if (RegCreateKey(HKEY_CURRENT_USER, Format(L"Software\\%s\\%s\\%s", g_strCompanyName, g_strAppName, pszSection), &Key)!=ERROR_SUCCESS)
+			return false;
+
 		return RegEnumAllValues(HKEY_CURRENT_USER, SlxGetProfileKey(pszSection), vec)==ERROR_SUCCESS;
 	}
 }
@@ -355,6 +407,21 @@ CUniString SIMPLEAPI SlxGetProfileKey(const wchar_t* pszSuffix)
 	else
 		return Format(L"Software\\%s\\%s", g_strCompanyName, g_strAppName);
 }
+
+CProfileSection* SIMPLEAPI SlxGetProfileSection(const wchar_t* pszSection)
+{
+	ASSERT(g_bFileBased);
+	return g_ProfileFile.FindSection(pszSection);
+}
+
+CProfileSection* SIMPLEAPI SlxCreateProfileSection(const wchar_t* pszSection)
+{
+	ASSERT(g_bFileBased);
+	CProfileSection* pSection=g_ProfileFile.CreateSection(pszSection);
+	SlxProfileFileSetModified();
+	return pSection;
+}
+
 
 void CALLBACK ProfileFlushProc(LPARAM lUnused)
 {
@@ -393,6 +460,20 @@ bool SIMPLEAPI SlxFlushProfileFile()
 	g_bProfileFileDirty=false;
 
 	return true;
+}
+
+CUniString SIMPLEAPI SlxGetProfileFileName()
+{
+	ASSERT(g_bFileBased);
+	return g_ProfileFile.GetFileName();
+}
+
+CUniString SIMPLEAPI SlxGetProfileFolderName()
+{
+	ASSERT(g_bFileBased);
+	CUniString str;
+	SplitPath(g_ProfileFile.GetFileName(), &str, NULL);
+	return str;
 }
 
 }	// namespace Simple

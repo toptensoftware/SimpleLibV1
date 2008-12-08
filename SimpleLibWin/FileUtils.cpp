@@ -118,6 +118,76 @@ CUniString SIMPLEAPI SlxGetModuleFolder(HMODULE hModule)
 
 
 
+// Copy a folder recursively.
+//   If bContinueOnError == true, will continue to copy if error encountered but will still return false
+//   If bContinueOnError == false, will abort if an error is encountered, but anything copied thus far stays copied.
+// Destination folder recursively created if necessary
+// GetLastError() will return error code if bContinueOnError==false, otherwise undefined.
+bool SIMPLEAPI CopyFolder(const wchar_t* pszDest, const wchar_t* pszSource, bool bContinueOnError, bool bFailIfExists)
+{
+	// Make sure target directory exists
+	if (GetFileAttributes(pszDest)==0xFFFFFFFF)
+	{
+		// Create target directory
+		if (FAILED(RecursiveCreateDirectory(pszDest)))
+		{
+			return false;
+		}
+	}
+
+	// Enumerate everything in the source folder
+	WIN32_FIND_DATA fd;
+	HANDLE hFind=FindFirstFile(SimplePathAppend(pszSource, L"*.*"), &fd);
+	bool bSuccess=true;
+	while (hFind!=INVALID_HANDLE_VALUE)
+	{
+		// Is it a directory?
+		if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+		{
+			if (!IsEqualString(fd.cFileName, L".") && !IsEqualString(fd.cFileName, L".."))
+			{
+				// Copy sub-folder
+				if (!CopyFolder(SimplePathAppend(pszDest, fd.cFileName), SimplePathAppend(pszSource, fd.cFileName), bContinueOnError, bFailIfExists))
+				{
+					bSuccess=false;
+					if (!bContinueOnError)
+					{
+						DWORD dwError=GetLastError();
+						FindClose(hFind);
+						SetLastError(dwError);
+						return false;
+					}
+				}
+			}
+				
+		}
+		else
+		{
+			// Copy file
+			if (!CopyFile(SimplePathAppend(pszSource, fd.cFileName), SimplePathAppend(pszDest, fd.cFileName), bFailIfExists))
+			{
+				bSuccess=false;
+				if (!bContinueOnError)
+				{
+					DWORD dwError=GetLastError();
+					FindClose(hFind);
+					SetLastError(dwError);
+					return false;
+				}
+			}
+		}
+
+		// Next file
+		if (!FindNextFile(hFind, &fd))
+		{
+			FindClose(hFind);
+			hFind=INVALID_HANDLE_VALUE;
+		}
+	}
+
+	return bSuccess;
+}
+
 
 
 }	// namespace Simple

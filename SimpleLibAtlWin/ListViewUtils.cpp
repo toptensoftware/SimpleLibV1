@@ -65,6 +65,10 @@ void SIMPLEAPI ToggleCheckState(ATLControls::CListViewCtrl& ListView)
 		}
 }
 
+static CUniString CleanString(const wchar_t* psz)
+{
+	return StringReplace(psz, L" ", L"", false);
+}
 
 void SIMPLEAPI LoadColumnWidths(ATLControls::CListViewCtrl& ListView, const wchar_t* pszSection, const wchar_t* pszPrefix)
 {
@@ -78,7 +82,7 @@ void SIMPLEAPI LoadColumnWidths(ATLControls::CListViewCtrl& ListView, const wcha
 		hdi.pszText=szText;
 		hdi.cchTextMax=_countof(szText);
 		header.GetItem(i, &hdi);
-		int iWidth=SlxGetProfileInt(pszSection, Format(L"%s%sWidth", pszPrefix, szText), -1);
+		int iWidth=SlxGetProfileInt(pszSection, Format(L"%s%sWidth", pszPrefix, CleanString(szText)), -1);
 		if (iWidth>=0)
 			{
 			hdi.mask=HDI_WIDTH;
@@ -100,7 +104,7 @@ void SIMPLEAPI SaveColumnWidths(ATLControls::CListViewCtrl& ListView, const wcha
 		hdi.pszText=szText;
 		hdi.cchTextMax=_countof(szText);
 		header.GetItem(i, &hdi);
-		SlxSetProfileInt(pszSection, Format(L"%s%sWidth", pszPrefix, szText), hdi.cxy);
+		SlxSetProfileInt(pszSection, Format(L"%s%sWidth", pszPrefix, CleanString(szText)), hdi.cxy);
 		}
 }
 

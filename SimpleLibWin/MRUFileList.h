@@ -38,6 +38,8 @@ public:
 // Save/load
 	void Save(const wchar_t* pszSubKey=L"RecentFiles", const wchar_t* pszKey=SlxGetProfileKey());
 	void Load(const wchar_t* pszSubKey=L"RecentFiles", const wchar_t* pszKey=SlxGetProfileKey());
+	void Save(CProfileSection* pSection);
+	void Load(CProfileSection* pSection);
 
 // Menu operations
 	void UpdateMenu(HMENU hMenu, UINT nID, const wchar_t* pszEmpty=NULL, const wchar_t* pszBaseDir=NULL, bool bTitleOnly=false);
