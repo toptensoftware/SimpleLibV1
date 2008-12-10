@@ -241,26 +241,158 @@ COLORREF SIMPLEAPI AlphaBlendColor(COLORREF rgb1, COLORREF rgb2, BYTE bAlpha)
 
 #include <gdiplus.h>
 
+COLORREF ReadRGB555(void*& p)
+{
+	WORD*& pp=(WORD*&)p;
+	WORD w=*pp++;
+	return RGB( 
+			((w>>10) & 0x1f) << 3, 
+			((w>>5) & 0x1f) << 3,
+			((w) & 0x1f) << 3 ) | 0xFF000000;
+}
+
+void WriteRGB555(void*& p, COLORREF v)
+{
+	WORD w= (((GetRValue(v)>>3) & 0x1f) << 10) | 
+			(((GetGValue(v)>>3) & 0x1f) << 5) | 
+			(((GetBValue(v)>>3) & 0x1f));
+
+	WORD*& pp=(WORD*&)p;
+	*pp++ = w;
+}
+
+COLORREF ReadRGB565(void*& p)
+{
+	WORD*& pp=(WORD*&)p;
+	WORD w=*pp++;
+	return RGB( 
+			((w>>11) & 0x1f) << 3, 
+			((w>>5) & 0x3f) << 2,
+			((w) & 0x1f) << 3 ) | 0xFF000000;
+}
+
+void WriteRGB565(void*& p, COLORREF v)
+{
+	WORD w= (((GetRValue(v)>>3) & 0x1f) << 11) | 
+			(((GetGValue(v)>>2) & 0x3f) << 5) | 
+			(((GetBValue(v)>>3) & 0x1f));
+
+	WORD*& pp=(WORD*&)p;
+	*pp++ = w;
+}
+
+struct RGB24
+{
+	BYTE r;
+	BYTE g;
+	BYTE b;
+};
+
+COLORREF ReadRGB24(void*& p)
+{
+	RGB24*& pp=(RGB24*&)p;
+	RGB24 v=*pp++;
+	return RGB(v.r, v.g, v.b) | 0xFF000000;
+}
+
+void WriteRGB24(void*& p, COLORREF v)
+{
+	RGB24*& pp=(RGB24*&)p;
+	pp->r=GetRValue(v);
+	pp->g=GetGValue(v);
+	pp->b=GetBValue(v);
+	pp++;
+}
+
+COLORREF ReadRGB32(void*& p)
+{
+	COLORREF*& pp=(COLORREF*&)p;
+	return (*pp++) | 0xFF000000;
+}
+
+void WriteRGB32(void*& p, COLORREF v)
+{
+	COLORREF*& pp=(COLORREF*&)p;
+	*pp++= (v & 0x00FFFFFF);
+}
+
+COLORREF ReadARGB(void*& p)
+{
+	COLORREF*& pp=(COLORREF*&)p;
+	return (*pp++);
+}
+
+void WriteARGB(void*& p, COLORREF v)
+{
+	COLORREF*& pp=(COLORREF*&)p;
+	*pp++=v;
+}
+
+typedef void (*PFNWRITE)(void*& p, COLORREF v);
+typedef COLORREF (*PFNREAD)(void*& p);
+
+void ConvertPixels(void* pDest, void* pSrc, int iPixels, Gdiplus::PixelFormat pfDest, Gdiplus::PixelFormat pfSrc)
+{
+	// Same format?
+	if (pfSrc==pfDest)
+	{
+		// Just copy it
+		memcpy(pDest, pSrc, Gdiplus::GetPixelFormatSize(pfDest) * iPixels);
+		return;
+	}
+
+	PFNREAD Read;
+	switch (pfSrc)
+	{
+		case PixelFormat16bppRGB555:	Read=&ReadRGB555; break;
+		case PixelFormat16bppRGB565:	Read=&ReadRGB565; break;
+		case PixelFormat24bppRGB:		Read=&ReadRGB24; break;
+		case PixelFormat32bppRGB:		Read=&ReadRGB32; break;
+		case PixelFormat32bppARGB:		Read=&ReadARGB; break;
+		default:
+			ASSERT(FALSE);
+			return;
+	}
+
+	PFNWRITE Write;
+	switch (pfDest)
+	{
+		case PixelFormat16bppRGB555:	Write=&WriteRGB555; break;
+		case PixelFormat16bppRGB565:	Write=&WriteRGB565; break;
+		case PixelFormat24bppRGB:		Write=&WriteRGB24; break;
+		case PixelFormat32bppRGB:		Write=&WriteRGB32; break;
+		case PixelFormat32bppARGB:		Write=&WriteARGB; break;
+		default:
+			ASSERT(FALSE);
+			return;
+	}
+
+	for (int i=0; i<iPixels; i++)
+	{
+		Write(pDest, Read(pSrc));
+	}
+}
+
 HBITMAP SIMPLEAPI BitmapFromGdiplusBitmap(Gdiplus::Bitmap& bmSrc)
 {
 	// Get source pixel format
 	Gdiplus::PixelFormat pfSrc=bmSrc.GetPixelFormat();
+	UINT nBPPSrc = Gdiplus::GetPixelFormatSize(pfSrc);
 
 	// Work out destination pixel format
-	UINT nBPP = 32;
 	Gdiplus::PixelFormat pfDest=PixelFormat32bppRGB;
 	if (pfSrc & PixelFormatGDI)
 	{
-		nBPP = Gdiplus::GetPixelFormatSize( pfSrc );
 		pfDest = pfSrc;
 	}
 
 	// If source has alpha channel, enfore 32 bit ARGB
 	if (Gdiplus::IsAlphaPixelFormat(pfSrc))
 	{
-		nBPP = 32;
 		pfDest = PixelFormat32bppARGB;
 	}
+
+	UINT nBPPDest = Gdiplus::GetPixelFormatSize(pfDest);;
 
 	// Setup bitmap info
 	LPBITMAPINFO pbmi=(LPBITMAPINFO)_alloca(sizeof(BITMAPINFOHEADER) + sizeof(RGBQUAD)*256);
@@ -269,9 +401,9 @@ HBITMAP SIMPLEAPI BitmapFromGdiplusBitmap(Gdiplus::Bitmap& bmSrc)
 	pbmi->bmiHeader.biWidth = bmSrc.GetWidth();
 	pbmi->bmiHeader.biHeight = bmSrc.GetHeight();
 	pbmi->bmiHeader.biPlanes = 1;
-	pbmi->bmiHeader.biBitCount = nBPP;
+	pbmi->bmiHeader.biBitCount = nBPPDest;
 	pbmi->bmiHeader.biCompression = BI_RGB;
-	if (nBPP<=8)
+	if (nBPPDest<=8)
 	{
 		memset( pbmi->bmiColors, 0, 256*sizeof( RGBQUAD ) );
 	}
@@ -311,45 +443,41 @@ HBITMAP SIMPLEAPI BitmapFromGdiplusBitmap(Gdiplus::Bitmap& bmSrc)
 	}
 
 	// Work out pitch of destination image
-	int iPitch=(((bmSrc.GetWidth()*nBPP)+31)/32)*4;
+	int iPitchDest=(((bmSrc.GetWidth()*nBPPDest)+31)/32)*4;
 
-	// Save pixel format
-	if (pfDest==pfSrc)
+	// DIB sections are upside down so start at end
+	pBits = LPBYTE( pBits )+((bmSrc.GetHeight()-1)*-iPitchDest);
+
+	// Lock source buffer
+	Gdiplus::BitmapData data;
+	Gdiplus::Rect rect(0, 0, bmSrc.GetWidth(), bmSrc.GetHeight());
+	if(bmSrc.LockBits( &rect, Gdiplus::ImageLockModeRead, pfSrc, &data )!=Gdiplus::Ok)
 	{
-		// Same pixel format, just copy bits
-
-		// DIB sections are upside down so adjust buffer starting position and pitch
-		pBits = LPBYTE( pBits )+((bmSrc.GetHeight()-1)*iPitch);
-		iPitch = -iPitch;
-
-		// Lock source buffer
-		Gdiplus::BitmapData data;
-		Gdiplus::Rect rect(0, 0, bmSrc.GetWidth(), bmSrc.GetHeight());
-		if(bmSrc.LockBits( &rect, Gdiplus::ImageLockModeRead, pfSrc, &data )!=Gdiplus::Ok)
-		{
-			DeleteObject(hBitmap);
-			return NULL;
-		}
-
-		// Work out byte per row by rounding up
-		int iBytesPerRow=((nBPP*bmSrc.GetWidth()+7) & ~7)/8;
-
-		// Get row pointers
-		BYTE* pbDestRow=(BYTE*)pBits;
-		BYTE* pbSrcRow=(BYTE*)data.Scan0;
-		for (int y=0; y<int(bmSrc.GetHeight()); y++)
-		{
-			// Copy it
-			memcpy(pbDestRow, pbSrcRow, iBytesPerRow);
-
-			// Update pointers
-			pbDestRow+=iPitch;
-			pbSrcRow+=data.Stride;
-		}
-
-		// Release source bits
-		bmSrc.UnlockBits( &data );
+		DeleteObject(hBitmap);
+		return NULL;
 	}
+
+	// Zero entire buffer
+	int iBytesPerRow=((nBPPDest*bmSrc.GetWidth()+7) & ~7)/8;
+	memset(pBits, 0, iBytesPerRow * bmSrc.GetHeight());
+
+	// Get row pointers
+	BYTE* pbDestRow=(BYTE*)pBits;
+	BYTE* pbSrcRow=(BYTE*)data.Scan0;
+	for (int y=0; y<int(bmSrc.GetHeight()); y++)
+	{
+		// Copy it
+		ConvertPixels(pbDestRow, pbSrcRow, bmSrc.GetWidth(), pfDest, pfSrc);
+
+		// Update pointers
+		pbDestRow-=iPitchDest;
+		pbSrcRow+=data.Stride;
+	}
+
+	// Release source bits
+	bmSrc.UnlockBits( &data );
+
+	/*
 	else
 	{
 		// Use GDI+ to do the conversion
@@ -357,6 +485,7 @@ HBITMAP SIMPLEAPI BitmapFromGdiplusBitmap(Gdiplus::Bitmap& bmSrc)
 		Gdiplus::Graphics g(&bmDest);
 		g.DrawImage( &bmSrc, 0, 0 );
 	}
+	*/
 
 	// Done!
 	return hBitmap;
