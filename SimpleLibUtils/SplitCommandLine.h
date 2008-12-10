@@ -21,6 +21,8 @@ namespace Simple
 {
 
 void SIMPLEAPI SplitCommandLine(const wchar_t* pszCommandLine, CVector<CUniString>& Args);
+bool SIMPLEAPI ExpandResponseFiles(CVector<CUniString>& args, CUniString& strError);
+bool SIMPLEAPI ParseArg(const wchar_t* pszArg, CUniString& strName, CUniString& strValue);
 
 }	// namespace Simple
 
