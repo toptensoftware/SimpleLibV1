@@ -20,6 +20,8 @@
 namespace Simple
 {
 
+void SIMPLEAPI SlxMessageBoxSetAppName(const wchar_t* pszAppName);
+CUniString SIMPLEAPI SlxMessageBoxGetAppName();
 int SIMPLEAPI SlxMessageBox(HWND hWndParent, const wchar_t* pszMessage, UINT nFlags=MB_OK|MB_ICONINFORMATION, const wchar_t* pszCaption=NULL);
 int SIMPLEAPI SlxMessageBox(const wchar_t* pszMessage, UINT nFlags=MB_OK|MB_ICONINFORMATION, const wchar_t* pszCaption=NULL);
 int SIMPLEAPI SlxMessageBox(UINT nResID, UINT nFlags=MB_OK|MB_ICONINFORMATION, const wchar_t* pszCaption=NULL);
