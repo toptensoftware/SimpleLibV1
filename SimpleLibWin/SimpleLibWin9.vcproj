@@ -703,6 +703,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ExpandVariables.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\FadeWindow.cpp"
 				>
 			</File>
@@ -989,6 +993,10 @@
 			</File>
 			<File
 				RelativePath=".\DragDetectEx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ExpandVariables.h"
 				>
 			</File>
 			<File

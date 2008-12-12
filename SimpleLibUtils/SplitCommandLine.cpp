@@ -96,6 +96,8 @@ bool SIMPLEAPI ExpandResponseFiles(CVector<CUniString>& args, CUniString& strErr
 			CUniString strResponseText;
 			if (!LoadTextFile<wchar_t>(pszFile, strResponseText))
 			{
+				args.RemoveAt(i);
+				i--;
 				if (bOptional)
 					continue;
 
