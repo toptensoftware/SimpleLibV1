@@ -460,6 +460,7 @@ HBITMAP SIMPLEAPI BitmapFromGdiplusBitmap(Gdiplus::Bitmap& bmSrc)
 
 	// Get row pointers
 	BYTE* pbDestRow=(BYTE*)LPBYTE( pBits )+((bmSrc.GetHeight()-1)*iPitchDest);
+
 	BYTE* pbSrcRow=(BYTE*)data.Scan0;
 	for (int y=0; y<int(bmSrc.GetHeight()); y++)
 	{

@@ -45,6 +45,8 @@ bool SIMPLEAPI ReadInt64(const wchar_t*& p, __int64* pi);
 bool SIMPLEAPI ReadDouble(const wchar_t*& psz, double* pdblVal);
 const wchar_t* SIMPLEAPI ParseInt(const wchar_t* psz, int* piValue);
 const wchar_t* SIMPLEAPI ParseInt64(const wchar_t* psz, __int64* piValue);
+bool SIMPLEAPI ParseBool(const wchar_t* psz, bool bDefault);
+int SIMPLEAPI ParseInt(const wchar_t* psz, int iDefault);
 
 
 template <class T>

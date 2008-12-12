@@ -391,6 +391,29 @@ const wchar_t* SIMPLEAPI ParseInt64(const wchar_t* psz, __int64* piValue)
 
 
 
+bool SIMPLEAPI ParseBool(const wchar_t* psz, bool bDefault)
+{
+	if (IsEqualStringI(psz, L"yes") || IsEqualStringI(psz, L"on") || IsEqualStringI(psz, L"true") || IsEqualStringI(psz, L"1"))
+		return true;
+
+	if (IsEqualStringI(psz, L"no") || IsEqualStringI(psz, L"off") || IsEqualStringI(psz, L"false") || IsEqualStringI(psz, L"0"))
+		return false;
+
+	return bDefault;
+}
+
+int SIMPLEAPI ParseInt(const wchar_t* psz, int iDefault)
+{
+	if (IsEmptyString(psz))
+		return iDefault;
+
+	int iVal;
+	if (!ParseInt(psz, &iVal))
+		return iDefault;
+
+	return iVal;
+}
+
 
 
 }
