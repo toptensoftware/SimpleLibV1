@@ -7,6 +7,7 @@ using namespace Simple;
 bool g_bAnyFailed=false;
 bool g_bFailed=false;
 
+
 void Failed(int iLine, const char* psz)
 {
 	if (!g_bFailed) printf("\n");
@@ -65,8 +66,6 @@ int Compare(const CMyObject& a, const CMyObject& b)
 {
 	return a.m_iVal-b.m_iVal;
 }
-
-
 
 
 void TestStrings()
@@ -131,8 +130,8 @@ void TestStrings()
 	// Unicode Format
 	#ifndef SIMPLELIB_NO_VSWPRINTF
 	CUniString strU=L"Hello";
-	CUniString strR=Format(L"%ls World %i", strU.sz(), 24);
-	printf("Result:%S\n", strR.sz());
+	CUniString strR=Format(L"%s World %i", strU.sz(), 24);
+//	printf("Result:%S\n", strR.sz());
 	ASSERT(Compare(strR, L"Hello World 24")==0);
 	#else
 	printf("\nUnicode Format() not supported\n");
@@ -155,7 +154,6 @@ void TestStrings()
 
 	CUniString strUnicode(a2w("Hello World"));
 	ASSERT(Compare(strUnicode, L"Hello World")==0);
-
 
 	if (!g_bFailed)
 		printf("OK\n");
@@ -1416,9 +1414,6 @@ int main(int argc, char* argv[])
 	{
 		printf("Finished - all tests passed.\n\n");
 	}
-
-	unsigned long long i=23;
-	printf("--%i - %llu--\n", sizeof(i), i);
 
 	return 0;
 }

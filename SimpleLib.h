@@ -401,6 +401,7 @@ template <> inline CString<wchar_t> t2t<wchar_t, char>(const char* psz, int iLen
 #pragma warning(default:4996)
 #endif
 
+
 }	// Close namespace while defining global scope Compare functions
 
 
