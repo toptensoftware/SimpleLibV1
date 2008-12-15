@@ -828,34 +828,81 @@ inline CString<char> Format(const char* format, va_list args)
 
 #else	// MSVC
 
+CUniString MsvcToGccFormatSpec(const wchar_t* p)
+{
+	CUniString str;
+	while (p[0])
+	{
+		if (p[0]!='%')
+		{
+			str+=*p++;
+			continue;
+		}
+
+		// Copy the %
+		str+=*p++;
+
+		// % Literal
+		if (p[0]=='%')
+		{
+			str+=*p++;
+			continue;
+		}
+
+		// Ignore flags, precision and width
+		while ((p[0]>='0' && p[0]<='9') || p[0]=='+' || p[0]=='-' || p[0]==' ' || p[0]=='#' || p[0]=='.' || p[0]=='*')
+		{
+			str+=*p++;
+		}
+
+		// String
+		if (p[0]=='s')
+		{
+			str+=L"ls";
+			p++;
+		}
+		else if (p[0]=='S')
+		{
+			str+=L"hs";
+			p++;
+		}
+		else if (p[0]=='c')
+		{
+			str+=L"lc";
+			p++;
+		}
+		else if (p[0]=='C')
+		{
+			str+=L"hc";
+			p++;
+		}
+		else if (p[0]=='I' && p[1]=='6' && p[2]=='4')
+		{
+			str+=L"ll";
+			p+=3;
+		}
+		else
+		{
+			str+=*p++;
+		}
+	}
+	return str;
+}
+
 // GNU/SUN Unicode Format
 #ifndef SIMPLELIB_NO_VSWPRINTF
 template <>
 inline CString<wchar_t> Format(const wchar_t* format, va_list args)
 {
-#ifdef _MSC_VER
-	// Sun compiler core dumps if passing null as first param to vsnprintf, so pass short
-	// buffer to calculate length
-	wchar_t tmp[2];
-
-	va_list args2;
-	va_copy(args2, args);
-    int iLen = vswprintf(tmp, _countof(tmp), format, args2);
-	va_end(args2);
-
-	CString<wchar_t> buf;
-    vswprintf(buf.GetBuffer(iLen), iLen+1, format, args);
-	return buf;
-#else
+	CUniString strNormalized=MscvToGccFormatSpec(format);
 	int iLen=5;
 	while (true)
 	{
 		CString<wchar_t> buf;
-		if (vswprintf(buf.GetBuffer(iLen), iLen+1, format, args)>=0)
+		if (vswprintf(buf.GetBuffer(iLen), iLen+1, strNormalized.sz(), args)>=0)
 			return buf;
 		iLen*=2;
 	}
-#endif
 }
 #endif
 

@@ -7,6 +7,11 @@ using namespace Simple;
 bool g_bAnyFailed=false;
 bool g_bFailed=false;
 
+
+// Normalize MSVC format specifiers to standard C++
+//		%[n]s -> %[n]ls
+//		%c -> %lc
+
 void Failed(int iLine, const char* psz)
 {
 	if (!g_bFailed) printf("\n");
@@ -65,8 +70,6 @@ int Compare(const CMyObject& a, const CMyObject& b)
 {
 	return a.m_iVal-b.m_iVal;
 }
-
-
 
 
 void TestStrings()
@@ -131,8 +134,8 @@ void TestStrings()
 	// Unicode Format
 	#ifndef SIMPLELIB_NO_VSWPRINTF
 	CUniString strU=L"Hello";
-	CUniString strR=Format(L"%S World %i", strU.sz(), 24);
-	printf("Result:%S\n", strR.sz());
+	CUniString strR=Format(L"%s World %i", strU.sz(), 24);
+//	printf("Result:%S\n", strR.sz());
 	ASSERT(Compare(strR, L"Hello World 24")==0);
 	#else
 	printf("\nUnicode Format() not supported\n");
@@ -155,7 +158,6 @@ void TestStrings()
 
 	CUniString strUnicode(a2w("Hello World"));
 	ASSERT(Compare(strUnicode, L"Hello World")==0);
-
 
 	if (!g_bFailed)
 		printf("OK\n");
