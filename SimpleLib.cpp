@@ -9,8 +9,8 @@
 // Special thanks to Nick Maher of GrofSoft for original map implementation
 //		http://www.grofsoft.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////////
@@ -27,7 +27,7 @@ namespace Simple
 {
 
 template <class T, class TKey>
-int slxFind(TKey key, const T* lo, const T* hi, 
+int slxFind(TKey key, const T* lo, const T* hi,
 					int (__cdecl *pfnCompare)(const T& a, TKey b))
 {
     const T* pos = lo;
@@ -47,7 +47,7 @@ int slxFind(TKey key, const T* lo, const T* hi,
 // Perform a simple linear search on an array
 // Assumes items are sorted and early aborts
 template <class T, class TKey>
-bool slxLinearSearch(TKey key, const T* lo, const T* hi, 
+bool slxLinearSearch(TKey key, const T* lo, const T* hi,
 					int (__cdecl *pfnCompare)(const T& a, TKey b), int& iPosition)
 {
     const T* pos = lo;
@@ -79,7 +79,7 @@ bool slxLinearSearch(TKey key, const T* lo, const T* hi,
 
 // Perform a binary search on an array
 template <class T, class TKey>
-bool slxQuickSearch(TKey key, const T* base, int iSize, 
+bool slxQuickSearch(TKey key, const T* base, int iSize,
 				int (__cdecl *pfnCompare)(const T& a, TKey b), int& iPosition)
 {
 	if (iSize<1)
@@ -129,7 +129,7 @@ bool slxQuickSearch(TKey key, const T* base, int iSize,
 }
 
 template <class T, class TKey>
-int slxFindEx(TKey key, void* c, const T* lo, const T* hi, 
+int slxFindEx(TKey key, void* c, const T* lo, const T* hi,
 					int (__cdecl *pfnCompare)(void* c, const T& a, TKey b))
 {
     const T* pos = lo;
@@ -149,7 +149,7 @@ int slxFindEx(TKey key, void* c, const T* lo, const T* hi,
 // Perform a simple linear search on an array
 // Assumes items are sorted and early aborts
 template <class T, class TKey>
-bool slxLinearSearchEx(TKey key, void* c, const T* lo, const T* hi, 
+bool slxLinearSearchEx(TKey key, void* c, const T* lo, const T* hi,
 					int (__cdecl *pfnCompare)(void* c, const T& a, TKey b), int& iPosition)
 {
     const T* pos = lo;
@@ -181,7 +181,7 @@ bool slxLinearSearchEx(TKey key, void* c, const T* lo, const T* hi,
 
 // Perform a binary search on an array
 template <class T, class TKey>
-bool slxQuickSearchEx(TKey key, void* c, const T* base, int iSize, 
+bool slxQuickSearchEx(TKey key, void* c, const T* base, int iSize,
 				int (__cdecl *pfnCompare)(void* c, const T& a, TKey b), int& iPosition)
 {
 	if (iSize<1)
@@ -517,7 +517,7 @@ bool CString<T>::Assign(const TAlt* psz, int iLen)
 // Assign
 template <class T>
 bool CString<T>::Assign(const T* psz, int iLen)
-{	
+{
 	// Clear old value
 	Empty();
 
@@ -643,17 +643,17 @@ bool CString<T>::Delete(int iPos, int iLen)
 // operator+=
 template <class T>
 CString<T>& CString<T>::operator+=(const T* psz)
-{ 
-	Append(psz); 
-	return *this; 
+{
+	Append(psz);
+	return *this;
 }
 
 // operator+=
 template <class T>
 CString<T>& CString<T>::operator+=(T ch)
-{ 
-	Append(ch); 
-	return *this; 
+{
+	Append(ch);
+	return *this;
 }
 
 
@@ -833,6 +833,7 @@ inline CString<char> Format(const char* format, va_list args)
 template <>
 inline CString<wchar_t> Format(const wchar_t* format, va_list args)
 {
+#ifdef _MSC_VER
 	// Sun compiler core dumps if passing null as first param to vsnprintf, so pass short
 	// buffer to calculate length
 	wchar_t tmp[2];
@@ -845,6 +846,16 @@ inline CString<wchar_t> Format(const wchar_t* format, va_list args)
 	CString<wchar_t> buf;
     vswprintf(buf.GetBuffer(iLen), iLen+1, format, args);
 	return buf;
+#else
+	int iLen=5;
+	while (true)
+	{
+		CString<wchar_t> buf;
+		if (vswprintf(buf.GetBuffer(iLen), iLen+1, format, args)>=0)
+			return buf;
+		iLen*=2;
+	}
+#endif
 }
 #endif
 
@@ -1439,7 +1450,7 @@ bool CVector<T,TSem,TArg>::Peek(T& val) const
 
 // Constructor
 template <class T, class TSem, class TArg>
-CSortedVector<T,TSem,TArg>::CSortedVector() 
+CSortedVector<T,TSem,TArg>::CSortedVector()
 {
 	m_pfnCompare=NULL;
 	m_bAllowDuplicates=true;
@@ -1454,7 +1465,7 @@ CSortedVector<T,TSem,TArg>::CSortedVector()
 
 // Destructor
 template <class T, class TSem, class TArg>
-CSortedVector<T,TSem,TArg>::~CSortedVector() 
+CSortedVector<T,TSem,TArg>::~CSortedVector()
 {
 };
 
@@ -1615,7 +1626,9 @@ void CSortedVector<T,TSem,TArg>::Resort(int (__cdecl *pfnCompare)(const T& a, co
 	// If turning off allow duplicates, verify vector is empty
 	ASSERT(!m_bAllowDuplicates || bAllowDuplicates || IsEmpty());
 
+#if defined(_MSC_VER) && (_MSC_VER>=1400)
 	m_pfnCompareEx=NULL;
+#endif
 	m_bAllowDuplicates=bAllowDuplicates;
 	if (pfnCompare!=NULL)
 		m_pfnCompare=pfnCompare;
@@ -1651,7 +1664,7 @@ void CSortedVector<T,TSem,TArg>::Resort(void* ctx, int (__cdecl *pfnCompare)(voi
 
 // Constructor
 template <class T, class TSem, class TArg>
-CGrid<T,TSem,TArg>::CGrid(int iWidth=0, int iHeight=0) :
+CGrid<T,TSem,TArg>::CGrid(int iWidth, int iHeight) :
 	m_iHeight(iHeight)
 {
 	SetSize(iWidth, iHeight);
@@ -1659,7 +1672,7 @@ CGrid<T,TSem,TArg>::CGrid(int iWidth=0, int iHeight=0) :
 
 // SetSize
 template <class T, class TSem, class TArg>
-void CGrid<T,TSem,TArg>::SetSize(int iWidth, int iHeight, const TArg& val=T())
+void CGrid<T,TSem,TArg>::SetSize(int iWidth, int iHeight, const TArg& val)
 {
 	// Adjust width of existing rows
 	for (int i=0; i<m_Columns.GetSize(); i++)
@@ -1681,7 +1694,7 @@ void CGrid<T,TSem,TArg>::SetSize(int iWidth, int iHeight, const TArg& val=T())
 }
 
 template <class T, class TSem, class TArg>
-void CGrid<T,TSem,TArg>::InsertColumn(int iPosition, const TArg& val=T())
+void CGrid<T,TSem,TArg>::InsertColumn(int iPosition, const TArg& val)
 {
 	m_Columns.InsertAt(iPosition, new CColumn(m_iHeight, val));
 }
@@ -1693,7 +1706,7 @@ void CGrid<T,TSem,TArg>::RemoveColumn(int iPosition)
 }
 
 template <class T, class TSem, class TArg>
-void CGrid<T,TSem,TArg>::InsertRow(int iPosition, const TArg& val=T())
+void CGrid<T,TSem,TArg>::InsertRow(int iPosition, const TArg& val)
 {
 	for (int i=0; i<m_Columns.GetSize(); i++)
 	{
@@ -1908,7 +1921,7 @@ void CLinkedList_template::Insert(T* p, T* pBefore)
 	chainmember(chainmember(p).m_pNext).m_pPrev=p;
 	chainmember(chainmember(p).m_pPrev).m_pNext=p;
 
-	// Update size 
+	// Update size
 	m_iSize++;
 
 	// Update iterate position
@@ -2190,7 +2203,7 @@ T* CLinkedList_template::GetAt(int iPos) const
 		m_iIterPos=-1;
 		return GetFirst();
 	}
-	
+
 	// Second?
 	if (iPos==1)
 	{
@@ -2212,7 +2225,7 @@ T* CLinkedList_template::GetAt(int iPos) const
 		m_iIterPos=iPos;
 		return m_pIterElem=GetPrevious(GetLast());
 	}
-	 
+
 	// Check for next/prev/current from current iterate position
 	if (m_pIterElem)
 	{
@@ -2383,7 +2396,7 @@ CPlex<T>::CPlex(int iBlockSize)
 	{
 		iBlockSize=(256-sizeof(BLOCK))/sizeof(T);
 	}
-	
+
 	if (iBlockSize<4)
 		iBlockSize=4;
 
@@ -2418,7 +2431,7 @@ T* CPlex<T>::Alloc()
 		// Setup free list chain
 		m_pFreeList=(FREEITEM*)&pNewBlock->m_bData[0];
 		FREEITEM* p=m_pFreeList;
-		for (int i=0; i<m_iBlockSize-1; i++)	
+		for (int i=0; i<m_iBlockSize-1; i++)
 			{
 			p->m_pNext=reinterpret_cast<FREEITEM*>(reinterpret_cast<char*>(p)+sizeof(T));
 			p=p->m_pNext;
@@ -2434,7 +2447,7 @@ T* CPlex<T>::Alloc()
 
 	// Update count
 	m_iCount++;
-	
+
 	new ((void*)p) T;
 
 	// Return pointer
@@ -2445,7 +2458,7 @@ template <class T>
 void CPlex<T>::Free(T* p)
 {
 	ASSERT(m_iCount>0);
-	
+
 	Destructor(p);
 
 	if (m_iCount==1)
@@ -2554,7 +2567,7 @@ typename CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::CKeyPair CMap<TKey, TV
 		m_pIterNode=m_pFirst;
 		return CKeyPair(m_pIterNode->m_KeyPair.m_Key, m_pIterNode->m_KeyPair.m_Value);
 	}
-	
+
 	if (iIndex==m_iSize-1)
 	{
 		m_iIterPos=m_iSize-1;
@@ -2630,13 +2643,13 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::Add(const TKey& Key, const
 {
 	CNode* pNode = m_pRoot;
 	CNode* pParent = NULL;
-	
+
 	int iCompare=0;
 	while (pNode != &m_Leaf)
 	{
 		pParent = pNode;
 		iCompare = TKeySem::Compare(Key, pNode->m_KeyPair.m_Key);
-		
+
 		if (iCompare < 0)
 			pNode = pNode->m_pLeft;
 		else if (iCompare > 0)
@@ -2663,7 +2676,7 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::Add(const TKey& Key, const
 	pNew->m_bRed = true;
 	pNew->m_KeyPair.m_Value = TValueSem::OnAdd(Value, this);
 	pNew->m_KeyPair.m_Key = TKeySem::OnAdd(Key, this);
-	
+
 	if (pParent)
 	{
 		if (iCompare<0)
@@ -2722,7 +2735,7 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::Add(const TKey& Key, const
 	{
 		pParent = pNode->m_pParent;
 		CNode* pGrandParent = pParent->m_pParent;
-		
+
 		if (pParent == pGrandParent->m_pLeft)
 		{
 			CNode* pUncle = pGrandParent->m_pRight;
@@ -2840,7 +2853,7 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::CheckChain()
 		ASSERT(m_pFirst->m_pPrev==NULL);
 		ASSERT(m_pLast!=NULL);
 		ASSERT(m_pLast->m_pNext==NULL);
-		
+
 		int i=0;
 		CNode* pNode=m_pFirst;
 		while (pNode)
@@ -2891,17 +2904,17 @@ template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyAr
 bool CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::CheckTree(CNode* pNode)
 {
 	int lh = 1, rh = 1;
-	
+
 	if (!pNode)
 		pNode = m_pRoot;
-	
+
 	if (pNode->m_pLeft != &m_Leaf)
 		lh = CheckTree(pNode->m_pLeft);
 
 	if (pNode->m_pRight != &m_Leaf)
 		rh = CheckTree(pNode->m_pRight);
 
-	ASSERT(lh == rh); 
+	ASSERT(lh == rh);
 
 	return !!(lh + !pNode->m_bRed);
 }
@@ -2969,7 +2982,7 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::RotateLeft(CNode* x)
 	}
 	else
 		m_pRoot = y;
-	
+
 	// Put x on y's left
 
 	y->m_pLeft = x;
@@ -3031,18 +3044,18 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::RemoveOrDetach(const TKeyA
 		else
 			break;
 	}
-	
+
 	if (z == &m_Leaf)
 		return;
 
 	CNode* y = (z->m_pLeft == &m_Leaf || z->m_pRight == &m_Leaf) ?	z : nextNode(z);
-		
+
 	CNode* x = (y->m_pLeft != &m_Leaf) ? y->m_pLeft : y->m_pRight;
 
 	// Ensure that x->m_pParent is correct.
 	// This is needed in case x == &m_Leaf
 
-	x->m_pParent = y->m_pParent; 
+	x->m_pParent = y->m_pParent;
 
 	if (y != m_pRoot)
 	{
@@ -3075,7 +3088,7 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::RemoveOrDetach(const TKeyA
 		*pvalDetached=z->m_KeyPair.m_Value;
 	}
 
-		
+
 	if (y != z)
 	{
 		// deleting value in z, but keeping z node and moving value from y node
@@ -3176,7 +3189,7 @@ void CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::RemoveOrDetach(const TKeyA
 					continue;
 				}
 				else if (!pSibling->m_pLeft->m_bRed)
-				{			
+				{
 					// Case 7: Sibling and its left child are both black
 					pSibling->m_pRight->m_bRed = false;
 					pSibling->m_bRed = true;
@@ -3228,7 +3241,7 @@ typename CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::CNode* CMap<TKey, TVal
 	while (pNode != &m_Leaf)
 	{
 		int iCompare = TKeySem::Compare(Key, pNode->m_KeyPair.m_Key);
-		
+
 		if (iCompare < 0)
 			pNode = pNode->m_pLeft;
 		else if (iCompare > 0)
@@ -3249,7 +3262,7 @@ typename CMap<TKey, TValue, TKeySem, TValueSem, TKeyArg>::CNode* CMap<TKey, TVal
 * Copyright 2004-2007 by Paul Hsieh
 * http://www.azillionmonkeys.com/qed/hash.html
 
-  This code is covered by Paul Hsieh derivative licence     
+  This code is covered by Paul Hsieh derivative licence
     http://www.azillionmonkeys.com/qed/license-derivative.html
 */
 
@@ -3391,7 +3404,7 @@ void CHashMap<TKey,TValue,TKeySem,TValueSem,TKeyArg,THash>::Rehash(int iNewSize)
 	{
 		// Hash the key
 		unsigned int nHash = THash::Hash(pNode->m_KeyPair.m_Key) & m_nHashMask;
-		
+
 		// Add to table
 		pNode->m_pHashNext=m_Table[nHash];
 		m_Table.ReplaceAt(nHash, pNode);
@@ -3568,7 +3581,7 @@ void CHashMap<TKey,TValue,TKeySem,TValueSem,TKeyArg,THash>::RemoveAll()
 {
 	// Call release semantics on all keys and values
 	CNode* pNode;
-	while (pNode=m_List.GetFirst())
+	while ((pNode=m_List.GetFirst()))
 	{
 		TKeySem::OnRemove(pNode->m_KeyPair.m_Key, this);
 		TValueSem::OnRemove(pNode->m_KeyPair.m_Value, this);
@@ -3619,7 +3632,11 @@ template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyAr
 void CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::Add(const TKey& Key, const TValue& Value)
 {
 	int iPos;
+#ifdef _MSC_VER
 	if (m_Entries.QuickSearchKey<TKeyArg>(Key, &CEntry::CompareKey, iPos))
+#else
+	if (m_Entries.QuickSearchKey(Key, &CEntry::CompareKey, iPos))
+#endif
 	{
 		m_Entries.ReplaceAt(iPos, CEntry(TKeySem::OnAdd(Key, this), TValueSem::OnAdd(Value, this)));
 	}
@@ -3633,7 +3650,11 @@ template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyAr
 void CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::Remove(const TKeyArg& Key)
 {
 	int iPos;
+#ifdef _MSC_VER
 	if (m_Entries.QuickSearchKey<TKeyArg>(Key, &CEntry::CompareKey, iPos))
+#else
+	if (m_Entries.QuickSearchKey(Key, &CEntry::CompareKey, iPos))
+#endif
 	{
 		TKeySem::OnRemove(m_Entries[iPos].m_Key,this);
 		TValueSem::OnRemove(m_Entries[iPos].m_Value,this);
@@ -3657,7 +3678,11 @@ template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyAr
 TValue CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::Detach(const TKeyArg& Key)
 {
 	int iPos;
+#ifdef _MSC_VER
 	if (m_Entries.QuickSearchKey<TKeyArg>(Key, &CEntry::CompareKey, iPos))
+#else
+	if (m_Entries.QuickSearchKey(Key, &CEntry::CompareKey, iPos))
+#endif
 	{
 		TValue v=m_Entries[iPos].m_Value;
 		TKeySem::OnRemove(m_Entries[iPos].m_Key,this);
@@ -3672,7 +3697,11 @@ template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyAr
 const TValue& CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::Get(const TKeyArg& Key, const TValue& Default) const
 {
 	int iPos;
+#ifdef _MSC_VER
 	if (m_Entries.QuickSearchKey<TKeyArg>(Key, &CEntry::CompareKey, iPos))
+#else
+	if (m_Entries.QuickSearchKey(Key, &CEntry::CompareKey, iPos))
+#endif
 	{
 		return m_Entries[iPos].m_Value;
 	}
@@ -3686,7 +3715,11 @@ template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyAr
 bool CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::Find(const TKeyArg& Key, TValue& Value) const
 {
 	int iPos;
+#ifdef _MSC_VER
 	if (m_Entries.QuickSearchKey<TKeyArg>(Key, &CEntry::CompareKey, iPos))
+#else
+	if (m_Entries.QuickSearchKey(Key, &CEntry::CompareKey, iPos))
+#endif
 	{
 		Value=m_Entries[iPos].m_Value;
 		return true;
@@ -3701,7 +3734,11 @@ template <class TKey, class TValue, class TKeySem, class TValueSem, class TKeyAr
 bool CIndex<TKey,TValue,TKeySem,TValueSem, TKeyArg>::HasKey(const TKeyArg& Key) const
 {
 	int iPos;
+#ifdef _MSC_VER
 	return m_Entries.QuickSearchKey<TKeyArg>(Key, &CEntry::CompareKey, iPos);
+#else
+	return m_Entries.QuickSearchKey(Key, &CEntry::CompareKey, iPos);
+#endif
 }
 
 
@@ -4054,7 +4091,7 @@ struct CDynTypeFirstHolder
 template <int iDummy> CDynType* CDynTypeFirstHolder<iDummy>::m_pFirst=NULL;
 
 
-inline CDynType::CDynType(int iID, void* (*pfnCreate)(), const wchar_t* pszName) : 
+inline CDynType::CDynType(int iID, void* (*pfnCreate)(), const wchar_t* pszName) :
 	m_iID(iID),
 	m_pfnCreate(pfnCreate),
 	m_strName(pszName)
@@ -4097,9 +4134,9 @@ inline CDynType* CDynType::GetTypeFromName(const wchar_t* pszName)
 
 
 inline void* CDynType::CreateInstance() const
-{ 
-	ASSERT(m_pfnCreate!=NULL); 
-	return m_pfnCreate(); 
+{
+	ASSERT(m_pfnCreate!=NULL);
+	return m_pfnCreate();
 }
 
 inline int CDynType::GetID() const
@@ -4136,9 +4173,9 @@ CDynType* CDynamicBase<TSelf,TBase>::QueryType()
 }
 
 template <class TSelf, class TBase>
-CDynType* CDynamicBase<TSelf,TBase>::GetType() 
+CDynType* CDynamicBase<TSelf,TBase>::GetType()
 {
-	return &TSelf::dyntype; 
+	return &TSelf::dyntype;
 }
 
 template <class TSelf, class TBase>
@@ -4148,7 +4185,7 @@ const wchar_t* CDynamicBase<TSelf,TBase>::GetTypeName()
 }
 
 
-template <class TSelf, class TBase> 
+template <class TSelf, class TBase>
 CDynType CDynamic<TSelf,TBase>::dyntype(0,NULL,TSelf::GetTypeName());
 
 
@@ -4162,12 +4199,12 @@ int CDynamicCreatable<TSelf,TBase,iID>::GenerateTypeID()
 }
 
 template <class TSelf, class TBase, int iID>
-void* CDynamicCreatable<TSelf,TBase,iID>::CreateInstance() 
-{ 
-	return new TSelf(); 
+void* CDynamicCreatable<TSelf,TBase,iID>::CreateInstance()
+{
+	return new TSelf();
 }
 
-template <class TSelf, class TBase, int iID> 
+template <class TSelf, class TBase, int iID>
 CDynType CDynamicCreatable<TSelf,TBase,iID>::dyntype(iID?iID:TSelf::GenerateTypeID(),TSelf::CreateInstance,TSelf::GetTypeName());
 
 
