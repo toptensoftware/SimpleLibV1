@@ -61,9 +61,6 @@
 #define __cdecl
 #define _stricmp strcasecmp
 #define _wcsicmp Simple::lazy_wcsicmp
-#ifndef _GLIBCXX_HAVE_VSWPRINTF
-//#define SIMPLELIB_NO_VSWPRINTF	// GNU C doesn't support wide vswprintf
-#endif
 #endif
 
 

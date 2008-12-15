@@ -131,7 +131,7 @@ void TestStrings()
 	// Unicode Format
 	#ifndef SIMPLELIB_NO_VSWPRINTF
 	CUniString strU=L"Hello";
-	CUniString strR=Format(L"%S World %i", strU.sz(), 24);
+	CUniString strR=Format(L"%ls World %i", strU.sz(), 24);
 	printf("Result:%S\n", strR.sz());
 	ASSERT(Compare(strR, L"Hello World 24")==0);
 	#else
@@ -1416,6 +1416,9 @@ int main(int argc, char* argv[])
 	{
 		printf("Finished - all tests passed.\n\n");
 	}
+
+	unsigned long long i=23;
+	printf("--%i - %llu--\n", sizeof(i), i);
 
 	return 0;
 }
