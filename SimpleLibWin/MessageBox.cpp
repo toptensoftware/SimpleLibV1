@@ -27,12 +27,27 @@
 namespace Simple
 {
 
+static CUniString g_strAppName;
+
+void SIMPLEAPI SlxMessageBoxSetAppName(const wchar_t* pszAppName)
+{
+	g_strAppName=pszAppName;
+}
+
+CUniString SIMPLEAPI SlxMessageBoxGetAppName()
+{
+	if (g_strAppName.IsEmpty())
+		return LoadString(IDS_PROJNAME);
+	else
+		return g_strAppName;
+}
+
 int SIMPLEAPI SlxMessageBox(HWND hWndParent, const wchar_t* pszMessage, UINT nFlags, const wchar_t* pszCaption)
 {
 	CUniString strAppName;
 	if (!pszCaption || pszCaption[0]==L'\0')
 	{
-		strAppName=LoadString(IDS_PROJNAME);
+		strAppName=SlxMessageBoxGetAppName();
 		pszCaption=strAppName;
 	}
 

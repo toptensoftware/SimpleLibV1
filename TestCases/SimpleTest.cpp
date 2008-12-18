@@ -1,11 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // SimpleTest.cpp : SimpleLib Unit Tests
 
-#include "..\SimpleLib.h"
+#include "../SimpleLib.h"
 using namespace Simple;
 
 bool g_bAnyFailed=false;
 bool g_bFailed=false;
+
 
 void Failed(int iLine, const char* psz)
 {
@@ -65,8 +66,6 @@ int Compare(const CMyObject& a, const CMyObject& b)
 {
 	return a.m_iVal-b.m_iVal;
 }
-
-
 
 
 void TestStrings()
@@ -131,7 +130,9 @@ void TestStrings()
 	// Unicode Format
 	#ifndef SIMPLELIB_NO_VSWPRINTF
 	CUniString strU=L"Hello";
-	ASSERT(Compare(Format(L"%s World %i", strU.sz(), 24), L"Hello World 24")==0);
+	CUniString strR=Format(L"%s World %i", strU.sz(), 24);
+//	printf("Result:%S\n", strR.sz());
+	ASSERT(Compare(strR, L"Hello World 24")==0);
 	#else
 	printf("\nUnicode Format() not supported\n");
 	#endif
@@ -153,7 +154,6 @@ void TestStrings()
 
 	CUniString strUnicode(a2w("Hello World"));
 	ASSERT(Compare(strUnicode, L"Hello World")==0);
-
 
 	if (!g_bFailed)
 		printf("OK\n");
@@ -224,7 +224,7 @@ void TestVector()
 	ASSERT(vec[3]==3);
 	vec.Swap(1,2);
 
-	// Move 
+	// Move
 	vec.Move(3,1);
 	ASSERT(vec[0]==0);
 	ASSERT(vec[1]==3);
@@ -412,7 +412,7 @@ void TestSortedVector()
 	{
 		const wchar_t* psz1=vec[i-1];
 		const wchar_t* psz2=vec[i];
-		ASSERT(_wcsicmp(vec[i], vec[i-1])>=0);
+		ASSERT(_wcsicmp(psz2, psz1)>=0);
 	}
 
 	if (!g_bFailed)
@@ -502,7 +502,7 @@ void TestMap()
 		if ((map[i].Key % 10)==0)
 		{
 			map.Remove(map[i].Key);
-			iTotal--;				
+			iTotal--;
 		}
 	}
 #ifdef _DEBUG
@@ -667,7 +667,7 @@ void TestIndex()
 		if ((map[i].Key % 10)==0)
 		{
 			map.Remove(map[i].Key);
-			iTotal--;				
+			iTotal--;
 		}
 	}
 	ASSERT(map.GetSize()==iTotal);
@@ -825,7 +825,7 @@ void TestHashMap()
 		if ((map[i].Key % 10)==0)
 		{
 			map.Remove(map[i].Key);
-			iTotal--;				
+			iTotal--;
 		}
 	}
 	ASSERT(map.GetSize()==iTotal);
@@ -978,7 +978,7 @@ void TestRingBuffer()
 	ASSERT(!buf.IsOverflow());
 	ASSERT(buf.GetSize()==0);
 	ASSERT(buf.IsEmpty());
-	
+
 	buf.Reset(3);
 	buf.Enqueue(10);
 	buf.Enqueue(20);
@@ -1013,7 +1013,7 @@ void TestRingBuffer()
 
 
 
-class CItem 
+class CItem
 {
 public:
 	CItem(int iVal) : m_iVal(iVal)
@@ -1196,7 +1196,7 @@ void TestLinkedList()
 		if ((List[i]->m_iVal % 10)==0)
 		{
 			List.Remove(List[i]);
-			iTotal--;				
+			iTotal--;
 		}
 	}
 	ASSERT(List.GetSize()==iTotal);
@@ -1214,7 +1214,7 @@ void TestLinkedList()
 
 	//printf("\n");
 
-		
+
 	// Perform random inserts while iterating...
 	srand(0);
 	for (i=0; i<List.GetSize(); i+=2)
@@ -1302,15 +1302,15 @@ public:
 	static const wchar_t* GetTypeName() { return L"CApple"; }
 };
 
-class CRedApple : public CDynamicCreatable<CRedApple, CApple> 
-{ 
+class CRedApple : public CDynamicCreatable<CRedApple, CApple>
+{
 	virtual void x() {};
 public:
 	static int GenerateTypeID() { return 1; };
 	static const wchar_t* GetTypeName() { return L"CRedApple"; }
 };
 
-class CGreenApple : public CDynamicCreatable<CGreenApple, CApple, 2> 
+class CGreenApple : public CDynamicCreatable<CGreenApple, CApple, 2>
 {
 	virtual void x() {};
 public:
@@ -1358,13 +1358,13 @@ void TestDynamic()
 
 	if (!g_bFailed)
 		printf("OK\n");
-#endif 
+#endif
 }
 
 void TestUniStringVector()
 {
 	printf("Testing CUniStringVector...");
-	
+
 	CUniStringVector vec;
 	vec.Add(L"Apples");
 	vec.Add(L"Pears");
@@ -1414,7 +1414,7 @@ int main(int argc, char* argv[])
 	{
 		printf("Finished - all tests passed.\n\n");
 	}
-		
+
 	return 0;
 }
 

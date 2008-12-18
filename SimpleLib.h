@@ -9,8 +9,8 @@
 // Special thanks to Nick Maher of GrofSoft for original map implementation
 //		http://www.grofsoft.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////////
@@ -57,11 +57,10 @@
 
 
 #ifdef __GNUC__
+#define _cdecl
+#define __cdecl
 #define _stricmp strcasecmp
 #define _wcsicmp Simple::lazy_wcsicmp
-#ifndef _GLIBCXX_HAVE_VSWPRINTF
-#define SIMPLELIB_NO_VSWPRINTF	// GNU C doesn't support wide vswprintf
-#endif
 #endif
 
 
@@ -160,7 +159,7 @@ namespace Simple
 {
 
 /////////////////////////////////////////////////////////////////////////////
-// Character template - used to get char <-> wchar_t opposite type in 
+// Character template - used to get char <-> wchar_t opposite type in
 //						templatized manner
 
 template <class T>
@@ -188,14 +187,14 @@ public:
 
 /*
 
-Simple string class stores a string.  Normally NULL terminated but not 
-necessarily so.  
+Simple string class stores a string.  Normally NULL terminated but not
+necessarily so.
 
-Implements "copy on write" for effecient copy of CString to CString 
+Implements "copy on write" for effecient copy of CString to CString
 	(eg: function return values etc...)
 
-Also, implemented with internal data prefixed to string memory so string class can be 
-	passed as a string pointer for sprintf type functions. (ie: the whole class is same 
+Also, implemented with internal data prefixed to string memory so string class can be
+	passed as a string pointer for sprintf type functions. (ie: the whole class is same
 	size as a pointer)  (See nested CHeader struct + Get/SetHeader functions)
 
 eg:
@@ -265,7 +264,7 @@ public:
 		if (sizeof(T)==sizeof(OLECHAR))
 		{
 			return m_psz ? ::SysAllocString(m_psz) : NULL;
-		}					  
+		}
 		else
 		{
 			return t2t<wchar_t,T>(m_psz).SysAllocString();
@@ -314,9 +313,9 @@ inline int lazy_wcsicmp(const wchar_t* psz1, const wchar_t* psz2)
 }
 
 // For case insensitive FindKey on CVector<CUniString> - vec.FindKey(L"XYZ", FindKeyI)
-inline int FindKeyI(const CUniString& str1, const wchar_t* psz2) 
-{ 
-	return _wcsicmp(str1, psz2); 
+inline int FindKeyI(const CUniString& str1, const wchar_t* psz2)
+{
+	return _wcsicmp(str1, psz2);
 };
 
 
@@ -388,19 +387,20 @@ inline CAnsiString w2a(const wchar_t* psz, int iLen=-1)
 template <class TDest, class TSrc>
 CString<TDest> t2t(const TSrc* psz, int iLen=-1);
 
-template <> inline CString<char> t2t<char, char>(const char* psz, int iLen) 
+template <> inline CString<char> t2t<char, char>(const char* psz, int iLen)
 	{ return CString<char>(psz,iLen); }
-template <> inline CString<char> t2t<char, wchar_t>(const wchar_t* psz, int iLen) 
+template <> inline CString<char> t2t<char, wchar_t>(const wchar_t* psz, int iLen)
 	{ return w2a(psz,iLen); }
-template <> inline CString<wchar_t> t2t<wchar_t, wchar_t>(const wchar_t* psz, int iLen) 
+template <> inline CString<wchar_t> t2t<wchar_t, wchar_t>(const wchar_t* psz, int iLen)
 	{ return CString<wchar_t>(psz,iLen); }
-template <> inline CString<wchar_t> t2t<wchar_t, char>(const char* psz, int iLen) 
+template <> inline CString<wchar_t> t2t<wchar_t, char>(const char* psz, int iLen)
 	{ return a2w(psz,iLen); }
 
 
 #if defined(_MSC_VER) && (_MSC_VER>=1400)
 #pragma warning(default:4996)
 #endif
+
 
 }	// Close namespace while defining global scope Compare functions
 
@@ -418,7 +418,7 @@ inline int __cdecl CompareI(const wchar_t* psz1, const wchar_t* psz2)	{ return _
 
 template <class T>
 int Compare(Simple::CString<T> const& str1, Simple::CString<T> const& str2)
-{														  
+{
 	return Compare(static_cast<const T*>(str1), static_cast<const T*>(str2));
 }
 
@@ -440,13 +440,13 @@ namespace Simple
 Semantic classes are used to control what happens when an object is added to or
 removed from a collection class and how to compare items for sorting etc...
 
-Eg: 
+Eg:
 
 a vector of pointers
 
 	CVector<CMyObject>	vec;
 
-a vector of pointers that will be deleted when removed from collection or 
+a vector of pointers that will be deleted when removed from collection or
 collection is destroyed
 
 	CVector<CMyObject, SOwnedPtr>		vec;
@@ -467,11 +467,11 @@ public:
 	template <class T, class TOwner>
 	static void OnRemove(T& val, TOwner* pOwner)
 		{ }
-	
+
 	template <class T, class TOwner>
 	static void OnDetach(T& val, TOwner* pOwner)
 		{ }
-	
+
 	template <class T1, class T2>
 	static int __cdecl Compare(const T1& a, const T2& b)
 		{ return ::Compare(a,b); }
@@ -485,11 +485,11 @@ public:
 	template <class T, class TOwner>
 	static const T& OnAdd(const T& val, TOwner* pOwner)
 		{ return val; }
-	
+
 	template <class T, class TOwner>
 	static void OnRemove(T& val, TOwner* pOwner)
 		{ delete val; }
-	
+
 	template <class T, class TOwner>
 	static void OnDetach(T& val, TOwner* pOwner)
 		{ }
@@ -507,11 +507,11 @@ public:
 	template <class T, class TOwner>
 	static const T& OnAdd(const T& val, TOwner* pOwner)
 		{ val->AddRef(); return val; }
-	
+
 	template <class T, class TOwner>
 	static void OnRemove(T& val, TOwner* pOwner)
 		{ val->Release(); }
-	
+
 	template <class T, class TOwner>
 	static void OnDetach(T& val, TOwner* pOwner)
 		{ }
@@ -546,7 +546,7 @@ public:
 
 /*
 
-Vector class implements a simple vector with semantics support.  
+Vector class implements a simple vector with semantics support.
 
 Stack operations are simulated with Push, Pop (2 flavours) and Top
 Queue operations are simulated with Enqueue, Dequeue (2 flavours) and Peek
@@ -554,17 +554,17 @@ Queue operations are simulated with Enqueue, Dequeue (2 flavours) and Peek
 eg:
 
 	// simple as it gets - a vector of integer values
-	CVector<int>			vecInts;		
+	CVector<int>			vecInts;
 
 	// a vector of class objects
-	CVector<CMyObject>	vecObjects;		
+	CVector<CMyObject>	vecObjects;
 
 	// a vector of pointers to class objects
 	CVector<CMyObject*>	vecPtrObjects;
 
 	// a vector of pointers to class objects where the objects will be deleted
 	// on removal from the collection.   Use DetachAt to remove without delete.
-	CVector<CMyObject*, SOwnedPtr> vecPtrObjects;	
+	CVector<CMyObject*, SOwnedPtr> vecPtrObjects;
 
 
 
@@ -765,7 +765,7 @@ private:
 	CSortedVector& operator=(const CSortedVector& Other);
 };
 
-	
+
 /////////////////////////////////////////////////////////////////////////////
 // CGrid
 
@@ -947,7 +947,7 @@ private:
 
 
 /////////////////////////////////////////////////////////////////////////////
-// CPlex - segmented memory allocator used for allocating nodes in 
+// CPlex - segmented memory allocator used for allocating nodes in
 //				CMap and CHashMap
 
 template <class T>
@@ -967,13 +967,19 @@ public:
 
 
 protected:
+
+
+#ifdef _MSC_VER
 	#pragma warning(disable: 4200)
+#endif
 	struct BLOCK
 	{
 		BLOCK*	m_pNext;
 		char	m_bData[0];
 	};
+#ifdef _MSC_VER
 	#pragma warning(default: 4200)
+#endif
 
 	struct FREEITEM
 	{
@@ -993,7 +999,7 @@ protected:
 /*
 
 Map class implements a map with semantics support.  Implemented as a red-black tree
-with linked-list between values for fast iteration.  
+with linked-list between values for fast iteration.
 
 Supports:
 	* Pseudo random access - operator[](int iIndex)
@@ -1003,16 +1009,16 @@ Supports:
 eg:
 
 	// map of ints to int
-	CMap<int, int>			mapInts;		
+	CMap<int, int>			mapInts;
 
 	// map of ints to object
-	CMap<int, CMyObject>	mapObjects;		
+	CMap<int, CMyObject>	mapObjects;
 
 	// map of ints to object ptrs
 	CMap<CMyObject*>	mapPtrObjects;
 
 	// a map of ints to pointers where pointers deleted on removal
-	CMap<int, CMyObject*, SValue, SOwnedPtr> mapPtrObjects;	
+	CMap<int, CMyObject*, SValue, SOwnedPtr> mapPtrObjects;
 
 	// a map of strings to integers, with case insensitivity on the keys
 	CMap< CString<char>, int, SCaseInsensitive>	map;
@@ -1044,12 +1050,12 @@ public:
 	class CKeyPair
 	{
 	public:
-		CKeyPair(const TKey& Key, TValue& Value) : 
+		CKeyPair(const TKey& Key, TValue& Value) :
 			Key(Key),
 			Value(Value)
 		{
 		}
-		CKeyPair(const CKeyPair& Other) : 
+		CKeyPair(const CKeyPair& Other) :
 			Key(Other.Key),
 			Value(Other.Value)
 		{
@@ -1151,7 +1157,7 @@ public:
 	class CEntry
 	{
 	public:
-		CEntry(const TKey& key, const TValue& value) : 
+		CEntry(const TKey& key, const TValue& value) :
 			m_Key(key),
 			m_Value(value)
 		{
@@ -1176,12 +1182,12 @@ public:
 	class CKeyPair
 	{
 	public:
-		CKeyPair(CEntry& e) : 
+		CKeyPair(CEntry& e) :
 			Key(e.m_Key),
 			Value(e.m_Value)
 		{
 		}
-		CKeyPair(const CKeyPair& Other) : 
+		CKeyPair(const CKeyPair& Other) :
 			Key(Other.Key),
 			Value(Other.Value)
 		{
@@ -1299,12 +1305,12 @@ public:
 	class CKeyPair
 	{
 	public:
-		CKeyPair(const TKey& Key, TValue& Value) : 
+		CKeyPair(const TKey& Key, TValue& Value) :
 			Key(Key),
 			Value(Value)
 		{
 		}
-		CKeyPair(const CKeyPair& Other) : 
+		CKeyPair(const CKeyPair& Other) :
 			Key(Other.Key),
 			Value(Other.Value)
 		{
@@ -1476,7 +1482,7 @@ class CSingleton
 public:
 	CSingleton()
 	{
-		m_pInstance=static_cast<T*>(this);		
+		m_pInstance=static_cast<T*>(this);
 	}
 	virtual ~CSingleton()
 	{
@@ -1501,7 +1507,7 @@ template <class T>
 class CAutoRestore
 {
 public:
-	CAutoRestore(T& Var, T NewValue) : 
+	CAutoRestore(T& Var, T NewValue) :
 		m_Var(Var)
 	{
 		m_OldValue=Var;
@@ -1522,23 +1528,23 @@ template <class T, class TSem=SOwnedPtr>
 class CAutoPtr
 {
 public:
-	CAutoPtr(T* ptr=NULL) 
-	{ 
-		p=ptr; 
+	CAutoPtr(T* ptr=NULL)
+	{
+		p=ptr;
 		if (p)
 			TSem::OnAdd(p,this);
 	};
-	~CAutoPtr() 
-	{ 
+	~CAutoPtr()
+	{
 		Release();
 	};
-	T* Detach() 
-	{ 
+	T* Detach()
+	{
 		if (p)
 			TSem::OnDetach(p, this);
-		T* ptr=p; 
-		p=NULL; 
-		return ptr; 
+		T* ptr=p;
+		p=NULL;
+		return ptr;
 	};
 	T** operator&()
 	{
@@ -1616,13 +1622,13 @@ class CApple : public CDynamicBase<CApple, CFruit>
 };
 
 // CRedApple derives from CApple and is dynamically createable from id 1
-class CRedApple : public CDynamicCreatable<CRedApple, CApple, 1> 
-{ 
+class CRedApple : public CDynamicCreatable<CRedApple, CApple, 1>
+{
 	virtual void x() {};
 };
 
 // CRedApple derives from CApple and is dynamically createable from id 2
-class CGreenApple : public CDynamicCreatable<CGreenApple, CApple, 2> 
+class CGreenApple : public CDynamicCreatable<CGreenApple, CApple, 2>
 {
 	virtual void x() {};
 };

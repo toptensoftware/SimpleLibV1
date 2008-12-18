@@ -25,3 +25,5 @@ _UpgradeReport_Files
 *.bini
 *.vspscc
 *.vssscc
+.metadata
+

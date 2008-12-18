@@ -194,6 +194,9 @@ int CProfileSection::FindEntryIndexRaw(const wchar_t* pszName, int iStartAfter) 
 
 int CProfileSection::FindEntryIndex(const wchar_t* pszName, int iStartAfter) const
 {
+	if (!this)
+		return -1;
+
 	const wchar_t* pszMode=m_pOwner->GetModeInternal();
 	if (pszMode)
 	{
