@@ -61,9 +61,6 @@
 #define __cdecl
 #define _stricmp strcasecmp
 #define _wcsicmp Simple::lazy_wcsicmp
-#ifndef _GLIBCXX_HAVE_VSWPRINTF
-//#define SIMPLELIB_NO_VSWPRINTF	// GNU C doesn't support wide vswprintf
-#endif
 #endif
 
 
@@ -403,6 +400,7 @@ template <> inline CString<wchar_t> t2t<wchar_t, char>(const char* psz, int iLen
 #if defined(_MSC_VER) && (_MSC_VER>=1400)
 #pragma warning(default:4996)
 #endif
+
 
 }	// Close namespace while defining global scope Compare functions
 

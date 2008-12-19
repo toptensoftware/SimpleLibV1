@@ -8,10 +8,6 @@ bool g_bAnyFailed=false;
 bool g_bFailed=false;
 
 
-// Normalize MSVC format specifiers to standard C++
-//		%[n]s -> %[n]ls
-//		%c -> %lc
-
 void Failed(int iLine, const char* psz)
 {
 	if (!g_bFailed) printf("\n");

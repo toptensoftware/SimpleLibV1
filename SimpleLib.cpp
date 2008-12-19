@@ -828,6 +828,13 @@ inline CString<char> Format(const char* format, va_list args)
 
 #else	// MSVC
 
+// Normalize MSVC format specifiers to standard C++
+//		%[n]s -> %[n]ls
+//		%[n]S -> %[n]hs
+//		%c -> %lc
+//		%C -> %hc
+//      %I64 -> %ll
+
 CUniString MsvcToGccFormatSpec(const wchar_t* p)
 {
 	CUniString str;
@@ -890,11 +897,10 @@ CUniString MsvcToGccFormatSpec(const wchar_t* p)
 }
 
 // GNU/SUN Unicode Format
-#ifndef SIMPLELIB_NO_VSWPRINTF
 template <>
 inline CString<wchar_t> Format(const wchar_t* format, va_list args)
 {
-	CUniString strNormalized=MscvToGccFormatSpec(format);
+	CUniString strNormalized=Simple::MsvcToGccFormatSpec(format);
 	int iLen=5;
 	while (true)
 	{
@@ -904,7 +910,6 @@ inline CString<wchar_t> Format(const wchar_t* format, va_list args)
 		iLen*=2;
 	}
 }
-#endif
 
 
 // GNU/SUN Ansi Format
