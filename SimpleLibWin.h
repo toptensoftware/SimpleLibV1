@@ -57,6 +57,7 @@
 #include "SimpleLibWin\ModuleCRC.h"
 #include "SimpleLibWin\MouseTracker.h"
 #include "SimpleLibWin\NotifyIcon.h"
+#include "SimpleLibWin\PerThreadData.h"
 #include "SimpleLibWin\PostableObject.h"
 #include "SimpleLibWin\ProfileFileBinary.h"
 #include "SimpleLibWin\ProfileSettings.h"
