@@ -779,6 +779,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PerThreadData.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\PostableObject.cpp"
 				>
 			</File>
@@ -1077,6 +1081,10 @@
 			</File>
 			<File
 				RelativePath=".\NotifyIcon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PerThreadData.h"
 				>
 			</File>
 			<File
