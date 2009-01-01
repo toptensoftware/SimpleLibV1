@@ -69,7 +69,7 @@ bool SIMPLEAPI GetModuleVersionInfo(HMODULE hModule, VS_FIXEDFILEINFO* pInfo)
 {
 	// Get module file name
 	wchar_t szFileName[MAX_PATH];
-	GetModuleFileName(NULL, szFileName, MAX_PATH);
+	GetModuleFileName(hModule, szFileName, MAX_PATH);
 
 	return GetModuleVersionInfo(szFileName, pInfo);
 }

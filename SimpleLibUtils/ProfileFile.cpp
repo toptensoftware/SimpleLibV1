@@ -1181,6 +1181,10 @@ CUniString EscapeString(const wchar_t* psz, bool bValue)
 				str+=L"\\\\";
 				break;
 
+			case L'\"':
+				str+=L"\\\"";
+				break;
+
 			case L'\n':
 				str+=L"\\n";
 				break;
