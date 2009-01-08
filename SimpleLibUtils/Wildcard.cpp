@@ -30,6 +30,11 @@ inline wchar_t towupper_fast(wchar_t ch)
 // Do a wildcard match on two strings
 bool SIMPLEAPI DoesWildcardMatch(const wchar_t* pszSpec, const wchar_t* pszString)
 {
+	if (IsEmptyString(pszSpec))
+		return false;
+	if (IsEmptyString(pszString))
+		return false;
+
 	// Process the string vs spec...
 	while (pszSpec[0] && pszString[0])
 		{

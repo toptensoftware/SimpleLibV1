@@ -183,6 +183,9 @@ int CProfileSection::FindEntryIndexRaw(const wchar_t* pszName, int iStartAfter) 
 	if (!this)
 		return -1;
 
+	if (IsEmptyString(pszName))
+		return -1;
+
 	for (int i=iStartAfter+1; i<GetSize(); i++)
 		{
 		if (!IsEmptyString(GetAt(i)->GetName()) && DoesWildcardMatch(pszName, GetAt(i)->GetName()))
@@ -195,6 +198,8 @@ int CProfileSection::FindEntryIndexRaw(const wchar_t* pszName, int iStartAfter) 
 int CProfileSection::FindEntryIndex(const wchar_t* pszName, int iStartAfter) const
 {
 	if (!this)
+		return -1;
+	if (IsEmptyString(pszName))
 		return -1;
 
 	const wchar_t* pszMode=m_pOwner->GetModeInternal();
@@ -239,6 +244,8 @@ int CProfileSection::FindSectionIndexRaw(const wchar_t* pszName, int iStartAfter
 {
 	if (!this)
 		return -1;
+	if (IsEmptyString(pszName))
+		return -1;
 
 	for (int i=iStartAfter+1; i<m_Sections.GetSize(); i++)
 		{
@@ -252,6 +259,9 @@ int CProfileSection::FindSectionIndexRaw(const wchar_t* pszName, int iStartAfter
 int CProfileSection::FindSectionIndex(const wchar_t* pszName, int iStartAfter) const
 {
 	if (!this)
+		return -1;
+
+	if (IsEmptyString(pszName))
 		return -1;
 
 	const wchar_t* pszMode=m_pOwner->GetModeInternal();
