@@ -1155,8 +1155,12 @@ void CVector<T,TSem,TArg>::InsertAtInternal(int iPosition, const T* pVal, int iC
 template <class T, class TSem, class TArg>
 int CVector<T,TSem,TArg>::Add(const T& val)
 {
-	// Just insert at end
-	InsertAtInternal(m_iSize, &val, 1);
+	// Grow if necessary
+	if (m_iSize+1>m_iMemSize)
+		GrowTo(m_iSize+1);
+
+	Constructor(m_pData+m_iSize, TSem::OnAdd(val, this));
+	m_iSize++;
 	return m_iSize-1;
 }
 
