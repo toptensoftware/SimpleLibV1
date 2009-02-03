@@ -1153,7 +1153,7 @@ void CVector<T,TSem,TArg>::InsertAtInternal(int iPosition, const T* pVal, int iC
 
 // Add
 template <class T, class TSem, class TArg>
-int CVector<T,TSem,TArg>::Add(const T& val)
+inline int CVector<T,TSem,TArg>::Add(const T& val)
 {
 	// Grow if necessary
 	if (m_iSize+1>m_iMemSize)
@@ -1176,7 +1176,7 @@ int CVector<T,TSem,TArg>::Remove(const TArg& val)
 
 // RemoveAt
 template <class T, class TSem, class TArg>
-void CVector<T,TSem,TArg>::RemoveAt(int iPosition)
+inline void CVector<T,TSem,TArg>::RemoveAt(int iPosition)
 {
 	ASSERT(iPosition>=0);
 	ASSERT(iPosition<GetSize());
@@ -1221,7 +1221,7 @@ void CVector<T,TSem,TArg>::RemoveAt(int iPosition, int iCount)
 
 // DetachAt
 template <class T, class TSem, class TArg>
-T CVector<T,TSem,TArg>::DetachAt(int iPosition)
+inline T CVector<T,TSem,TArg>::DetachAt(int iPosition)
 {
 	ASSERT(iPosition>=0);
 	ASSERT(iPosition<GetSize());
@@ -1271,7 +1271,7 @@ void CVector<T,TSem,TArg>::RemoveAll()
 
 // GetAt
 template <class T, class TSem, class TArg>
-T& CVector<T,TSem,TArg>::GetAt(int iPosition) const
+inline T& CVector<T,TSem,TArg>::GetAt(int iPosition) const
 {
 	ASSERT(iPosition>=0);
 	ASSERT(iPosition<GetSize());
@@ -1281,21 +1281,21 @@ T& CVector<T,TSem,TArg>::GetAt(int iPosition) const
 
 // operator[]
 template <class T, class TSem, class TArg>
-T& CVector<T,TSem,TArg>::operator[](int iPosition) const
+inline T& CVector<T,TSem,TArg>::operator[](int iPosition) const
 {
 	return GetAt(iPosition);
 }
 
 // GetBuffer
 template <class T, class TSem, class TArg>
-T* CVector<T,TSem,TArg>::GetBuffer() const
+inline T* CVector<T,TSem,TArg>::GetBuffer() const
 {
 	return m_pData;
 }
 
 // GetSize
 template <class T, class TSem, class TArg>
-int CVector<T,TSem,TArg>::GetSize() const
+inline int CVector<T,TSem,TArg>::GetSize() const
 {
 	return m_iSize;
 }
@@ -1405,21 +1405,21 @@ int CVector<T,TSem,TArg>::FindKey(TKey key, void* ctx, int (__cdecl *pfnCompare)
 
 // IsEmpty
 template <class T, class TSem, class TArg>
-bool CVector<T,TSem,TArg>::IsEmpty() const
+inline bool CVector<T,TSem,TArg>::IsEmpty() const
 {
 	return GetSize()==0;
 }
 
 // Push
 template <class T, class TSem, class TArg>
-void CVector<T,TSem,TArg>::Push(const TArg& val)
+inline void CVector<T,TSem,TArg>::Push(const TArg& val)
 {
 	Add(val);
 }
 
 // Pop
 template <class T, class TSem, class TArg>
-bool CVector<T,TSem,TArg>::Pop(T& val)
+inline bool CVector<T,TSem,TArg>::Pop(T& val)
 {
 	if (IsEmpty())
 		return false;
@@ -1430,7 +1430,7 @@ bool CVector<T,TSem,TArg>::Pop(T& val)
 
 // Pop
 template <class T, class TSem, class TArg>
-T CVector<T,TSem,TArg>::Pop()
+inline T CVector<T,TSem,TArg>::Pop()
 {
 	ASSERT(!IsEmpty());
 	return DetachAt(GetSize()-1);
@@ -1438,7 +1438,7 @@ T CVector<T,TSem,TArg>::Pop()
 
 // Top
 template <class T, class TSem, class TArg>
-T& CVector<T,TSem,TArg>::Top() const
+inline T& CVector<T,TSem,TArg>::Top() const
 {
 	ASSERT(!IsEmpty());
 	return GetAt(GetSize()-1);
@@ -1446,7 +1446,7 @@ T& CVector<T,TSem,TArg>::Top() const
 
 // Top
 template <class T, class TSem, class TArg>
-bool CVector<T,TSem,TArg>::Top(T& val) const
+inline bool CVector<T,TSem,TArg>::Top(T& val) const
 {
 	if (IsEmpty())
 		return false;
@@ -1456,14 +1456,14 @@ bool CVector<T,TSem,TArg>::Top(T& val) const
 
 // Enqueue
 template <class T, class TSem, class TArg>
-void CVector<T,TSem,TArg>::Enqueue(const TArg& val)
+inline void CVector<T,TSem,TArg>::Enqueue(const TArg& val)
 {
 	Add(val);
 }
 
 // Dequeue
 template <class T, class TSem, class TArg>
-T CVector<T,TSem,TArg>::Dequeue()
+inline T CVector<T,TSem,TArg>::Dequeue()
 {
 	ASSERT(!IsEmpty());
 	return DetachAt(0);
@@ -1471,7 +1471,7 @@ T CVector<T,TSem,TArg>::Dequeue()
 
 // Dequeue
 template <class T, class TSem, class TArg>
-bool CVector<T,TSem,TArg>::Dequeue(T& val)
+inline bool CVector<T,TSem,TArg>::Dequeue(T& val)
 {
 	if (IsEmpty())
 		return false;
@@ -1482,7 +1482,7 @@ bool CVector<T,TSem,TArg>::Dequeue(T& val)
 
 // Peek
 template <class T, class TSem, class TArg>
-T& CVector<T,TSem,TArg>::Peek() const
+inline T& CVector<T,TSem,TArg>::Peek() const
 {
 	ASSERT(!IsEmpty());
 	return GetAt(0);
@@ -1490,7 +1490,7 @@ T& CVector<T,TSem,TArg>::Peek() const
 
 // Peek
 template <class T, class TSem, class TArg>
-bool CVector<T,TSem,TArg>::Peek(T& val) const
+inline bool CVector<T,TSem,TArg>::Peek(T& val) const
 {
 	if (IsEmpty())
 		return false;
