@@ -1421,10 +1421,17 @@ inline void CVector<T,TSem,TArg>::Push(const TArg& val)
 template <class T, class TSem, class TArg>
 inline bool CVector<T,TSem,TArg>::Pop(T& val)
 {
-	if (IsEmpty())
+	if (m_iSize==0)
 		return false;
 
-	val=Pop();
+	// Update size
+	m_iSize--;
+
+	val=m_pData[m_iSize];
+
+	TSem::OnDetach(m_pData[m_iSize], this);
+	Destructor(m_pData+m_iSize);
+
 	return true;
 }
 
