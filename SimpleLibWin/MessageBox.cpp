@@ -28,6 +28,9 @@ namespace Simple
 {
 
 static CUniString g_strAppName;
+static SlxInteractive g_Interactive=slxInteractive;
+static CUniString g_strLastError;
+
 
 void SIMPLEAPI SlxMessageBoxSetAppName(const wchar_t* pszAppName)
 {
@@ -44,6 +47,17 @@ CUniString SIMPLEAPI SlxMessageBoxGetAppName()
 
 int SIMPLEAPI SlxMessageBox(HWND hWndParent, const wchar_t* pszMessage, UINT nFlags, const wchar_t* pszCaption)
 {
+	if (g_Interactive!=slxInteractive)
+	{
+		if ((nFlags & 0x000000F0)==MB_ICONHAND)
+			g_strLastError=pszMessage;
+
+		if ((nFlags & MB_YESNOCANCEL) || (nFlags & MB_YESNO))
+			return g_Interactive==slxNonInteractiveSaveChanges ? IDYES : IDNO;
+
+		return IDOK;
+	}
+
 	CUniString strAppName;
 	if (!pszCaption || pszCaption[0]==L'\0')
 	{
@@ -65,7 +79,22 @@ int SIMPLEAPI SlxMessageBox(UINT nResID, UINT nFlags, const wchar_t* pszCaption)
 }
 
 
+SlxInteractive SlxGetInteractive()
+{
+	return g_Interactive;
+}
 
+
+void SlxSetInteractive(SlxInteractive newVal)
+{
+	g_Interactive=newVal;
+	g_strLastError.Empty();
+}
+
+CUniString SlxGetNonInteractiveError()
+{
+	return g_strLastError;
+}
 
 
 

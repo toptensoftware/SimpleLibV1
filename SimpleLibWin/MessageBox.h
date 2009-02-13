@@ -26,6 +26,17 @@ int SIMPLEAPI SlxMessageBox(HWND hWndParent, const wchar_t* pszMessage, UINT nFl
 int SIMPLEAPI SlxMessageBox(const wchar_t* pszMessage, UINT nFlags=MB_OK|MB_ICONINFORMATION, const wchar_t* pszCaption=NULL);
 int SIMPLEAPI SlxMessageBox(UINT nResID, UINT nFlags=MB_OK|MB_ICONINFORMATION, const wchar_t* pszCaption=NULL);
 
+enum SlxInteractive
+{
+	slxInteractive,
+	slxNonInteractiveSaveChanges,
+	slxNonInteractiveDiscardChanges,
+};
+
+SlxInteractive SlxGetInteractive();
+void SlxSetInteractive(SlxInteractive newVal);
+CUniString SlxGetNonInteractiveError();
+
 
 }	// namespace Simple
 
