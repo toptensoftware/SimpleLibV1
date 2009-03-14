@@ -129,7 +129,7 @@ public:
 			{
 			if (m_Threads[i]->m_dwThreadID==GetCurrentThreadId())
 				{
-				m_Threads.DeleteAt(i);
+				m_Threads.RemoveAt(i);
 				break;
 				}
 			}
@@ -172,7 +172,7 @@ public:
 	};
 	
 
-	CVector<CThreadEntry*>	m_Threads;
+	CVector<CThreadEntry*, SOwnedPtr>	m_Threads;
 	static CComClassFactorySingletonPerThread<T>*	m_pInstance;
 	static T* FindInstance()
 	{

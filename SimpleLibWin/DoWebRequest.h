@@ -21,7 +21,9 @@
 namespace Simple
 {
 
+CUniString SIMPLEAPI UrlEncode(const wchar_t* p);
 bool SIMPLEAPI DoWebRequest(const wchar_t* pszUrl, CUniString& str);
+bool SIMPLEAPI DoWebPost(const wchar_t* pszUrl, const wchar_t* pszFormData, CUniString& str);
 
 }	// namespace Simple
 
