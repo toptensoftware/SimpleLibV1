@@ -78,15 +78,18 @@ void TestStrings()
 	CAnsiString str("Hello");
 	ASSERT(Compare(str, "Hello")==0);
 	ASSERT(str.GetLength()==5);
+	ASSERT(str.Compare("Hello")==0);
 
 	// Append
 	str.Append(" World");
 	ASSERT(Compare(str, "Hello World")==0);
+	ASSERT(str.Compare("Hello World")==0);
 	ASSERT(str.GetLength()==11);
 
 	// +=
 	str+="!!";
 	ASSERT(Compare(str, "Hello World!!")==0);
+	ASSERT(str.Compare("Hello World!!")==0);
 	ASSERT(str.GetLength()==13);
 
 	// Copy constructor
@@ -137,10 +140,26 @@ void TestStrings()
 	printf("\nUnicode Format() not supported\n");
 	#endif
 
+	CAnsiString strA("Hello World");
+	ASSERT(strA.Left(5).Compare("Hello")==0);
+	ASSERT(strA.Right(5).Compare("World")==0);
+	ASSERT(strA.ToUpper().Compare("HELLO WORLD")==0);
+	ASSERT(strA.ToLower().Compare("hello world")==0);
+	ASSERT(strA.Compare("Hello World")==0);
+
+	CUniString strW(L"Hello World");
+	ASSERT(strW.Left(5).Compare(L"Hello")==0);
+	ASSERT(strW.Right(5).Compare(L"World")==0);
+	ASSERT(strW.ToUpper().Compare(L"HELLO WORLD")==0);
+	ASSERT(strW.ToLower().Compare(L"hello world")==0);
+	ASSERT(strW.Compare(L"Hello World")==0);
+
 	// Left, Right, Mid
 	ASSERT(Compare(Left("Hello World",5), "Hello")==0);
 	ASSERT(Compare(Right("Hello World", 5), "World")==0);
 	ASSERT(Compare(Mid("Hello World", 1, 4), "ello")==0);
+	ASSERT(Compare(Mid("Hello World", 6, -1), "World")==0);
+	ASSERT(Compare(Mid("Hello World", -5, -1), "World")==0);
 
 	ASSERT(CompareI("Hello World", "hello world")==0);
 	ASSERT(CompareI(L"Hello World", L"hello world")==0);
@@ -175,7 +194,7 @@ int CompareIntKeyPtr(CMyObject* const& p, int iVal)
 }
 
 void TestVector()
-{
+{															   
 	g_bFailed=false;
 	printf("Testing CVector...");
 
@@ -188,6 +207,13 @@ void TestVector()
 	{
 		vec.Add(i);
 	}
+
+	/*
+	int iVal;
+	vec.Pop(iVal);
+	iVal++;
+	vec.Push(iVal);
+	*/
 
 	// Test initial addd
 	ASSERT(vec.GetSize()==10);

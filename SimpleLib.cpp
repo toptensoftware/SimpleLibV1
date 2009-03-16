@@ -341,7 +341,7 @@ T* CString<T>::GetBuffer(int iBufSize)
 	CHeader* pHeader=GetHeader();
 
 	if (iBufSize<0)
-	{
+	{			 
 		iBufSize=pHeader->m_iLength;
 		if (iBufSize<0)
 			iBufSize=GetLength()+1;
@@ -656,6 +656,58 @@ CString<T>& CString<T>::operator+=(T ch)
 	return *this;
 }
 
+template <class T>
+CString<T> CString<T>::ToUpper()
+{
+	if (!m_psz)
+		return NULL;
+
+	CString<T> copy(*this);
+	SChar<T>::ToUpper(copy.GetBuffer(-1));
+	return copy;
+}
+
+template <class T>
+CString<T> CString<T>::ToLower()
+{
+	if (!m_psz)
+		return NULL;
+
+	CString<T> copy(*this);
+	SChar<T>::ToLower(copy.GetBuffer(-1));
+	return copy;
+}
+
+template <class T>
+int CString<T>::Compare(const T* psz)
+{
+	return ::Compare(*this, psz);
+}
+
+template <class T>
+CString<T> CString<T>::Left(int iCount)
+{
+	return ::Left<T>(*this, iCount);
+}
+
+template <class T>
+CString<T> CString<T>::Right(int iCount)
+{
+	return ::Right<T>(*this, iCount);
+}
+
+template <class T>
+CString<T> CString<T>::SubStr(int iFrom, int iCount)
+{
+	return ::SubStr<T>(m_psz, iFrom, iCount);
+}
+
+template <class T>
+CString<T> CString<T>::Mid(int iFrom, int iCount)
+{
+	return ::SubStr<T>(m_psz, iFrom, iCount);
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 // Substring functions
@@ -672,6 +724,9 @@ CString<T> Mid(const T* psz, int iStart, int iLength)
 	if (iStart>iLen)
 		return NULL;
 
+	if (iStart<0)
+		iStart=iLen+iStart;
+
 	if (iLength<0)
 		iLength=iLen-iStart;
 
@@ -679,6 +734,12 @@ CString<T> Mid(const T* psz, int iStart, int iLength)
 		iLength=iLen-iStart;
 
 	return CString<T>(psz+iStart, iLength);
+}
+
+template <class T>
+CString<T> SubStr(const T* psz, int iStart, int iLength)
+{
+	return Mid<T>(psz, iStart, iLength);
 }
 
 // Left
