@@ -20,6 +20,7 @@
 namespace Simple
 {
 
+void SIMPLEAPI FindFilesRecursive(const wchar_t* pszBaseFolder, const wchar_t* pszSpec, CVector<CUniString>& Files, bool bFullPath,  const wchar_t* pszPrefix=L"");
 void SIMPLEAPI FindFiles(const wchar_t* pszSpec, CVector<CUniString>& Files, bool bFullPath);
 void SIMPLEAPI FindSubFolders(const wchar_t* pszFolder, CVector<CUniString>& Folders, bool bFullPath);
 
