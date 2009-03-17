@@ -28,7 +28,7 @@ public:
 	virtual ~IFileStreamImpl();
 
 	BOOL Create(LPCTSTR pszFileName);
-	BOOL Open(LPCTSTR pszFileName);
+	BOOL Open(LPCTSTR pszFileName, DWORD dwShare=FILE_SHARE_READ);
 	BOOL OpenReadWrite(LPCTSTR pszFileName);
 	void Close();
 	bool IsOpen();
