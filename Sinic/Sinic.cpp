@@ -62,6 +62,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		cl.BuildHelp(L"o|out", L"Output File", NULL, clOptional);
 		cl.BuildHelp(L"InputFile", L"File to be processed", NULL, clPlaced);
 		cl.BuildHelp(L"crcstamp", L"CRC Stamp Module", NULL, clOptional);
+		cl.BuildHelp(L"crcverify", L"Check Module CRC Stamp", NULL, clOptional);
 		wprintf(cl.GetHelp(L"Sinic"));
 		return 7;
 	}
@@ -70,6 +71,30 @@ int _tmain(int argc, _TCHAR* argv[])
 	CUniString strInputFile;
 	cl.GetPlacedValue(0, L"InputFile", strInputFile);
 	strInputFile=QualifyPath(strInputFile);
+
+	if (cl.GetSwitch(L"crcverify"))
+	{
+		if (!DoesFileExist(strInputFile))
+		{
+			wprintf(L"Verifying %s... file doesn't exist, ignoring\n", strInputFile);
+			return 0;
+		}
+		else
+		{
+			if (!CheckModuleCRC(strInputFile))
+			{
+				wprintf(L"************************************************************\n");
+				wprintf(L" Verifying %s... FAILED\n", strInputFile);
+				wprintf(L"************************************************************\n");
+				return 7;
+			}
+			else
+			{
+				wprintf(L"Verifying %s... OK\n", strInputFile);
+				return 0;
+			}
+		}
+	}
 
 	// Module CRC Stamp?
 	if (cl.GetSwitch(L"crcstamp"))
