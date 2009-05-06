@@ -888,75 +888,75 @@ iaddg(
 	efficiency.
  */
 
-void
-normal_addg(
-	giant			a,
-	giant			b
-)
-/* b := a + b, both a,b assumed non-negative. */
-{
-	int 			carry = 0;
-	int 			asize = a->sign, bsize = b->sign;
-	long 			k;
-	int				j=0;
-	unsigned short	*aptr = a->n, *bptr = b->n;
+		void
+		normal_addg(
+			giant			a,
+			giant			b
+		)
+		/* b := a + b, both a,b assumed non-negative. */
+		{
+			int 			carry = 0;
+			int 			asize = a->sign, bsize = b->sign;
+			long 			k;
+			int				j=0;
+			unsigned short	*aptr = a->n, *bptr = b->n;
 
-	if (asize < bsize)
-	{
-		for (j=0; j<asize; j++)
-		{
-			k = *aptr++ + *bptr + carry;
-			carry = 0;
-			if (k >= 65536L)
+			if (asize < bsize)
 			{
-				k -= 65536L;
-				++carry;
+				for (j=0; j<asize; j++)
+				{
+					k = *aptr++ + *bptr + carry;
+					carry = 0;
+					if (k >= 65536L)
+					{
+						k -= 65536L;
+						++carry;
+					}
+					*bptr++ = (unsigned short)k;
+				}
+				for (j=asize; j<bsize; j++)
+				{
+					k = *bptr + carry;
+					carry = 0;
+					if (k >= 65536L)
+					{
+						k -= 65536L;
+						++carry;
+					}
+					*bptr++ = (unsigned short)k;
+				}
 			}
-			*bptr++ = (unsigned short)k;
-		}
-		for (j=asize; j<bsize; j++)
-		{
-			k = *bptr + carry;
-			carry = 0;
-			if (k >= 65536L)
+			else
 			{
-				k -= 65536L;
-				++carry;
+				for (j=0; j<bsize; j++)
+				{
+					k = *aptr++ + *bptr + carry;
+					carry = 0;
+					if (k >= 65536L)
+					{
+						k -= 65536L;
+						++carry;
+					}
+					*bptr++ = (unsigned short)k;
+				}
+				for (j=bsize; j<asize; j++)
+				{
+					k = *aptr++ + carry;
+					carry = 0;
+					if (k >= 65536L)
+					{
+						k -= 65536L;
+						++carry;
+					}
+					*bptr++ = (unsigned short)k;
+				}
 			}
-			*bptr++ = (unsigned short)k;
-		}
-	}
-	else
-	{
-		for (j=0; j<bsize; j++)
-		{
-			k = *aptr++ + *bptr + carry;
-			carry = 0;
-			if (k >= 65536L)
+			if (carry)
 			{
-				k -= 65536L;
-				++carry;
+				*bptr = 1; ++j;
 			}
-			*bptr++ = (unsigned short)k;
+			b->sign = j;
 		}
-		for (j=bsize; j<asize; j++)
-		{
-			k = *aptr++ + carry;
-			carry = 0;
-			if (k >= 65536L)
-			{
-				k -= 65536L;
-				++carry;
-			}
-			*bptr++ = (unsigned short)k;
-		}
-	}
-	if (carry)
-	{
-		*bptr = 1; ++j;
-	}
-	b->sign = j;
-}
 
 
 void

@@ -82,5 +82,129 @@ CUniString gformat(giant g, int iBase)
 		return str;
 }
 
+unsigned int
+gtou(
+	giant 			x
+)
+/* Calculate the value of an int-sized unsigned giant NOT exceeding 32 bits. */
+{
+	register int 	size = abs(x->sign);
+
+	switch(size)
+	{
+		case 0:
+			break;
+		case 1:
+			return x->n[0];
+		case 2:
+			return x->n[0] | (x->n[1])<<16;
+		default:
+			fprintf(stderr,"Giant too large for gtou\n");
+			break;
+	}
+	return 0;
+}
+
+void
+utog(
+	unsigned int	i,
+	giant			g
+)
+/* The giant g becomes set to the integer value i. */
+{
+	if (i==0)
+	{
+		g->sign = 0;
+		g->n[0] = 0;
+		return;
+	}
+	g->n[0] = (unsigned short)(i & 0xFFFF);
+	i >>= 16;
+	if (i)
+	{
+		g->n[1] = (unsigned short)i;
+		g->sign = 2;
+	}
+	else
+	{
+		g->sign = 1;
+	}
+}
+
+
+void
+bitandg(
+	giant			a,
+	giant			b
+)
+/* b := a & b, both a,b assumed non-negative. */
+{
+	int 			asize = abs(a->sign), bsize = abs(b->sign);
+	int				commonsize=min(asize, bsize);
+	int				j=0;
+	unsigned short	*aptr = a->n, *bptr = b->n;
+
+
+	for (j=0; j<commonsize; j++)
+	{
+		*bptr++ &= *aptr++;
+	}
+
+	// Truncate additional bits
+	b->sign=commonsize;
+}
+
+void
+bitorg(
+	giant			a,
+	giant			b
+)
+/* b := a & b, both a,b assumed non-negative. */
+{
+	int 			asize = abs(a->sign), bsize = abs(b->sign);
+	int				commonsize=min(asize, bsize);
+	int				j=0;
+	unsigned short	*aptr = a->n, *bptr = b->n;
+
+
+	for (j=0; j<commonsize; j++)
+	{
+		*bptr++ |= *aptr++;
+	}
+	for (; j<asize; j++)
+	{
+		*bptr++ = *aptr++;
+	}
+	b->sign=max(asize,bsize);
+}
+
+void
+bitxorg(
+	giant			a,
+	giant			b
+)
+/* b := a ^ b, both a,b assumed non-negative. */
+{
+	int 			asize = abs(a->sign), bsize = abs(b->sign);
+	int				commonsize=min(asize, bsize);
+	int				j=0;
+	unsigned short	*aptr = a->n, *bptr = b->n;
+
+
+	for (j=0; j<commonsize; j++)
+	{
+		*bptr++ ^= *aptr++;
+	}
+
+	for (; j<asize; j++)
+	{
+		*bptr++ = *aptr++;
+	}
+	b->sign=max(asize,bsize);
+}
+
+
+
+
 }
 

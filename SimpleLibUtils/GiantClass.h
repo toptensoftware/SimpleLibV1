@@ -28,8 +28,14 @@ namespace Simple
 // Utility functions
 bool gparse(giant g, const wchar_t* psz, int iBase);
 CUniString gformat(giant g, int iBase);
+unsigned int gtou(giant x);
+void utog(unsigned int i, giant g);
+void bitandg(giant a, giant b);
+void bitorg(giant a, giant b);
+void bitxorg(giant a, giant b);
 
-template <int iSize>
+	
+	template <int iSize>
 class CGiantBase
 {
 public:
@@ -42,6 +48,11 @@ public:
 	{
 		m_p=newgiant(iSize);
 		itog(iVal, m_p);
+	}
+	CGiantBase(unsigned int uVal)
+	{
+		m_p=newgiant(iSize);
+		utog(uVal, m_p);
 	}
 	CGiantBase(const wchar_t* psz, int iBase)
 	{
@@ -63,6 +74,9 @@ public:
 	{
 		free(m_p);
 	}
+
+	int AsInt() { return gtoi(m_p); }
+	unsigned int AsUInt() { return gtou(m_p); }
 
 	CGiantBase<iSize>& operator=(const CGiantBase<iSize>& Other)
 	{
@@ -90,7 +104,7 @@ public:
 
 	CGiantBase<iSize>& operator-=(int i)
 	{
-		isubg(i, m_p);
+		iaddg(-i, m_p);
 		return *this;
 	}
 
@@ -102,7 +116,7 @@ public:
 
 	CGiantBase<iSize>& operator*=(int i)
 	{
-		imulg(i, m_p);
+		mulg(CGiantBase<iSize>(i), m_p);
 		return *this;
 	}
 
@@ -114,7 +128,7 @@ public:
 
 	CGiantBase<iSize>& operator%=(int i)
 	{
-		imodg(i, m_p);
+		modg(CGiantBase<iSize>(i), m_p);
 		return *this;
 	}
 
@@ -126,7 +140,25 @@ public:
 
 	CGiantBase<iSize>& operator/=(int i)
 	{
-		idivg(i, m_p);
+		divg(CGiantBase<iSize>(i), m_p);
+		return *this;
+	}
+
+	CGiantBase<iSize>& operator&=(const CGiantBase<iSize>& Other)
+	{
+		bitandg(Other, m_p);
+		return *this;
+	}
+
+	CGiantBase<iSize>& operator|=(const CGiantBase<iSize>& Other)
+	{
+		bitorg(Other, m_p);
+		return *this;
+	}
+
+	CGiantBase<iSize>& operator^=(const CGiantBase<iSize>& Other)
+	{
+		bitxorg(Other, m_p);
 		return *this;
 	}
 
@@ -216,6 +248,30 @@ CGiantBase<iSize> operator%(const CGiantBase<iSize> a, const CGiantBase<iSize> b
 {
 	CGiantBase<iSize> t(a);
 	t%=b;
+	return t;
+}
+
+template <int iSize>
+CGiantBase<iSize> operator&(const CGiantBase<iSize> a, const CGiantBase<iSize> b)
+{
+	CGiantBase<iSize> t(a);
+	t&=b;
+	return t;
+}
+
+template <int iSize>
+CGiantBase<iSize> operator|(const CGiantBase<iSize> a, const CGiantBase<iSize> b)
+{
+	CGiantBase<iSize> t(a);
+	t|=b;
+	return t;
+}
+
+template <int iSize>
+CGiantBase<iSize> operator^(const CGiantBase<iSize> a, const CGiantBase<iSize> b)
+{
+	CGiantBase<iSize> t(a);
+	t^=b;
 	return t;
 }
 
