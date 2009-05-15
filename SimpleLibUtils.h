@@ -37,6 +37,7 @@
 #include "SimpleLibUtils\Tokenizer.h"
 #include "SimpleLibUtils\TrimString.h"
 #include "SimpleLibUtils\Wildcard.h"
+#include "SimpleLibUtils\GiantClass.h"
 
 
 #if _MSC_VER < 1500
