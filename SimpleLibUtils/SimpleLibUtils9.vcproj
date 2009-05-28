@@ -763,6 +763,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Sha1.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SmartStringCompare.cpp"
 				>
 			</File>
@@ -969,6 +973,10 @@
 			</File>
 			<File
 				RelativePath=".\ProfileFile.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Sha1.h"
 				>
 			</File>
 			<File
