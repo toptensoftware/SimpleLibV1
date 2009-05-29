@@ -230,7 +230,7 @@ CUniString ExpandVariables(const wchar_t* psz, IVariableProvider* pProvider)
 			}
 
 			// Extract variable name
-			CUniString strVar(pszVar, p-pszVar);
+			CUniString strVar(pszVar, int(p-pszVar));
 
 			// Skip closing bracket
 			p++;

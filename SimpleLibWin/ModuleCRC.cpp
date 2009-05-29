@@ -51,11 +51,11 @@ unsigned int CalculateModuleCRC(void* pModuleData, unsigned int dwLen, void* pCR
 
 	// Calculate CRC up to start of CRC control block
 	CalculateCRCStart(dwCRC);
-	CalculateCRCContinue(dwCRC, (LPBYTE)pModuleData, reinterpret_cast<LPBYTE>(pCRCBlock)-reinterpret_cast<LPBYTE>(pModuleData));
+	CalculateCRCContinue(dwCRC, (LPBYTE)pModuleData, int(reinterpret_cast<LPBYTE>(pCRCBlock)-reinterpret_cast<LPBYTE>(pModuleData)));
 
 	// Calculate CRC after CRC control block
 	CalculateCRCContinue(dwCRC, reinterpret_cast<LPBYTE>(pCRCBlock)+sizeof(CRCCONTROLBLOCK),
-			dwLen-(reinterpret_cast<LPBYTE>(pCRCBlock)-reinterpret_cast<LPBYTE>(pModuleData))-sizeof(CRCCONTROLBLOCK));
+			dwLen-int(reinterpret_cast<LPBYTE>(pCRCBlock)-reinterpret_cast<LPBYTE>(pModuleData))-sizeof(CRCCONTROLBLOCK));
 
 	return dwCRC;
 }

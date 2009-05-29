@@ -125,7 +125,7 @@ bool SIMPLEAPI DoWebPost(const wchar_t* pszUrl, const wchar_t* pszFormData, CUni
 		return false;
 
 	// Connect to server
-	CUniString strServer(pszUrl, p-pszUrl);
+	CUniString strServer(pszUrl, int(p-pszUrl));
 	HINTERNET hConnect=InternetConnect(hInternet, strServer, INTERNET_DEFAULT_HTTP_PORT,  NULL, NULL, INTERNET_SERVICE_HTTP, 0, 1);
 	if (!hConnect)
 	{
@@ -146,7 +146,7 @@ bool SIMPLEAPI DoWebPost(const wchar_t* pszUrl, const wchar_t* pszFormData, CUni
 	// Send the request
 	const wchar_t* pszHeaders=L"Content-type: application/x-www-form-urlencoded";
 	CAnsiString strFormData=w2a(pszFormData);
-	if (!HttpSendRequest(hRequest, pszHeaders, wcslen(pszHeaders), (void*)strFormData.sz(), strFormData.GetLength()))
+	if (!HttpSendRequest(hRequest, pszHeaders, (DWORD)wcslen(pszHeaders), (void*)strFormData.sz(), (DWORD)strFormData.GetLength()))
 	{
 		InternetCloseHandle(hRequest);
 		InternetCloseHandle(hConnect);

@@ -419,7 +419,7 @@ CAnsiString Sha1Format(uint8_t sha[])
 	char* p=psz;
 	for (int i=0; i<SHA1HashSize; i++)
 	{
-		sprintf_s(p, 2, "%.2x", sha[i]);
+		sprintf_s(p, 3, "%.2x", sha[i]);
 		p+=2;
 	}
 
@@ -439,12 +439,12 @@ CAnsiString Sha1(const void* p, unsigned int cb)
 
 CAnsiString Sha1(const char* psz)
 {
-	return Sha1((void*)psz, strlen(psz));
+	return Sha1((void*)psz, (unsigned int)strlen(psz));
 }
 
 CAnsiString Sha1(const wchar_t* psz)
 {
-	return Sha1((void*)psz, wcslen(psz)*sizeof(wchar_t*));
+	return Sha1((void*)psz, (unsigned int)(wcslen(psz)*sizeof(wchar_t)));
 }
 
 
