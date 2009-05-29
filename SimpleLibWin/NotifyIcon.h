@@ -32,6 +32,7 @@ public:
 
 // Attributes
 	void Create(HWND hWndParent, UINT nID=1, UINT nMessageID=0);
+	void Recreate();
 	void Delete();
 	void Update();
 		
@@ -67,6 +68,11 @@ protected:
 //
 //	NOTIFYICON_HANDLER(m_NotifyIcon, WM_LBUTTONDOWN, OnNotifyLButtonDown)
 
+extern const UINT WM_TASKBARCREATED;
+
+#define NOTIFYICON_TASKBARCREATED_HANDLER(nid) \
+	if (uMsg==WM_TASKBARCREATED) \
+		nid.Recreate();
 
 #define NOTIFYICON_HANDLER(nid, msg, func) \
 	if ((nid).m_nid.hWnd && uMsg==(nid).m_nid.uCallbackMessage && wParam==(nid).m_nid.uID && lParam==msg) \

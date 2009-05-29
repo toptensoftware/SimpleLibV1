@@ -29,6 +29,7 @@
 #include "SimpleLibUtils\PathLibrary.h"
 #include "SimpleLibUtils\ProfileFile.h"
 #include "SimpleLibUtils\LoadSaveTextFile.h"
+#include "SimpleLibUtils\Sha1.h"
 #include "SimpleLibUtils\SmartStringCompare.h"
 #include "SimpleLibUtils\SplitCommandLine.h"
 #include "SimpleLibUtils\SplitString.h"
@@ -37,6 +38,7 @@
 #include "SimpleLibUtils\Tokenizer.h"
 #include "SimpleLibUtils\TrimString.h"
 #include "SimpleLibUtils\Wildcard.h"
+#include "SimpleLibUtils\GiantClass.h"
 
 
 #if _MSC_VER < 1500

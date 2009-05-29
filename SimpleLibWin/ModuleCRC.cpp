@@ -66,13 +66,18 @@ struct CRCCONTROLBLOCK CrcControlBlock =
 // Check module CRC
 bool CheckModuleCRC(HINSTANCE hInstanceThis)
 {
-
 	// Get the module's file name
 	WCHAR szModulePath[MAX_PATH];
 	GetModuleFileName(hInstanceThis, szModulePath, MAX_PATH);
 
+	// Check it
+	return CheckModuleCRC(szModulePath);
+}
+
+bool CheckModuleCRC(const wchar_t* pszModulePath)
+{
 	// Load the file
-	HANDLE hFile=CreateFile(szModulePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+	HANDLE hFile=CreateFile(pszModulePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 	if (hFile)
 	{
 		// Get length of file

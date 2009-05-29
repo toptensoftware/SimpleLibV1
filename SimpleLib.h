@@ -172,6 +172,23 @@ class SChar<char>
 {
 public:
 	typedef wchar_t TAlt;
+
+	static void ToUpper(char* psz)
+	{
+		#if defined(_MSC_VER) && (_MSC_VER>=1400)
+		_strupr_s(psz, strlen(psz)+1);
+		#else
+		_strupr(psz);
+		#endif
+	}
+	static void ToLower(char* psz)
+	{
+		#if defined(_MSC_VER) && (_MSC_VER>=1400)
+		_strlwr_s(psz, strlen(psz)+1);
+		#else
+		_strlwr(psz);
+		#endif
+	}
 };
 
 template <>
@@ -179,6 +196,23 @@ class SChar<wchar_t>
 {
 public:
 	typedef char TAlt;
+
+	static void ToUpper(wchar_t* psz)
+	{
+		#if defined(_MSC_VER) && (_MSC_VER>=1400)
+		_wcsupr_s(psz, wcslen(psz)+1);
+		#else
+		_wcsupr(psz);
+		#endif
+	}
+	static void ToLower(wchar_t* psz)
+	{
+		#if defined(_MSC_VER) && (_MSC_VER>=1400)
+		_wcslwr_s(psz, wcslen(psz)+1);
+		#else
+		_wcslwr(psz);
+		#endif
+	}
 };
 
 
@@ -232,7 +266,7 @@ public:
 
 // Operations
 	void FreeExtra();
-	T* GetBuffer(int iBufSize);				// Ensures at least iBufSize, grows to iBufSize
+	T* GetBuffer(int iBufSize=-1);			// Ensures at least iBufSize, grows to iBufSize
 	T* GrowBuffer(int iNewSize);			// Smart grow for appending, doubles buffer size when too small
 	void Empty();
 	bool IsEmpty() const;
@@ -247,6 +281,13 @@ public:
 	bool Delete(int iPos, int iLen=-1);
 	CString<T>& operator+=(const T* psz);
 	CString<T>& operator+=(T ch);
+	CString<T> ToUpper();
+	CString<T> ToLower();
+	int Compare(const T* psz);
+	CString<T> Left(int iCount);
+	CString<T> Right(int iCount);
+	CString<T> SubStr(int iFrom, int iCount=-1);
+	CString<T> Mid(int iFrom, int iCount=-1);
 
 #ifdef __wtypes_h__
 	/*
@@ -329,6 +370,9 @@ CString<T> Format(const T* pszFormat, va_list args);
 
 template <class T>
 CString<T> Mid(const T* psz, int iStart, int iLength=-1);
+
+template <class T>
+CString<T> SubStr(const T* psz, int iStart, int iLength=-1);
 
 template <class T>
 CString<T> Left(const T* psz, int iLength);

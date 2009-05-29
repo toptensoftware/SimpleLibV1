@@ -43,9 +43,9 @@ BOOL IFileStreamImpl::Create(LPCTSTR pszFileName)
 }
 
 // Open an existing file
-BOOL IFileStreamImpl::Open(LPCTSTR pszFileName)
+BOOL IFileStreamImpl::Open(LPCTSTR pszFileName, DWORD dwShare)
 {
-	m_hFile=CreateFile(pszFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	m_hFile=CreateFile(pszFileName, GENERIC_READ, dwShare, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	return m_hFile!=INVALID_HANDLE_VALUE;
 }
 

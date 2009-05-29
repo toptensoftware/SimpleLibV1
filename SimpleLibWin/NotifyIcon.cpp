@@ -29,6 +29,8 @@ namespace Simple
 
 #pragma comment(lib, "shell32.lib")
 
+const UINT WM_TASKBARCREATED = RegisterWindowMessage(L"TaskbarCreated") ;
+
 //////////////////////////////////////////////////////////////////////////
 // CNotifyIcon
 
@@ -86,6 +88,12 @@ void CNotifyIcon::Create(HWND hWndParent, UINT nID, UINT nMessageID)
 //		Shell_NotifyIcon(NIM_SETVERSION, &m_nid);
 		m_nid.uTimeout=0;
 		}
+}
+
+void CNotifyIcon::Recreate()
+{
+	m_nid.uFlags=NIF_MESSAGE|NIF_ICON|NIF_TIP;
+	Create(m_nid.hWnd, m_nid.uID, m_nid.uCallbackMessage);
 }
 
 void CNotifyIcon::Delete()
@@ -192,9 +200,27 @@ LRESULT CNotifyIcon::OnNotifyIcon(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 		return 0;
 		}
 
+	/*
+	*/
+
+
 	return 0;
 }
 
+/*
+SetForegroundWindow(hDlg);
 
+   // Display the menu
+   TrackPopupMenu(   hSubMenu,
+                     TPM_RIGHTBUTTON,
+                     pt.x,
+                     pt.y,
+                     0,
+                     hDlg,
+                     NULL);
+
+   PostMessage(hDlg, WM_NULL, 0, 0);
+
+   */
 
 }	// namespace Simple

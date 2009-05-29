@@ -332,12 +332,13 @@ bool SIMPLEAPI ReadDouble(const wchar_t*& psz, double* pdblVal)
 		p++;
 
 	// Double?
-	if (!ReadDoubleU(psz, pdblVal))
+	if (!ReadDoubleU(p, pdblVal))
 		return false;
 
 	if (bNegative)
 		pdblVal[0]*=-1.0;
 
+	psz=p;
 	return true;
 }
 
