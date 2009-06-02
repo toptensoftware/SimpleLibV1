@@ -27,7 +27,10 @@ public:
 		SetCriticalSectionSpinCount(this, dwSpinCount);
 	}
 #endif
-	bool IsOwned() { return this->OwningThread==(HANDLE)GetCurrentThreadId(); };
+	bool IsOwned() 
+	{ 
+		return HandleToULong(this->OwningThread)==GetCurrentThreadId(); 
+	};
 };
 class CEnterCriticalSection
 {
