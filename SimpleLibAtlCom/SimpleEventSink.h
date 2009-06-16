@@ -19,10 +19,22 @@
 
 #include "SimpleEventSinkBase.h"
 
-#ifndef _WIN64
-
 namespace Simple
 {
+
+extern "C" HRESULT _invoke_c_this(
+			void* pThis,
+			int cArgs,
+			VARIANT* pArgs,
+			void* pfn
+			);
+
+extern "C" HRESULT _invoke_c(
+			int cArgs,
+			VARIANT* pArgs,
+			void* pfn
+			);
+
 
 template <class T>
 struct EVENTENTRY
@@ -32,7 +44,7 @@ struct EVENTENTRY
 	union 
 		{
 		HRESULT (__stdcall T::*m_pfn)();	//method to invoke
-		DWORD m_dwpfn;
+		void* m_pvfn;
 		};
 };
 
@@ -107,8 +119,6 @@ public:
 	};
 
 }	// namespace Simple
-
-#endif	// !_WIN64
 
 #endif	// __SIMPLEEVENTSINK_H
 

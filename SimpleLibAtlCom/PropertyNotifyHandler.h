@@ -6,8 +6,6 @@
 
 #include "SimpleSink.h"
 
-#ifndef _WIN64
-
 namespace Simple
 {
 
@@ -34,7 +32,7 @@ protected:
 	union
 		{
 		NOTIFYHANDLER	m_pfn;
-		DWORD			m_dwpfn;
+		void*			m_pvfn;
 		};
 
 // Operations
@@ -46,8 +44,6 @@ protected:
 
 
 }	// namespace Simple
-
-#endif		// !_WIN64
 
 #endif	// __PROPERTYNOTIFYHANDLER_H
 

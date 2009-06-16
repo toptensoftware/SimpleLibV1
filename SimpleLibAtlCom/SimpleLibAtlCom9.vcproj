@@ -16,6 +16,9 @@
 		/>
 	</Platforms>
 	<ToolFiles>
+		<ToolFile
+			RelativePath=".\masm64.rules"
+		/>
 	</ToolFiles>
 	<Configurations>
 		<Configuration
@@ -33,6 +36,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="MASM64"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -112,6 +118,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="MASM64"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -194,6 +203,9 @@
 				Name="VCCustomBuildTool"
 			/>
 			<Tool
+				Name="MASM64"
+			/>
+			<Tool
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
@@ -270,6 +282,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="MASM64"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -351,6 +366,9 @@
 				Name="VCCustomBuildTool"
 			/>
 			<Tool
+				Name="MASM64"
+			/>
+			<Tool
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
@@ -428,6 +446,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="MASM64"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -510,6 +531,9 @@
 				Name="VCCustomBuildTool"
 			/>
 			<Tool
+				Name="MASM64"
+			/>
+			<Tool
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
@@ -586,6 +610,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="MASM64"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -799,7 +826,6 @@
 				>
 				<FileConfiguration
 					Name="RS|x64"
-					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -807,7 +833,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DS|x64"
-					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -815,7 +840,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="RD|x64"
-					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -823,7 +847,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DD|x64"
-					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -847,7 +870,6 @@
 				>
 				<FileConfiguration
 					Name="RS|x64"
-					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -855,7 +877,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DS|x64"
-					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -863,7 +884,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="RD|x64"
-					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -871,7 +891,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DD|x64"
-					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1136,6 +1155,42 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\invokec.asm64"
+			>
+			<FileConfiguration
+				Name="RS|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="MASM64"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="DS|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="MASM64"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="RD|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="MASM64"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="DD|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="MASM64"
+				/>
+			</FileConfiguration>
+		</File>
 		<File
 			RelativePath="..\SimpleLibAtlCom.h"
 			>
