@@ -50,6 +50,9 @@ public:
 
 private:
 	DWORD	m_dwThreadId;
+	int		m_iQueuedMessages;
+
+	friend struct POSTABLETHREADINFO;
 };
 
 }	// namespace Simple
