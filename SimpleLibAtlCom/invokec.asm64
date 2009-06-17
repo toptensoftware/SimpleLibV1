@@ -1,0 +1,406 @@
+; -----------------------------------------------------------------------------
+; Helper to invoke a c function with a set of arguments specified as an array
+; of variants.
+; -----------------------------------------------------------------------------
+
+.CODE
+
+; --- Variant types ---
+VT_EMPTY			EQU 0
+VT_NULL				EQU 1
+VT_I2				EQU 2
+VT_I4				EQU 3
+VT_R4				EQU 4
+VT_R8				EQU 5
+VT_CY				EQU 6
+VT_DATE				EQU 7
+VT_BSTR				EQU 8
+VT_DISPATCH			EQU 9
+VT_ERROR			EQU 10
+VT_BOOL				EQU 11
+VT_VARIANT			EQU 12
+VT_UNKNOWN			EQU 13
+VT_DECIMAL			EQU 14
+VT_I1				EQU 16
+VT_UI1				EQU 17
+VT_UI2				EQU 18
+VT_UI4				EQU 19
+VT_I8				EQU 20
+VT_UI8				EQU 21
+VT_INT				EQU 22
+VT_UINT				EQU 23
+VT_VOID				EQU 24
+VT_HRESULT			EQU 25
+VT_PTR				EQU 26
+VT_SAFEARRAY		EQU 27
+VT_CARRAY			EQU 28
+VT_USERDEFINED		EQU 29
+VT_LPSTR			EQU 30
+VT_LPWSTR			EQU 31
+VT_RECORD			EQU 36
+VT_INT_PTR			EQU 37
+VT_UINT_PTR			EQU 38
+VT_FILETIME			EQU 64
+VT_BLOB				EQU 65
+VT_STREAM			EQU 66
+VT_STORAGE			EQU 67
+VT_STREAMED_OBJECT	EQU 68
+VT_STORED_OBJECT	EQU 69
+VT_BLOB_OBJECT		EQU 70
+VT_CF				EQU 71
+VT_CLSID			EQU 72
+VT_VERSIONED_STREAM	EQU 73
+VT_BSTR_BLOB		EQU 0fffh
+VT_VECTOR			EQU 01000h
+VT_ARRAY			EQU 02000h
+VT_BYREF			EQU 04000h
+VT_RESERVED			EQU 08000h
+VT_ILLEGAL			EQU 0ffffh
+VT_ILLEGALMASKED	EQU 0fffh
+VT_TYPEMASK			EQU 0fffh
+
+VARIANT struct 2, nonunique
+	_vt				DW		?
+	_resv1			DW		?
+	_resv2			DW		?
+	_resv3			DW		?
+	_data			DQ		?
+	_data2			DQ		?
+VARIANT ends
+
+; extern "C" void _invoke_c(
+;				int cArgs,				// Number of args, max 32
+;				VARIANT* pArgs,			// Argument in reverse order ie: pArgs[0]=last argument
+;				void* pfn,				// Pointer to the function to call
+;				)
+_invoke_c proc frame
+
+	; --- stack frame ---
+	StackFrame struct 4, nonunique
+		_working		DQ		32 dup (?)		; Max 32 arguments
+		_saveRBX		DQ		?				;
+		_saveRSI		DQ		?				;
+		_saveRDI		DQ		?				;
+		_retaddr		DQ		?
+		_cArgs			DQ		?				; [rcx]
+		_pArgs			DQ		?				; [rdx]
+		_pfn			DQ		?				; [r8]
+	StackFrame ends								  
+	
+	; --- prolog ---
+	sub		rsp,StackFrame._retaddr
+	.allocstack StackFrame._retaddr
+	mov		[rsp].StackFrame._saveRBX,rbx
+	.savereg	rbx,StackFrame._saveRBX
+	mov		[rsp].StackFrame._saveRSI,rsi
+	.savereg	rsi,StackFrame._saveRSI
+	.endprolog
+	
+	; --- Save params to shadow ---
+	mov		[rsp].StackFrame._cArgs,rcx
+	mov		[rsp].StackFrame._pfn,r8
+	mov		[rsp].StackFrame._pArgs,rdx
+	
+	; --- Do we have more than 4 params? ---
+	cmp		rcx,4
+	jbe		stack_args_done
+	
+	; --- copy args 5+ to stack ---
+	lea		r9,[rsp+rcx*8-8]				; Dest ptr
+	sub		rcx,4							; Count
+loop1:
+
+	; Move data bytes
+	mov		rax,qword ptr [rdx].VARIANT._data
+	mov		qword ptr[r9],rax
+	
+	; Update counters/pointers and loop
+	add		rdx,sizeof(VARIANT)
+	sub		r9,8
+	sub		rcx,1
+	jnz		loop1
+
+
+stack_args_done:
+
+	; --- copy first 4 args into appropriate registers ---
+	
+	mov		rbx,[rsp].StackFrame._cArgs
+	cmp		rbx,0
+	je		reg_args_done
+
+	; Get pointer to first arg in rsi	 (remember args in reverse order)	
+	mov		rsi,[rsp].StackFrame._pArgs
+	mov		rax,rbx
+	dec		rax
+	mov		r10,sizeof(VARIANT)
+	mul		r10
+	add		rsi,rax
+
+	; First arg into rcx/xmm0
+	call	arg_type
+	jnc		arg1_fp
+arg1_int:
+	mov		rcx,r10
+	jmp		arg1_cont	
+arg1_fp:
+	movq	xmm0,xmm5
+arg1_cont:
+	cmp		rbx,1
+	je		reg_args_done
+	
+	
+	; Second arg into rdx/xmm1
+	sub		rsi,sizeof(VARIANT)
+	call	arg_type
+	jnc		arg2_fp
+arg2_int:
+	mov		rdx,r10
+	jmp		arg2_cont	
+arg2_fp:
+	movq	xmm1,xmm5
+arg2_cont:
+	cmp		rbx,2
+	je		reg_args_done
+	
+	; Third arg into r8/xmm2
+	sub		rsi,sizeof(VARIANT)
+	call	arg_type
+	jnc		arg3_fp
+arg3_int:
+	mov		r8,r10
+	jmp		arg3_cont	
+arg3_fp:
+	movq	xmm2,xmm5
+arg3_cont:
+	cmp		rbx,3
+	je		reg_args_done
+	
+	; Fourth arg into r9/xmm3
+	sub		rsi,sizeof(VARIANT)
+	call	arg_type
+	jnc		arg4_fp
+arg4_int:
+	mov		r9,r10
+	jmp		arg4_cont	
+arg4_fp:
+	movq	xmm3,xmm5
+arg4_cont:
+	
+	
+reg_args_done:
+
+	; --- Invoke the call ---
+	call	[rsp].StackFrame._pfn
+
+
+
+	; --- epilog ---
+	mov		rbx,[rsp].StackFrame._saveRBX
+	mov		rsi,[rsp].StackFrame._saveRSI
+	add		rsp,StackFrame._retaddr
+	ret
+	
+_invoke_c endp	
+
+
+
+; extern "C" HRESULT _invoke_c_this(
+;				void* pThis,			// pThis
+;				int cArgs,				// Number of args, max 32
+;				VARIANT* pArgs,			// Argument in reverse order ie: pArgs[0]=last argument
+;				void* pfn,				// Pointer to the function to call
+;				)
+_invoke_c_this proc frame
+
+	; --- stack frame ---
+	StackFrame2 struct 4, nonunique
+		_working		DQ		32 dup (?)		; Max 32 arguments
+		_saveRBX		DQ		?				;
+		_saveRSI		DQ		?				;
+		_saveRDI		DQ		?				;
+		_retaddr		DQ		?
+		_pThis			DQ		?				; [rcx]
+		_cArgs			DQ		?				; [rdx]
+		_pArgs			DQ		?				; [r8]
+		_pfn			DQ		?				; [r9]
+	StackFrame2 ends								  
+	
+	; --- prolog ---
+	sub		rsp,StackFrame2._retaddr
+	.allocstack StackFrame2._retaddr
+	mov		[rsp].StackFrame2._saveRBX,rbx
+	.savereg	rbx,StackFrame2._saveRBX
+	mov		[rsp].StackFrame2._saveRSI,rsi
+	.savereg	rsi,StackFrame2._saveRSI
+	.endprolog
+	
+	; --- Save params to shadow ---
+	mov		[rsp].StackFrame2._pThis,rcx
+	mov		[rsp].StackFrame2._cArgs,rdx
+	mov		[rsp].StackFrame2._pfn,r9
+	mov		[rsp].StackFrame2._pArgs,r10
+	
+	; --- Do we have more than 4 params (including implicit pThis)? ---
+	cmp		rdx,3
+	jbe		stack_args_done
+	
+	; --- copy args 5+ to stack ---
+	lea		r9,[rsp+rdx*8-8]				; Dest ptr
+	sub		rdx,3							; Count
+loop1:
+
+	; Move data bytes
+	mov		rax,qword ptr [r8].VARIANT._data
+	mov		qword ptr[r9],rax
+	
+	; Update counters/pointers and loop
+	add		r8,sizeof(VARIANT)
+	sub		r9,8
+	sub		rdx,1
+	jnz		loop1
+
+
+stack_args_done:
+
+	; --- copy first 4 args into appropriate registers ---
+	
+	mov		rbx,[rsp].StackFrame2._cArgs
+	cmp		rbx,0
+	je		reg_args_done
+
+	; Get pointer to first arg in rsi	 (remember args in reverse order)	
+	mov		rsi,[rsp].StackFrame2._pArgs
+	mov		rax,rbx
+	dec		rax
+	mov		r10,sizeof(VARIANT)
+	mul		r10
+	add		rsi,rax
+
+	; First arg will be pThis
+	mov		rcx,[rsp].StackFrame2._pThis
+
+	; Second arg into rdx/xmm1
+	call	arg_type
+	jnc		arg2_fp
+arg2_int:
+	mov		rdx,r10
+	jmp		arg2_cont	
+arg2_fp:
+	movq	xmm1,xmm5
+arg2_cont:
+	cmp		rbx,2
+	je		reg_args_done
+	
+	; Third arg into r8/xmm2
+	sub		rsi,sizeof(VARIANT)
+	call	arg_type
+	jnc		arg3_fp
+arg3_int:
+	mov		r8,r10
+	jmp		arg3_cont	
+arg3_fp:
+	movq	xmm2,xmm5
+arg3_cont:
+	cmp		rbx,3
+	je		reg_args_done
+	
+	; Fourth arg into r9/xmm3
+	sub		rsi,sizeof(VARIANT)
+	call	arg_type
+	jnc		arg4_fp
+arg4_int:
+	mov		r9,r10
+	jmp		arg4_cont	
+arg4_fp:
+	movq	xmm3,xmm5
+arg4_cont:
+	
+	
+reg_args_done:
+
+	; --- Invoke the call ---
+	call	[rsp].StackFrame2._pfn
+
+
+
+	; --- epilog ---
+	mov		rbx,[rsp].StackFrame2._saveRBX
+	mov		rsi,[rsp].StackFrame2._saveRSI
+	add		rsp,StackFrame2._retaddr
+	ret
+	
+_invoke_c_this endp	
+
+
+; --- Helper to check arg type ---
+; Looks at variant in rsi and returns 
+; c - integer or ptr type, value in r10
+; nc - float or double type, value in xmm5
+arg_type proc 
+	mov		ax,word ptr [rsi].VARIANT._vt
+	and		ax,(VT_ARRAY or VT_BYREF)
+	jnz		simple_type
+	mov		ax,word ptr [rsi].VARIANT._vt
+	cmp		ax,VT_I1
+	je		simple_type
+	cmp		ax,VT_UI1
+	je		simple_type
+	cmp		ax,VT_I2
+	je		simple_type
+	cmp		ax,VT_UI2
+	je		simple_type
+	cmp		ax,VT_I4
+	je		simple_type
+	cmp		ax,VT_UI4
+	je		simple_type
+	cmp		ax,VT_I8
+	je		simple_type
+	cmp		ax,VT_UI8
+	je		simple_type
+	cmp		ax,VT_BSTR
+	je		simple_type
+	cmp		ax,VT_HRESULT
+	je		simple_type
+	cmp		ax,VT_ERROR
+	je		simple_type
+	cmp		ax,VT_BOOL
+	je		simple_type
+	cmp		ax,VT_DISPATCH
+	je		simple_type
+	cmp		ax,VT_UNKNOWN
+	je		simple_type
+	cmp		ax,VT_CY
+	je		simple_type
+	cmp		ax,VT_INT
+	je		simple_type
+	cmp		ax,VT_UINT
+	je		simple_type
+	cmp		ax,VT_R8
+	je		double_type
+	cmp		ax,VT_DATE
+	je		double_type
+	cmp		ax,VT_R4
+	je		float_type
+	
+	int		3
+	ret
+	
+	
+simple_type:
+	mov		r10,qword ptr[rsi].VARIANT._data
+	stc
+	ret
+	
+double_type:
+	movsd	xmm5,qword ptr[rsi].VARIANT._data
+	clc
+	ret
+	
+float_type:
+	movss	xmm5,dword ptr[rsi].VARIANT._data
+	clc
+	ret
+arg_type	endp	
+
+END

@@ -19,8 +19,6 @@
 
 #include "SimpleEventSink.h"
 
-#ifndef _WIN64
-
 namespace Simple
 {
 
@@ -71,45 +69,15 @@ int CalcVariantStackSize(VARTYPE vt)
 	return 0;
 }
 
-HRESULT SIMPLEAPI InvokeEventHandler(void* pThis, EVENTENTRY<CDummy>* pEventMap, ITypeInfo* pEventInfo, DISPID dispid, DISPPARAMS* pDispParams)
+#ifndef _M_X64
+
+extern "C" HRESULT _invoke_c_this(
+			void* pThis,
+			int cArgs,
+			VARIANT* pArgs,
+			void* pfn
+			)
 {
-	// Check no named args...
-	if (pDispParams->cNamedArgs)
-		return E_NOTIMPL;
-
-	// Find handler using dispid
-	bool bHaveNamedEntries=false;
-	EVENTENTRY<CDummy>* p;
-	for (p=pEventMap; p->m_dwpfn!=NULL; p++)
-		{
-		if (p->m_pszEventName)
-			bHaveNamedEntries=true;
-
-		// Match?
-		if (!p->m_pszEventName && p->m_iEventID==dispid)
-			 break;
-		}
-
-	// If couldn't find by ID, use name
-	if (!p->m_dwpfn && bHaveNamedEntries)
-		{
-		// What is the event's name
-		CComBSTR bstrEventName;
-		pEventInfo->GetDocumentation(dispid, &bstrEventName, NULL, NULL, NULL);
-		
-		// Find handler
-		for (p=pEventMap; p->m_dwpfn!=NULL; p++)
-			{
-			// Match?
-			if (p->m_pszEventName && _wcsicmp(bstrEventName, p->m_pszEventName)==0) 
-				 break;
-			}
-		}
-
-	// Quit if not interested
-	if (!p->m_dwpfn)
-		return S_OK;
-
 	// Save old stack pointer
 	#ifdef _DEBUG
 	DWORD dwESPOld;
@@ -118,14 +86,14 @@ HRESULT SIMPLEAPI InvokeEventHandler(void* pThis, EVENTENTRY<CDummy>* pEventMap,
 
 	// Pack parameters onto stack...
 	HRESULT hr;
-	for (UINT i=0; i<pDispParams->cArgs; i++)
+	for (int i=0; i<cArgs; i++)
 		{
 		// Work out how much to push onto stack
-		DWORD cbPush=CalcVariantStackSize(pDispParams->rgvarg[i].vt);
+		DWORD cbPush=CalcVariantStackSize(pArgs[i].vt);
 		ASSERT(cbPush!=0);
 
 		// Push it...
-		void* pSrc=&pDispParams->rgvarg[i].bVal;
+		void* pSrc=&pArgs[i].bVal;
 		_asm 
 			{
 			mov ecx,cbPush
@@ -137,26 +105,119 @@ HRESULT SIMPLEAPI InvokeEventHandler(void* pThis, EVENTENTRY<CDummy>* pEventMap,
 		}
 
 	// Call it
-	DWORD dw=p->m_dwpfn;
 	_asm  
 		{
 		mov	ecx,pThis
-		call dw
+		call pfn
 		mov hr,eax;
 		}
 
 	// Check handler fixed up the stack OK...
 	#ifdef _DEBUG
+	DWORD dw;
 	_asm mov dw,esp
 	ASSERT(dw==dwESPOld);
 	#endif
 
-	// Finished...
 	return hr;
+}
+
+extern "C" HRESULT _invoke_c(
+			int cArgs,
+			VARIANT* pArgs,
+			void* pfn
+			)
+{
+	// Save old stack pointer
+	#ifdef _DEBUG
+	DWORD dwESPOld;
+	_asm mov dwESPOld,esp
+	#endif
+
+	// Pack parameters onto stack...
+	HRESULT hr;
+	for (int i=0; i<cArgs; i++)
+		{
+		// Work out how much to push onto stack
+		DWORD cbPush=CalcVariantStackSize(pArgs[i].vt);
+		ASSERT(cbPush!=0);
+
+		// Push it...
+		void* pSrc=&pArgs[i].bVal;
+		_asm 
+			{
+			mov ecx,cbPush
+			sub esp,ecx
+			mov edi,esp
+			mov esi,pSrc
+			rep movsb
+			}
+		}
+
+	// Call it
+	_asm  
+		{
+		call pfn
+		mov hr,eax;
+		}
+
+	// Check handler fixed up the stack OK...
+	#ifdef _DEBUG
+	DWORD dw;
+	_asm mov dw,esp
+	ASSERT(dw==dwESPOld);
+	#endif
+
+	return hr;
+}
+
+#endif
+
+
+HRESULT SIMPLEAPI InvokeEventHandler(void* pThis, EVENTENTRY<CDummy>* pEventMap, ITypeInfo* pEventInfo, DISPID dispid, DISPPARAMS* pDispParams)
+{
+	// Check no named args...
+	if (pDispParams->cNamedArgs)
+		return E_NOTIMPL;
+
+	// Find handler using dispid
+	bool bHaveNamedEntries=false;
+	EVENTENTRY<CDummy>* p;
+	for (p=pEventMap; p->m_pvfn!=NULL; p++)
+		{
+		if (p->m_pszEventName)
+			bHaveNamedEntries=true;
+
+		// Match?
+		if (!p->m_pszEventName && p->m_iEventID==dispid)
+			 break;
+		}
+
+	// If couldn't find by ID, use name
+	if (!p->m_pvfn && bHaveNamedEntries)
+		{
+		// What is the event's name
+		CComBSTR bstrEventName;
+		pEventInfo->GetDocumentation(dispid, &bstrEventName, NULL, NULL, NULL);
+		
+		// Find handler
+		for (p=pEventMap; p->m_pvfn!=NULL; p++)
+			{
+			// Match?
+			if (p->m_pszEventName && _wcsicmp(bstrEventName, p->m_pszEventName)==0) 
+				 break;
+			}
+		}
+
+	// Quit if not interested
+	if (!p->m_pvfn)
+		return S_OK;
+
+	// Call it
+	return _invoke_c_this(pThis, pDispParams->cArgs, pDispParams->rgvarg, p->m_pvfn);
 }
 
 
 
 }	// namespace Simple
 
-#endif		// _WIN64
