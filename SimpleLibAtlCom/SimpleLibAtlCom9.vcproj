@@ -824,34 +824,6 @@
 			<File
 				RelativePath=".\PropertyNotifyHandler.cpp"
 				>
-				<FileConfiguration
-					Name="RS|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DS|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="RD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\SafeArray.cpp"
@@ -868,34 +840,6 @@
 			<File
 				RelativePath=".\SimpleEventSink.cpp"
 				>
-				<FileConfiguration
-					Name="RS|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DS|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="RD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\SimpleEventSinkBase.cpp"
@@ -1172,6 +1116,15 @@
 				>
 				<Tool
 					Name="MASM64"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="DS|x64"
+				>
+				<Tool
+					Name="MASM64"
+					GeneratePreprocessedSourceListing="false"
+					AssembledCodeListingFile="$(InputName).lst"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
