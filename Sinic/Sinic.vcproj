@@ -19,7 +19,7 @@
 		<Configuration
 			Name="DS|Win32"
 			OutputDirectory="..\bin"
-			IntermediateDirectory="..\Build\$(PlatformName)\$(ConfigurationName)\$(ProjectName)"
+			IntermediateDirectory="..\BuildOutput\$(PlatformName)\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			>
@@ -94,7 +94,7 @@
 		<Configuration
 			Name="RS|Win32"
 			OutputDirectory="..\bin"
-			IntermediateDirectory="..\Build\$(PlatformName)\$(ConfigurationName)\$(ProjectName)"
+			IntermediateDirectory="..\BuildOutput\$(PlatformName)\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"

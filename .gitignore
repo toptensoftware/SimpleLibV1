@@ -1,8 +1,10 @@
 # git-ls-files --others --exclude-from=.git/info/exclude
 
-Build
+Build*
 Debug
 Release
+bin
+lib
 _UpgradeReport_Files
 *.obj
 *.pch

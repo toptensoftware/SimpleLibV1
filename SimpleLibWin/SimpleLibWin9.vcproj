@@ -21,7 +21,7 @@
 		<Configuration
 			Name="RS|Win32"
 			OutputDirectory="..\lib"
-			IntermediateDirectory="..\Build\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
+			IntermediateDirectory="..\BuildOutput\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -100,7 +100,7 @@
 		<Configuration
 			Name="RS|x64"
 			OutputDirectory="..\lib"
-			IntermediateDirectory="..\Build\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
+			IntermediateDirectory="..\BuildOutput\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -180,7 +180,7 @@
 		<Configuration
 			Name="DS|Win32"
 			OutputDirectory="..\lib"
-			IntermediateDirectory="..\Build\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
+			IntermediateDirectory="..\BuildOutput\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -258,7 +258,7 @@
 		<Configuration
 			Name="DS|x64"
 			OutputDirectory="..\lib"
-			IntermediateDirectory="..\Build\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
+			IntermediateDirectory="..\BuildOutput\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -337,7 +337,7 @@
 		<Configuration
 			Name="RD|Win32"
 			OutputDirectory="..\lib"
-			IntermediateDirectory="..\Build\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
+			IntermediateDirectory="..\BuildOutput\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -416,7 +416,7 @@
 		<Configuration
 			Name="RD|x64"
 			OutputDirectory="..\lib"
-			IntermediateDirectory="..\Build\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
+			IntermediateDirectory="..\BuildOutput\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -496,7 +496,7 @@
 		<Configuration
 			Name="DD|Win32"
 			OutputDirectory="..\lib"
-			IntermediateDirectory="..\Build\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
+			IntermediateDirectory="..\BuildOutput\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -574,7 +574,7 @@
 		<Configuration
 			Name="DD|x64"
 			OutputDirectory="..\lib"
-			IntermediateDirectory="..\Build\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
+			IntermediateDirectory="..\BuildOutput\$(ProjectName)\$(PlatformName)\$(ConfigurationName)9"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
