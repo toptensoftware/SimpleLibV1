@@ -28,4 +28,5 @@ _UpgradeReport_Files
 *.vspscc
 *.vssscc
 .metadata
+*head.txt
 
