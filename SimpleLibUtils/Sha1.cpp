@@ -450,3 +450,4 @@ CAnsiString Sha1(const wchar_t* psz)
 
 
 }
+
