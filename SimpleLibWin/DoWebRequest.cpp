@@ -120,7 +120,7 @@ bool SIMPLEAPI DoWebPost(const wchar_t* pszUrl, const wchar_t* pszFormData, CUni
 	pszUrl+=7;
 
 	// Find end of server
-	p=StringSearch(p, L"/", false);
+	p=StringSearch(pszUrl, L"/", false);
 	if (!p)
 		return false;
 
