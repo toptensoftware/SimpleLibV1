@@ -1,0 +1,21 @@
+# depslib dependency file v1.0
+1256513378 source:/home/bradr/dev/goldfish/sdks/simplelib/TestCases/SimpleTest.cpp
+	"../SimpleLib.h"
+
+1256517855 /home/bradr/dev/goldfish/sdks/simplelib/SimpleLib.h
+	<assert.h>
+	<stdarg.h>
+	<stdlib.h>
+	<string.h>
+	<search.h>
+	<stdio.h>
+	<wchar.h>
+	<ctype.h>
+	<wctype.h>
+	<stdint.h>
+	<intrin.h>
+	<intrin.h>
+	"SimpleLib.cpp"
+
+1256518096 /home/bradr/dev/goldfish/sdks/simplelib/SimpleLib.cpp
+

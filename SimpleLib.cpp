@@ -341,7 +341,7 @@ T* CString<T>::GetBuffer(int iBufSize)
 	CHeader* pHeader=GetHeader();
 
 	if (iBufSize<0)
-	{			 
+	{
 		iBufSize=pHeader->m_iLength;
 		if (iBufSize<0)
 			iBufSize=GetLength()+1;
@@ -687,25 +687,25 @@ int CString<T>::Compare(const T* psz)
 template <class T>
 CString<T> CString<T>::Left(int iCount)
 {
-	return ::Left<T>(*this, iCount);
+	return Simple::Left<T>(*this, iCount);
 }
 
 template <class T>
 CString<T> CString<T>::Right(int iCount)
 {
-	return ::Right<T>(*this, iCount);
+	return Simple::Right<T>(*this, iCount);
 }
 
 template <class T>
 CString<T> CString<T>::SubStr(int iFrom, int iCount)
 {
-	return ::SubStr<T>(m_psz, iFrom, iCount);
+	return Simple::SubStr<T>(m_psz, iFrom, iCount);
 }
 
 template <class T>
 CString<T> CString<T>::Mid(int iFrom, int iCount)
 {
-	return ::SubStr<T>(m_psz, iFrom, iCount);
+	return Simple::SubStr<T>(m_psz, iFrom, iCount);
 }
 
 

@@ -56,11 +56,51 @@
 #endif
 
 
-#ifdef __GNUC__
+#ifdef __GNUG__
 #define _cdecl
 #define __cdecl
 #define _stricmp strcasecmp
 #define _wcsicmp Simple::lazy_wcsicmp
+inline char* strupr(char* psz)
+{
+	char* p=psz;
+	while (p[0])
+	{
+		*p=toupper(*p);
+		p++;
+	}
+	return psz;
+}
+inline char* strlwr(char* psz)
+{
+	char* p=psz;
+	while (p[0])
+	{
+		*p=tolower(*p);
+		p++;
+	}
+	return psz;
+}
+inline wchar_t* wcsupr(wchar_t* psz)
+{
+	wchar_t* p=psz;
+	while (p[0])
+	{
+		*p=towupper(*p);
+		p++;
+	}
+	return psz;
+}
+inline wchar_t* wcslwr(wchar_t* psz)
+{
+	wchar_t* p=psz;
+	while (p[0])
+	{
+		*p=towlower(*p);
+		p++;
+	}
+	return psz;
+}
 #endif
 
 
@@ -178,7 +218,7 @@ public:
 		#if defined(_MSC_VER) && (_MSC_VER>=1400)
 		_strupr_s(psz, strlen(psz)+1);
 		#else
-		_strupr(psz);
+		strupr(psz);
 		#endif
 	}
 	static void ToLower(char* psz)
@@ -186,7 +226,7 @@ public:
 		#if defined(_MSC_VER) && (_MSC_VER>=1400)
 		_strlwr_s(psz, strlen(psz)+1);
 		#else
-		_strlwr(psz);
+		strlwr(psz);
 		#endif
 	}
 };
@@ -202,7 +242,7 @@ public:
 		#if defined(_MSC_VER) && (_MSC_VER>=1400)
 		_wcsupr_s(psz, wcslen(psz)+1);
 		#else
-		_wcsupr(psz);
+		wcsupr(psz);
 		#endif
 	}
 	static void ToLower(wchar_t* psz)
@@ -210,7 +250,7 @@ public:
 		#if defined(_MSC_VER) && (_MSC_VER>=1400)
 		_wcslwr_s(psz, wcslen(psz)+1);
 		#else
-		_wcslwr(psz);
+		wcslwr(psz);
 		#endif
 	}
 };
