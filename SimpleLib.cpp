@@ -896,7 +896,7 @@ inline CString<char> Format(const char* format, va_list args)
 //		%C -> %hc
 //      %I64 -> %ll
 
-CUniString MsvcToGccFormatSpec(const wchar_t* p)
+inline CUniString MsvcToGccFormatSpec(const wchar_t* p)
 {
 	CUniString str;
 	while (p[0])
