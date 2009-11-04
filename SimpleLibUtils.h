@@ -6,8 +6,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -19,26 +19,26 @@
 #include "SimpleLib.h"
 
 // Include files from SimpleLibUtils
-#include "SimpleLibUtils\CalcCRC.h"
-#include "SimpleLibUtils\CommandLineParser.h"
-#include "SimpleLibUtils\Cryptor.h"
-#include "SimpleLibUtils\FormatBinary.h"
-#include "SimpleLibUtils\IncrementString.h"
-#include "SimpleLibUtils\ParseUtils.h"
-#include "SimpleLibUtils\ParseHtmlColor.h"
-#include "SimpleLibUtils\PathLibrary.h"
-#include "SimpleLibUtils\ProfileFile.h"
-#include "SimpleLibUtils\LoadSaveTextFile.h"
-#include "SimpleLibUtils\Sha1.h"
-#include "SimpleLibUtils\SmartStringCompare.h"
-#include "SimpleLibUtils\SplitCommandLine.h"
-#include "SimpleLibUtils\SplitString.h"
-#include "SimpleLibUtils\StringReplace.h"
-#include "SimpleLibUtils\StringSearch.h"
-#include "SimpleLibUtils\Tokenizer.h"
-#include "SimpleLibUtils\TrimString.h"
-#include "SimpleLibUtils\Wildcard.h"
-#include "SimpleLibUtils\GiantClass.h"
+#include "SimpleLibUtils/CalcCRC.h"
+#include "SimpleLibUtils/CommandLineParser.h"
+#include "SimpleLibUtils/Cryptor.h"
+#include "SimpleLibUtils/FormatBinary.h"
+#include "SimpleLibUtils/IncrementString.h"
+#include "SimpleLibUtils/ParseUtils.h"
+#include "SimpleLibUtils/ParseHtmlColor.h"
+#include "SimpleLibUtils/PathLibrary.h"
+#include "SimpleLibUtils/ProfileFile.h"
+#include "SimpleLibUtils/LoadSaveTextFile.h"
+#include "SimpleLibUtils/Sha1.h"
+#include "SimpleLibUtils/SmartStringCompare.h"
+#include "SimpleLibUtils/SplitCommandLine.h"
+#include "SimpleLibUtils/SplitString.h"
+#include "SimpleLibUtils/StringReplace.h"
+#include "SimpleLibUtils/StringSearch.h"
+#include "SimpleLibUtils/Tokenizer.h"
+#include "SimpleLibUtils/TrimString.h"
+#include "SimpleLibUtils/Wildcard.h"
+#include "SimpleLibUtils/GiantClass.h"
 
 
 #if _MSC_VER < 1500
