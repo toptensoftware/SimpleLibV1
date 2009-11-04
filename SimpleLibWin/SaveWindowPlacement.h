@@ -24,9 +24,11 @@ namespace Simple
 // Save the placement of a frame window, using CuSetProfileXXX
 // Use pOverride if you have a saved window placement that should be used instead of the current
 // window placement (eg: for a main app window that's in full screen mode)
+void SIMPLEAPI SaveWindowPlacement(HWND hWnd, CProfileSection* pSection, const wchar_t* pszPrefix=L"MainFrame", WINDOWPLACEMENT* pOverride=NULL);
 void SIMPLEAPI SaveWindowPlacement(HWND hWnd, const wchar_t* pszSection=L"Window", const wchar_t* pszPrefix=L"MainFrame", WINDOWPLACEMENT* pOverride=NULL);
 
 // Loads the window placement.  Returns a ShowWindow constant for showing the window
+int SIMPLEAPI LoadWindowPlacement(HWND hWnd, CProfileSection* pSection, const wchar_t* pszPrefix=L"MainFrame");
 int SIMPLEAPI LoadWindowPlacement(HWND hWnd, const wchar_t* pszSection=L"Window", const wchar_t* pszPrefix=L"MainFrame");
 
 

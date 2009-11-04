@@ -24,8 +24,7 @@
 namespace Simple
 {
 
-
-void SIMPLEAPI SaveWindowPlacement(HWND hWnd, const wchar_t* pszSection, const wchar_t* pszPrefix, WINDOWPLACEMENT* pOverride)
+void SIMPLEAPI SaveWindowPlacement(HWND hWnd, CProfileSection* pSection, const wchar_t* pszPrefix, WINDOWPLACEMENT* pOverride)
 {
 	// Get placement
 	WINDOWPLACEMENT wp;
@@ -40,24 +39,29 @@ void SIMPLEAPI SaveWindowPlacement(HWND hWnd, const wchar_t* pszSection, const w
 	}
 
 	// Save position
-	SlxSetProfileInt(pszSection, Format(L"%sX", pszPrefix), wp.rcNormalPosition.left);
-	SlxSetProfileInt(pszSection, Format(L"%sY", pszPrefix), wp.rcNormalPosition.top);
+	pSection->SetIntValue(Format(L"%sX", pszPrefix), wp.rcNormalPosition.left);
+	pSection->SetIntValue(Format(L"%sY", pszPrefix), wp.rcNormalPosition.top);
 
 	// Save size...
 	if (GetWindowLong(hWnd, GWL_STYLE) & WS_THICKFRAME)
 	{
-		SlxSetProfileInt(pszSection, Format(L"%sWidth", pszPrefix), Width(wp.rcNormalPosition));
-		SlxSetProfileInt(pszSection, Format(L"%sHeight", pszPrefix), Height(wp.rcNormalPosition));
+		pSection->SetIntValue(Format(L"%sWidth", pszPrefix), Width(wp.rcNormalPosition));
+		pSection->SetIntValue(Format(L"%sHeight", pszPrefix), Height(wp.rcNormalPosition));
 	}
 
 	// Save maximized
 	if (GetWindowLong(hWnd, GWL_STYLE) & WS_MAXIMIZEBOX)
 	{
-		SlxSetProfileInt(pszSection, Format(L"%sMaximized", pszPrefix), wp.showCmd==SW_SHOWMAXIMIZED);
+		pSection->SetIntValue(Format(L"%sMaximized", pszPrefix), wp.showCmd==SW_SHOWMAXIMIZED);
 	}
 }
 
-int SIMPLEAPI LoadWindowPlacement(HWND hWnd, const wchar_t* pszSection, const wchar_t* pszPrefix)
+void SIMPLEAPI SaveWindowPlacement(HWND hWnd, const wchar_t* pszSection, const wchar_t* pszPrefix, WINDOWPLACEMENT* pOverride)
+{
+	SaveWindowPlacement(hWnd, SlxCreateProfileSection(pszSection), pszPrefix, pOverride);
+}
+
+int SIMPLEAPI LoadWindowPlacement(HWND hWnd, CProfileSection* pSection, const wchar_t* pszPrefix)
 {
 	// Get current placement
 	WINDOWPLACEMENT wp;
@@ -66,17 +70,20 @@ int SIMPLEAPI LoadWindowPlacement(HWND hWnd, const wchar_t* pszSection, const wc
 
 	SIZE size=Size(wp.rcNormalPosition);
 
+	if (!pSection)
+		return SW_SHOWNORMAL;
+
 	// Load position
-	wp.rcNormalPosition.left=SlxGetProfileInt(pszSection, Format(L"%sX", pszPrefix), -10000);
-	wp.rcNormalPosition.top=SlxGetProfileInt(pszSection, Format(L"%sY", pszPrefix), -10000);
+	wp.rcNormalPosition.left=pSection->GetIntValue(Format(L"%sX", pszPrefix), -10000);
+	wp.rcNormalPosition.top=pSection->GetIntValue(Format(L"%sY", pszPrefix), -10000);
 	if (wp.rcNormalPosition.left<=-10000 || wp.rcNormalPosition.top<=-10000)
 		return SW_SHOWNORMAL;
 
 	// Load size
 	if (GetWindowLong(hWnd, GWL_STYLE) & WS_THICKFRAME)
 	{
-		wp.rcNormalPosition.right=SlxGetProfileInt(pszSection, Format(L"%sWidth", pszPrefix), -10000);
-		wp.rcNormalPosition.bottom=SlxGetProfileInt(pszSection, Format(L"%sHeight", pszPrefix), -10000);
+		wp.rcNormalPosition.right=pSection->GetIntValue(Format(L"%sWidth", pszPrefix), -10000);
+		wp.rcNormalPosition.bottom=pSection->GetIntValue(Format(L"%sHeight", pszPrefix), -10000);
 
 		if (wp.rcNormalPosition.right<=-10000 || wp.rcNormalPosition.bottom<=-10000)
 			return SW_SHOWNORMAL;
@@ -92,9 +99,13 @@ int SIMPLEAPI LoadWindowPlacement(HWND hWnd, const wchar_t* pszSection, const wc
 	// Save maximized
 	if (GetWindowLong(hWnd, GWL_STYLE) & WS_MAXIMIZEBOX)
 	{
-		if (SlxGetProfileInt(pszSection, Format(L"%sMaximized", pszPrefix), 0))
+		if (pSection->GetIntValue(Format(L"%sMaximized", pszPrefix), 0))
 		{
 			wp.showCmd=SW_SHOWMAXIMIZED;
+		}
+		else if (wp.showCmd==SW_SHOWMAXIMIZED)
+		{
+			wp.showCmd=SW_SHOWNORMAL;
 		}
 	}
 
@@ -112,6 +123,10 @@ int SIMPLEAPI LoadWindowPlacement(HWND hWnd, const wchar_t* pszSection, const wc
 	return iRetv;
 }
 
+int SIMPLEAPI LoadWindowPlacement(HWND hWnd, const wchar_t* pszSection, const wchar_t* pszPrefix)
+{
+	return LoadWindowPlacement(hWnd, SlxGetProfileSection(pszSection), pszPrefix);
+}
 
 
 
