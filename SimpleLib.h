@@ -444,11 +444,21 @@ inline CUniString a2w(const char* psz, int iLen=-1)
 	if (!psz)
 		return 0;
 
-	if (iLen<0)
-		iLen=int(strlen(psz));
-
 	CUniString str;
-	mbstowcs(str.GetBuffer(int(iLen*2+1)), psz, iLen+1);
+
+	if (iLen<0)
+	{
+		iLen=int(strlen(psz));
+		mbstowcs(str.GetBuffer(int(iLen*2+1)), psz, iLen+1);
+	}
+	else
+	{
+		char* pszTemp=(char*)alloca(iLen+1);
+		memcpy(pszTemp, psz, iLen);
+		pszTemp[iLen]='\0';
+		mbstowcs(str.GetBuffer(int(iLen*2+1)), pszTemp, iLen+1);
+	}
+
 	return str;
 }
 
@@ -457,11 +467,21 @@ inline CAnsiString w2a(const wchar_t* psz, int iLen=-1)
 	if (!psz)
 		return 0;
 
-	if (iLen<0)
-		iLen=int(wcslen(psz));
-
 	CAnsiString str;
-	wcstombs(str.GetBuffer(int(iLen*2+1)), psz, iLen+1);
+
+	if (iLen<0)
+	{
+		iLen=int(wcslen(psz));
+		wcstombs(str.GetBuffer(int(iLen*2+1)), psz, iLen+1);
+	}
+	else
+	{
+		wchar_t* pszTemp=(wchar_t*)alloca((iLen+1)*2);
+		memcpy(pszTemp, psz, iLen*2);
+		pszTemp[iLen]=L'\0';
+		wcstombs(str.GetBuffer(int(iLen*2+1)), pszTemp, iLen+1);
+	}
+
 	return str;
 }
 
