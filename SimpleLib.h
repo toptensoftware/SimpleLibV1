@@ -56,11 +56,51 @@
 #endif
 
 
-#ifdef __GNUC__
+#ifdef __GNUG__
 #define _cdecl
 #define __cdecl
 #define _stricmp strcasecmp
 #define _wcsicmp Simple::lazy_wcsicmp
+inline char* strupr(char* psz)
+{
+	char* p=psz;
+	while (p[0])
+	{
+		*p=toupper(*p);
+		p++;
+	}
+	return psz;
+}
+inline char* strlwr(char* psz)
+{
+	char* p=psz;
+	while (p[0])
+	{
+		*p=tolower(*p);
+		p++;
+	}
+	return psz;
+}
+inline wchar_t* wcsupr(wchar_t* psz)
+{
+	wchar_t* p=psz;
+	while (p[0])
+	{
+		*p=towupper(*p);
+		p++;
+	}
+	return psz;
+}
+inline wchar_t* wcslwr(wchar_t* psz)
+{
+	wchar_t* p=psz;
+	while (p[0])
+	{
+		*p=towlower(*p);
+		p++;
+	}
+	return psz;
+}
 #endif
 
 
@@ -178,7 +218,7 @@ public:
 		#if defined(_MSC_VER) && (_MSC_VER>=1400)
 		_strupr_s(psz, strlen(psz)+1);
 		#else
-		_strupr(psz);
+		strupr(psz);
 		#endif
 	}
 	static void ToLower(char* psz)
@@ -186,7 +226,7 @@ public:
 		#if defined(_MSC_VER) && (_MSC_VER>=1400)
 		_strlwr_s(psz, strlen(psz)+1);
 		#else
-		_strlwr(psz);
+		strlwr(psz);
 		#endif
 	}
 };
@@ -202,7 +242,7 @@ public:
 		#if defined(_MSC_VER) && (_MSC_VER>=1400)
 		_wcsupr_s(psz, wcslen(psz)+1);
 		#else
-		_wcsupr(psz);
+		wcsupr(psz);
 		#endif
 	}
 	static void ToLower(wchar_t* psz)
@@ -210,7 +250,7 @@ public:
 		#if defined(_MSC_VER) && (_MSC_VER>=1400)
 		_wcslwr_s(psz, wcslen(psz)+1);
 		#else
-		_wcslwr(psz);
+		wcslwr(psz);
 		#endif
 	}
 };
@@ -404,11 +444,21 @@ inline CUniString a2w(const char* psz, int iLen=-1)
 	if (!psz)
 		return 0;
 
-	if (iLen<0)
-		iLen=int(strlen(psz));
-
 	CUniString str;
-	mbstowcs(str.GetBuffer(int(iLen*2+1)), psz, iLen+1);
+
+	if (iLen<0)
+	{
+		iLen=int(strlen(psz));
+		mbstowcs(str.GetBuffer(int(iLen*2+1)), psz, iLen+1);
+	}
+	else
+	{
+		char* pszTemp=(char*)alloca(iLen+1);
+		memcpy(pszTemp, psz, iLen);
+		pszTemp[iLen]='\0';
+		mbstowcs(str.GetBuffer(int(iLen*2+1)), pszTemp, iLen+1);
+	}
+
 	return str;
 }
 
@@ -417,11 +467,21 @@ inline CAnsiString w2a(const wchar_t* psz, int iLen=-1)
 	if (!psz)
 		return 0;
 
-	if (iLen<0)
-		iLen=int(wcslen(psz));
-
 	CAnsiString str;
-	wcstombs(str.GetBuffer(int(iLen*2+1)), psz, iLen+1);
+
+	if (iLen<0)
+	{
+		iLen=int(wcslen(psz));
+		wcstombs(str.GetBuffer(int(iLen*2+1)), psz, iLen+1);
+	}
+	else
+	{
+		wchar_t* pszTemp=(wchar_t*)alloca((iLen+1)*2);
+		memcpy(pszTemp, psz, iLen*2);
+		pszTemp[iLen]=L'\0';
+		wcstombs(str.GetBuffer(int(iLen*2+1)), pszTemp, iLen+1);
+	}
+
 	return str;
 }
 

@@ -19,6 +19,8 @@ namespace Simple
 
 #ifndef __SHA1_H
 #define __SHA1_H
+
+	
 /*
  *  sha1.h
  *
@@ -105,7 +107,6 @@ CAnsiString Sha1(const wchar_t* psz);
 CAnsiString Sha1Format(uint8_t sha[]);
 
 }
-
 
 #endif	// __SHA1_H
 

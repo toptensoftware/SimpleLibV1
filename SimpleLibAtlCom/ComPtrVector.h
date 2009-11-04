@@ -315,12 +315,12 @@ public:
 	}
 
 	// Initial this vector from a safe array
-	HRESULT InitFromSafeArray(REFIID riid, SAFEARRAY* pArray)
+	HRESULT InitFromSafeArray(SAFEARRAY* pArray)
 	{
 		// Check its a variant safe array
 		VARTYPE vt;
 		RETURNIFFAILED(SafeArrayGetVartype(pArray, &vt));
-		if (vt!=VT_VARIANT)
+		if (vt!=VT_VARIANT && vt!=VT_UNKNOWN)
 			return E_UNEXPECTED;
 
 		// Check 1 dimensional
@@ -336,18 +336,40 @@ public:
 
 		// Add each item
 		for (LONG j=lLbound; j<=lUbound; j++)
+		{
+			if (vt==VT_VARIANT)
 			{
-			CComVariant var;
-			if (SUCCEEDED(SafeArrayGetElement(pArray, &j, &var)) && SUCCEEDED(var.ChangeType(VT_UNKNOWN)))
+				CComVariant var;
+				if (SUCCEEDED(SafeArrayGetElement(pArray, &j, &var)) && SUCCEEDED(var.ChangeType(VT_UNKNOWN)))
 				{
-				CComPtr<IUnknown> spUnk;
-				if (V_UNKNOWN(&var))
+					T p=NULL;
+
+					if (V_UNKNOWN(&var))
 					{
-					V_UNKNOWN(&var)->QueryInterface(riid, (void**)&spUnk.p);
+						V_UNKNOWN(&var)->QueryInterface(__uuidof(*p), (void**)&p);
 					}
-				Vector.Add(spUnk);
+					Add(p);
+					if (p)
+						p->Release();
 				}
 			}
+			else
+			{
+				CComPtr<IUnknown> spUnk;
+				if (SUCCEEDED(SafeArrayGetElement(pArray, &j, &spUnk)))
+				{
+					T p=NULL;
+
+					if (spUnk)
+					{
+						spUnk->QueryInterface(__uuidof(*p), (void**)&p);
+					}
+					Add(p);
+					if (p)
+						p->Release();
+				}
+			}
+		}
 
 		return S_OK;
 	}
