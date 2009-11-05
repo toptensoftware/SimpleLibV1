@@ -47,7 +47,7 @@ public:
 		HGLOBAL hData=NULL;
 		unsigned char* pData;
 		size_t cbData;
-		if (UnformatBinaryData(pEntry->GetValue(), &pData, &cbData))
+		if (UnformatBinaryData(pEntry->GetValue(), (void**)&pData, &cbData))
 			{
 			if (cbData)
 				{
