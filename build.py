@@ -88,7 +88,7 @@ def build(target, platform):
     # Execute
     print("Building", target, platform);
     if os.system(cmd)!=0:
-        sys.exit("*** Build failed ***");
+        sys.exit("*** SimpleLib Build failed ***");
 
 # Delete previous build log
 if os.path.isfile("build.log"):
