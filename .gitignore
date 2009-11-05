@@ -31,4 +31,4 @@ _UpgradeReport_Files
 *head.txt
 *.depend
 *.layout
-
+*.log
