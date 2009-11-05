@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="SimpleLibUtils" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../lib/Linux/Debug/libSimpleLibUtils" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../Build/Linux/Debug/SimpleLibUtils/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="../lib/Linux/Release/libSimpleLibUtils" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../Build/Linux/Release/SimpleLibUtils/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Unit filename="CalcCRC.cpp" />
+		<Unit filename="CalcCRC.h" />
+		<Unit filename="CommandLineParser.cpp" />
+		<Unit filename="CommandLineParser.h" />
+		<Unit filename="Cryptor.cpp" />
+		<Unit filename="Cryptor.h" />
+		<Unit filename="FormatBinary.cpp" />
+		<Unit filename="FormatBinary.h" />
+		<Unit filename="GiantClass.cpp" />
+		<Unit filename="GiantClass.h" />
+		<Unit filename="IncrementString.cpp" />
+		<Unit filename="IncrementString.h" />
+		<Unit filename="LoadSaveTextFile.cpp" />
+		<Unit filename="LoadSaveTextFile.h" />
+		<Unit filename="ParseHtmlColor.cpp" />
+		<Unit filename="ParseHtmlColor.h" />
+		<Unit filename="ParseUtils.cpp" />
+		<Unit filename="ParseUtils.h" />
+		<Unit filename="PathLibrary.cpp" />
+		<Unit filename="PathLibrary.h" />
+		<Unit filename="ProfileFile.cpp" />
+		<Unit filename="ProfileFile.h" />
+		<Unit filename="Sha1.cpp" />
+		<Unit filename="Sha1.h" />
+		<Unit filename="SimpleLibUtils8.vcproj" />
+		<Unit filename="SimpleLibUtils9.vcproj" />
+		<Unit filename="SimpleLibUtilsBuild.h" />
+		<Unit filename="SmartStringCompare.cpp" />
+		<Unit filename="SmartStringCompare.h" />
+		<Unit filename="SplitCommandLine.cpp" />
+		<Unit filename="SplitCommandLine.h" />
+		<Unit filename="SplitString.cpp" />
+		<Unit filename="SplitString.h" />
+		<Unit filename="StdAfx.cpp" />
+		<Unit filename="StdAfx.h">
+			<Option compile="1" />
+			<Option weight="0" />
+		</Unit>
+		<Unit filename="StringReplace.cpp" />
+		<Unit filename="StringReplace.h" />
+		<Unit filename="StringSearch.cpp" />
+		<Unit filename="StringSearch.h" />
+		<Unit filename="Tokenizer.cpp" />
+		<Unit filename="Tokenizer.h" />
+		<Unit filename="TrimString.cpp" />
+		<Unit filename="TrimString.h" />
+		<Unit filename="Wildcard.cpp" />
+		<Unit filename="Wildcard.h" />
+		<Unit filename="giants.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="giants.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<lib_finder disable_auto="1" />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -22,9 +22,9 @@ namespace Simple
 
 wchar_t SIMPLEAPI ToHex(int iNibble);
 unsigned char SIMPLEAPI FromHex(wchar_t ch);
-CUniString SIMPLEAPI FormatBinaryData(unsigned char* pData, size_t cb, int iBytesPerLine);
-bool SIMPLEAPI UnformatBinaryData(const wchar_t* psz, unsigned char** ppData, size_t* pcb);
-size_t SIMPLEAPI UnformatBinaryData(const wchar_t* psz, unsigned char* pData, size_t cbData);
+CUniString SIMPLEAPI FormatBinaryData(const void* pData, size_t cb, int iBytesPerLine);
+bool SIMPLEAPI UnformatBinaryData(const wchar_t* psz, void** ppData, size_t* pcb);
+size_t SIMPLEAPI UnformatBinaryData(const wchar_t* psz, void* pData, size_t cbData);
 
 }	// namespace Simple
 

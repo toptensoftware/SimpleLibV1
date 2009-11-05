@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -121,9 +121,9 @@ protected:
 	{
 	public:
 		CArg(const wchar_t* pszName, int iOrder) :
-			m_strName(pszName),
 			m_bUsed(false),
-			m_iOrder(iOrder)
+			m_iOrder(iOrder),
+			m_strName(pszName)
 		{
 		};
 

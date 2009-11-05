@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -41,10 +41,10 @@ bool SIMPLEAPI SkipLineSpace(const wchar_t*& p);
 bool SIMPLEAPI SkipLineEnd(const wchar_t*& p);
 bool SIMPLEAPI SkipIdentifier(const wchar_t*& p, CUniString& str, const wchar_t* pszExtraLeadChars=NULL, const wchar_t* pszExtraChars=NULL);
 bool SIMPLEAPI ReadInt(const wchar_t*& p, int* pi);
-bool SIMPLEAPI ReadInt64(const wchar_t*& p, __int64* pi);
+bool SIMPLEAPI ReadInt64(const wchar_t*& p, int64_t* pi);
 bool SIMPLEAPI ReadDouble(const wchar_t*& psz, double* pdblVal);
 const wchar_t* SIMPLEAPI ParseInt(const wchar_t* psz, int* piValue);
-const wchar_t* SIMPLEAPI ParseInt64(const wchar_t* psz, __int64* piValue);
+const wchar_t* SIMPLEAPI ParseInt64(const wchar_t* psz, int64_t* piValue);
 bool SIMPLEAPI ParseBool(const wchar_t* psz, bool bDefault);
 int SIMPLEAPI ParseInt(const wchar_t* psz, int iDefault);
 
@@ -64,7 +64,7 @@ const T* SIMPLEAPI FindOneOf(const T* psz, const T* pszDelims)
 class CSimpleParser
 {
 public:
-	CSimpleParser(const wchar_t* psz=NULL) : 
+	CSimpleParser(const wchar_t* psz=NULL) :
 		m_psz(psz),
 		m_pszError(NULL),
 		m_bSkipWhiteSpace(false),
@@ -87,7 +87,7 @@ public:
 	{
 		m_bCaseSensitive=bCaseSensitive;
 	}
-	
+
 	bool IsEOL()
 	{
 		if (m_pszError)
@@ -164,7 +164,7 @@ public:
 		m_psz=psz;
 		return true;
 	}
-	
+
 	bool ReadLine(CUniString& str)
 	{
 		if (m_pszError)
@@ -181,7 +181,7 @@ public:
 		SkipToEOL();
 
 		str=CUniString(pszStart, int(m_psz-pszStart));
-		
+
 		SkipToNextLine();
 
 		return true;
@@ -279,21 +279,22 @@ public:
 	{
 		return Simple::SkipWhiteSpace(m_psz);
 	}
-	
+
 	bool SkipLineSpace()
 	{
 		return Simple::SkipLineSpace(m_psz);
 	}
-	
+
 	bool SkipToEOL()
 	{
 		Simple::SkipToEOL(m_psz);
 		return true;
 	}
-	
+
 	bool SkipToNextLine()
 	{
 		Simple::SkipToNextLine(m_psz);
+		return true;
 	}
 
 	bool CheckEOF()
@@ -307,12 +308,12 @@ public:
 		m_pszError=m_psz;
 		return false;
 	}
-	
+
 	void ClearError()
 	{
 		m_pszError=NULL;
 	}
-	
+
 	const wchar_t* GetErrorPosition()
 	{
 		return m_pszError;

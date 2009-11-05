@@ -45,9 +45,9 @@
  * arithmetic on B-bit operands, you need MAX_SHORTS > B/8,
  * perferably a tad larger than this; e.g. MAX_SHORTS > B/7.
  */
-#define MAX_SHORTS (1<<19)	
+#define MAX_SHORTS (1<<19)
 
-#define INFINITY (-1)
+#define GIANTS_INFINITY (-1)
 #define FA 0
 #define TR 1
 #define COLUMNWIDTH 64
@@ -61,11 +61,11 @@
 /* Decimal digit ceiling in digit-input routines. */
 #define MAX_DIGITS 10000
 
-/* Next, mumber of shorts per operand 
+/* Next, mumber of shorts per operand
    at which Karatsuba breaks over. */
 #define KARAT_BREAK 40
 
-/* Next, mumber of shorts per operand 
+/* Next, mumber of shorts per operand
    at which FFT breaks over. */
 #define FFT_BREAK 200
 

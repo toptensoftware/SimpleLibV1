@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -23,12 +23,12 @@ namespace Simple
 
 // Miscellaneous parser utilities
 int SIMPLEAPI ParseHexChar(wchar_t ch);
-bool SIMPLEAPI ParseHexU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverflow);
-bool SIMPLEAPI ParseIntU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverflow);
+bool SIMPLEAPI ParseHexU(const wchar_t*& p, uint64_t& iVal, bool& bOverflow);
+bool SIMPLEAPI ParseIntU(const wchar_t*& p, uint64_t& iVal, bool& bOverflow);
 bool SIMPLEAPI IsDoubleU(const wchar_t* p);
 bool SIMPLEAPI ParseDoubleU(const wchar_t*& p, double& dblVal, bool& bOverflow);
 bool SIMPLEAPI ParseDouble(const wchar_t*& psz, double& dblVal, bool& bError);
-bool SIMPLEAPI ParseInt64(const wchar_t*& psz, __int64& iVal, bool& bError);
+bool SIMPLEAPI ParseInt64(const wchar_t*& psz, int64_t& iVal, bool& bError);
 
 
 // Tokens
@@ -90,7 +90,7 @@ public:
 	virtual const wchar_t* GetError()=0;
 	virtual const wchar_t* GetStringLiteral()=0;;
 	virtual int GetInt32Literal()=0;;
-	virtual __int64 GetInt64Literal()=0;;
+	virtual int64_t GetInt64Literal()=0;;
 	virtual double GetDoubleLiteral()=0;;
 	virtual TypeQualifier GetTypeQualifier()=0;
 };
@@ -100,7 +100,7 @@ class CContentProvider
 public:
 	virtual bool GetFileContent(
 				const wchar_t* pszCurrentFileName,
-				const wchar_t* pszFileName, 
+				const wchar_t* pszFileName,
 				bool bSysPath,
 				CUniString& strQualifiedFileName,
 				CUniString& strContent
@@ -117,7 +117,7 @@ public:
 // CContentProvider
 	virtual bool GetFileContent(
 				const wchar_t* pszCurrentFileName,
-				const wchar_t* pszFileName, 
+				const wchar_t* pszFileName,
 				bool bSysPath,
 				CUniString& strQualifiedFileName,
 				CUniString& strContent
@@ -165,10 +165,10 @@ public:
 	virtual const wchar_t* GetError();
 	virtual const wchar_t* GetStringLiteral();
 	virtual int GetInt32Literal();
-	virtual __int64 GetInt64Literal();
+	virtual int64_t GetInt64Literal();
 	virtual double GetDoubleLiteral();
 	virtual TypeQualifier GetTypeQualifier();
-		
+
 	bool Check(int token, const wchar_t* pszError=NULL);
 	bool Skip(int token, const wchar_t* pszError=NULL);
 	void Unexpected(const wchar_t* pszWhen=NULL);
@@ -205,7 +205,7 @@ protected:
 	int					m_iToken;
 	CUniString			m_strError;
 	const wchar_t*			m_pszToken;
-	__int64				m_iVal;
+	int64_t				m_iVal;
 	double				m_dblVal;
 	TypeQualifier		m_TypeQualifier;
 	int					m_iLineNumber;

@@ -29,4 +29,6 @@ _UpgradeReport_Files
 *.vssscc
 .metadata
 *head.txt
+*.depend
+*.layout
 

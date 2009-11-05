@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////
 // ParseUtils.cpp - implementation of ParseUtils
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "ParseUtils.h"
@@ -259,7 +259,7 @@ bool SIMPLEAPI ReadInt(const wchar_t*& p, int* pi)
 }
 
 // Read an integer from an wchar_t buffer
-bool SIMPLEAPI ReadInt64(const wchar_t*& p, __int64* pi)
+bool SIMPLEAPI ReadInt64(const wchar_t*& p, int64_t* pi)
 {
 	const wchar_t* pszOrig=p;
 
@@ -368,13 +368,13 @@ const wchar_t* SIMPLEAPI ParseInt(const wchar_t* psz, int* piValue)
 }
 
 
-const wchar_t* SIMPLEAPI ParseInt64(const wchar_t* psz, __int64* piValue)
+const wchar_t* SIMPLEAPI ParseInt64(const wchar_t* psz, int64_t* piValue)
 {
 	while (psz[0]==' ' || psz[0]=='\t')
 		psz++;
 
 	// Negative
-	__int64 iNeg=1;
+	int64_t iNeg=1;
 	if (psz[0]==L'-')
 		{
 		iNeg=-1;

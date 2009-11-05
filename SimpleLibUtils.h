@@ -40,7 +40,7 @@
 #include "SimpleLibUtils/Wildcard.h"
 #include "SimpleLibUtils/GiantClass.h"
 
-
+#ifdef _MSC_VER
 #if _MSC_VER < 1500
 	#ifdef _WIN64
 		#ifdef _DEBUG
@@ -101,6 +101,7 @@
 			#endif
 		#endif
 	#endif
+#endif
 #endif
 
 #endif	// __SIMPLELIBUTILS_H
