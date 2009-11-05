@@ -38,7 +38,8 @@
 #ifdef _MSC_VER
 typedef unsigned int uint32_t;
 typedef unsigned char uint8_t;
-typedef unsigned long long int uint64_t;
+typedef __int64 int64_t;
+typedef unsigned __int64 uint64_t;
 #else
 #include <stdint.h>
 typedef unsigned long long int uint64_t;

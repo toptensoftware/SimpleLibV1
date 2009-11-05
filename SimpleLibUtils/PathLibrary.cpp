@@ -86,7 +86,7 @@ CUniString SIMPLEAPI QualifyPath(const wchar_t* psz)
 {
 #ifdef _MSC_VER
 	CUniString str;
-	_wfullpath(str.GetBuffer(MAX_PATH), psz, MAX_PATH);
+	_wfullpath(str.GetBuffer(_MAX_PATH), psz, _MAX_PATH);
 	return str;
 #else
 	return CanonicalPathAppend(a2w(get_current_dir_name()), psz);
@@ -365,7 +365,7 @@ bool SIMPLEAPI DoesPathExist(const wchar_t* pszFileName)
 	if (IsEmptyString(pszFileName))
 		return false;
 
-#ifdef _MSV_VER
+#ifdef _MSC_VER
 	struct _stat s;
 	if (_wstat(pszFileName, &s))
 		return false;
