@@ -35,9 +35,16 @@
 #include <ctype.h>
 #include <wctype.h>
 
-#ifndef _MSC_VER
+#ifdef _MSC_VER
+typedef unsigned int uint32_t;
+typedef unsigned char uint8_t;
+typedef __int64 int64_t;
+typedef unsigned __int64 uint64_t;
+#else
 #include <stdint.h>
+typedef unsigned long long int uint64_t;
 #endif
+
 
 #ifndef SIMPLELIB_NOMINMAX
 
@@ -57,10 +64,12 @@
 
 
 #ifdef __GNUG__
+#define MAX_PATH 4096
 #define _cdecl
 #define __cdecl
 #define _stricmp strcasecmp
 #define _wcsicmp Simple::lazy_wcsicmp
+#define _wcsnicmp Simple::lazy_wcsnicmp
 inline char* strupr(char* psz)
 {
 	char* p=psz;
@@ -388,6 +397,20 @@ inline int lazy_wcsicmp(const wchar_t* psz1, const wchar_t* psz2)
 		int icmp=int(towupper(*psz1++))-int(towupper(*psz2++));
 		if (icmp!=0)
 			return icmp;
+	}
+
+	return 0;
+}
+
+inline int lazy_wcsnicmp(const wchar_t* psz1, const wchar_t* psz2, size_t len)
+{
+	while ((*psz1 || *psz2) && len)
+	{
+		int icmp=int(towupper(*psz1++))-int(towupper(*psz2++));
+		if (icmp!=0)
+			return icmp;
+
+		len--;
 	}
 
 	return 0;

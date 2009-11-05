@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////
 // Cryptor.cpp - implementation of Cryptor
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include "SimpleLibUtilsBuild.h"
 #include "Cryptor.h"
@@ -79,17 +79,15 @@ void CCryptorKey::SetStringKey(const char* pszKey)
 		pszKey="DefSeedDefSeed";
 
 	// Setup seed
-	char szSeed[13];
-	szSeed[12]='\0';
-	strncpy_s(szSeed, sizeof(szSeed), pszKey, 12);
+	CAnsiString str=pszKey;
 
 	// Make sure seed is at least 12 bytes long
-	while (strlen(szSeed)<12)
+	while (str.GetLength()<12)
 	{
-		strcat_s(szSeed, sizeof(szSeed), "Q");
+		str+="Q";
 	}
 
-	memcpy(m_bKey, szSeed, 12);
+	memcpy(m_bKey, str.sz(), 12);
 }
 
 // Constructor
@@ -204,16 +202,16 @@ void CCryptor::TransformBuffer(void* pBuffer, unsigned int cbBuffer)
 	}
 }
 
-void CCryptor::Skip(unsigned __int64 cbBuffer)
+void CCryptor::Skip(uint64_t cbBuffer)
 {
 	unsigned char b;
-	for (unsigned __int64 i=0; i<cbBuffer; i++)
+	for (uint64_t i=0; i<cbBuffer; i++)
 	{
 		TransformByte(b);
 	}
 }
 
-void CCryptor::Seek(unsigned __int64 uiPos)
+void CCryptor::Seek(uint64_t uiPos)
 {
 	if (uiPos==m_uiPos)
 		return;

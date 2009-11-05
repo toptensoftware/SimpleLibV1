@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////
 // IncrementString.cpp - implementation of IncrementString
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "IncrementString.h"
@@ -42,7 +42,7 @@ CUniString SIMPLEAPI IncrementString(const wchar_t* psz)
 		CUniString strPrefix(psz, int(pszEnd-psz));
 		int i;
 		ReadInt(pszEnd, &i);
-		return Format(L"%s%i", strPrefix, i+1);
+		return Format(L"%s%i", strPrefix.sz(), i+1);
 		}
 	else
 		{
@@ -90,7 +90,7 @@ CUniString SIMPLEAPI IncrementStringEx(const wchar_t* psz, const wchar_t* pszDef
 
 	// Yes
 	CUniString strPrefix(psz, int(pszEnd-psz));
-	return Format(L"%s%s%s", strPrefix, strNumber, pszTrailing);
+	return Format(L"%s%s%s", strPrefix.sz(), strNumber.sz(), pszTrailing);
 }
 
 

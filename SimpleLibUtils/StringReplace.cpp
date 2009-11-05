@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////
 // StringReplace.cpp - implementation of StringReplace
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "StringReplace.h"
@@ -44,6 +44,8 @@ CUniString SIMPLEAPI StringReplace(const wchar_t* pszIn, const wchar_t* pszFind,
 
 
 	CUniString buf;
+	if (iStartAt>0)
+		buf.Append(pszIn, iStartAt);
 	const wchar_t* p=pszIn+iStartAt;
 	const wchar_t* pszStart=p;
 	bool bMatches=false;

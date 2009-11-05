@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -14,18 +14,26 @@
 //////////////////////////////////////////////////////////////////////////
 // PathLibrary.cpp - implementation of PathLibrary
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "PathLibrary.h"
 #include "SplitString.h"
 
-#include <sys\stat.h>
+#include <sys/stat.h>
+
+#ifndef _MSC_VER
+#include <unistd.h>
+#endif
 
 namespace Simple
 {
 
+#ifdef _WIN32
 #define PATH_SEPARATOR	'\\'
+#else
+#define PATH_SEPARATOR	'/'
+#endif
 
 bool SIMPLEAPI IsPathSeparator(wchar_t ch)
 {
@@ -76,9 +84,13 @@ CUniString SIMPLEAPI SimplePathAppend(const wchar_t* pszPath1, const wchar_t* ps
 // Fully qualify a path against the current working directory
 CUniString SIMPLEAPI QualifyPath(const wchar_t* psz)
 {
+#ifdef _MSC_VER
 	CUniString str;
 	_wfullpath(str.GetBuffer(_MAX_PATH), psz, _MAX_PATH);
 	return str;
+#else
+	return CanonicalPathAppend(a2w(get_current_dir_name()), psz);
+#endif
 }
 
 // Find the extension of a file name
@@ -141,7 +153,7 @@ void SIMPLEAPI RemoveLastElement(wchar_t* pszPath)
 		p[0]='\0';
 		if (p>pszPath && p[-1]==':')
 		{
-			p[0]='\\';
+			p[0]=PATH_SEPARATOR;
 			p[1]='\0';
 		}
 	}
@@ -331,11 +343,21 @@ bool SIMPLEAPI DoesFileExist(const wchar_t* pszFileName)
 	if (IsEmptyString(pszFileName))
 		return false;
 
+#ifdef _MSC_VER
 	struct _stat s;
 	if (_wstat(pszFileName, &s))
 		return false;
 
 	return (s.st_mode & _S_IFREG)!=0;
+
+#else
+	struct stat s;
+	if (stat(w2a(pszFileName), &s))
+		return false;
+
+	return S_ISREG(s.st_mode);
+#endif
+
 }
 
 bool SIMPLEAPI DoesPathExist(const wchar_t* pszFileName)
@@ -343,11 +365,19 @@ bool SIMPLEAPI DoesPathExist(const wchar_t* pszFileName)
 	if (IsEmptyString(pszFileName))
 		return false;
 
+#ifdef _MSC_VER
 	struct _stat s;
 	if (_wstat(pszFileName, &s))
 		return false;
-
 	return (s.st_mode & _S_IFDIR)!=0;
+#else
+	struct stat s;
+	if (stat(w2a(pszFileName), &s))
+		return false;
+
+	return S_ISDIR(s.st_mode);
+#endif
+
 }
 
 

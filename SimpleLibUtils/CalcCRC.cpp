@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////
 // CalcCRC.cpp - implementation of CalcCRC
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "CalcCRC.h"
@@ -22,15 +22,15 @@
 namespace Simple
 {
 
-static unsigned __int32 g_dwCRCTable[256];
+static uint32_t g_dwCRCTable[256];
 static bool  g_bInitialized=false;
 
 // Reflection is a requirement for the official CRC-32 standard.
 // You can create CRCs without it, but they won't conform to the standard.
-static unsigned __int32 CrcReflect(unsigned __int32 ref, char ch)
+static uint32_t CrcReflect(uint32_t ref, char ch)
 {// Used only by _Init()
 
-	unsigned __int32 value(0);
+	uint32_t value(0);
 
 	// Swap bit 0 for bit 7
 	// bit 1 for bit 6, etc.
@@ -51,9 +51,9 @@ static void InitCRCTable()
 
 	g_bInitialized = true;
 
-	// This is the official polynomial used by CRC-32 
-	// in PKZip, WinZip and Ethernet. 
-	unsigned __int32 ulPolynomial = 0x04c11db7;
+	// This is the official polynomial used by CRC-32
+	// in PKZip, WinZip and Ethernet.
+	uint32_t ulPolynomial = 0x04c11db7;
 
 	// 256 values representing ASCII character codes.
 	for(int i = 0; i <= 0xFF; i++)
@@ -65,7 +65,7 @@ static void InitCRCTable()
 	}
 }
 
-void SIMPLEAPI CalculateCRCStart(unsigned __int32& dwCRC)
+void SIMPLEAPI CalculateCRCStart(uint32_t& dwCRC)
 {
 	// Make sure initialised
 	InitCRCTable();
@@ -73,21 +73,22 @@ void SIMPLEAPI CalculateCRCStart(unsigned __int32& dwCRC)
 }
 
 
-void SIMPLEAPI CalculateCRCContinue(unsigned __int32& dwCRC, const unsigned char* pbData, int cbData)
+void SIMPLEAPI CalculateCRCContinue(uint32_t& dwCRC, const void* pbDataIn, int cbData)
 {
+	const char* pbData=(const char*)pbDataIn;
 	while(cbData--)
 		dwCRC = (dwCRC >> 8) ^ g_dwCRCTable[(dwCRC & 0xFF) ^ *pbData++];
 }
 
-void SIMPLEAPI CalculateCRCFinish(unsigned __int32& dwCRC)
+void SIMPLEAPI CalculateCRCFinish(uint32_t& dwCRC)
 {
 	// Exclusive OR the result with the beginning value.
 	dwCRC = dwCRC ^ 0xffffffff;
 }
 
-unsigned __int32 SIMPLEAPI CalculateCRC(const unsigned char* pbData, int cbData)
+uint32_t SIMPLEAPI CalculateCRC(const void* pbData, int cbData)
 {
-	unsigned __int32 dwCRC;
+	uint32_t dwCRC;
 	CalculateCRCStart(dwCRC);
 	CalculateCRCContinue(dwCRC, pbData, cbData);
 	CalculateCRCFinish(dwCRC);

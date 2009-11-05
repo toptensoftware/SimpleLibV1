@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////
 // FormatBinary.cpp - implementation of FormatBinary
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "FormatBinary.h"
@@ -45,53 +45,58 @@ unsigned char SIMPLEAPI FromHex(wchar_t ch)
 	return 0;
 }
 
-CUniString SIMPLEAPI FormatBinaryData(unsigned char* pData, size_t cb, int iBytesPerLine)
+CUniString SIMPLEAPI FormatBinaryData(const void* pDataIn, size_t cb, int iBytesPerLine)
 {
-	// How many carriage returns 
+	const unsigned char* pData=(const unsigned char*)pDataIn;
+
+	// How many carriage returns
 	int iCRs=int(iBytesPerLine ? cb/iBytesPerLine : 0);
 
 	// Allocate sys string
 	CUniString str;
 	wchar_t* p=str.GetBuffer(int(cb*2+1+iCRs*2));
-	
+
 	// Convert it
 	for (size_t i=0; i<cb; i++)
-		{
+	{
 		p[0]=ToHex((*pData) >>4);
 		p[1]=ToHex((*pData) & 0x0F);
 		p+=2;
 
 		if (iBytesPerLine && i>0 && (i % iBytesPerLine==0))
-			{
+		{
+			#ifdef _MSC_VER
 			p[0]=L'\r';
+			#endif
 			p[1]=L'\n';
 			p+=2;
-			}
-		pData++;
 		}
+		pData++;
+	}
 	p[0]=L'\0';
 
 	return str;
 }
 
-bool SIMPLEAPI UnformatBinaryData(const wchar_t* psz, unsigned char** ppData, size_t* pcb)
+bool SIMPLEAPI UnformatBinaryData(const wchar_t* psz, void** ppData, size_t* pcb)
 {
 	// How long is the string
 	int iByteLen=int(wcslen(psz)/2);
 	if (iByteLen<1)
 		return false;
 
-	*ppData=(unsigned char*)malloc(iByteLen);
+	*ppData=malloc(iByteLen);
 
 	*pcb=UnformatBinaryData(psz, ppData[0], iByteLen);
 
 	return true;
 }
 
-size_t SIMPLEAPI UnformatBinaryData(const wchar_t* psz, unsigned char* pData1, size_t cbData)
+size_t SIMPLEAPI UnformatBinaryData(const wchar_t* psz, void* pDataIn, size_t cbData)
 {
 	// Write each byte to the stream
 	const wchar_t* p=psz;
+	unsigned char* pData1=(unsigned char*)pDataIn;
 	unsigned char* pData=pData1;
 	while (p[0])
 		{

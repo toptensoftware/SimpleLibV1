@@ -2,6 +2,7 @@
 // SimpleTest.cpp : SimpleLib Unit Tests
 
 #include "../SimpleLib.h"
+
 using namespace Simple;
 
 bool g_bAnyFailed=false;
@@ -194,7 +195,7 @@ int CompareIntKeyPtr(CMyObject* const& p, int iVal)
 }
 
 void TestVector()
-{															   
+{
 	g_bFailed=false;
 	printf("Testing CVector...");
 

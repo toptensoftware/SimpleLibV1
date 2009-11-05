@@ -1232,7 +1232,7 @@ HRESULT SIMPLEAPI XML_Element(CXMLArchive& ar, IUnknown* pObject)
 				// Read binary data
 				unsigned char* pData;
 				size_t cbData;
-				if (UnformatBinaryData(str, &pData, &cbData))
+				if (UnformatBinaryData(str, (void**)&pData, &cbData))
 					{
 					// Write it to stream...
 					spStream->Write(pData, (ULONG)cbData, NULL);
@@ -1501,7 +1501,7 @@ HRESULT SIMPLEAPI SlxLoadObject(IUnknown* pObject, BSTR newVal, LPCOLESTR pszDoc
 	// Read binary data
 	unsigned char* pData;
 	size_t cbData;
-	if (UnformatBinaryData(newVal, &pData, &cbData))
+	if (UnformatBinaryData(newVal, (void**)&pData, &cbData))
 		{
 		// Write it to stream...
 		spStream->Write(pData, (ULONG)cbData, NULL);

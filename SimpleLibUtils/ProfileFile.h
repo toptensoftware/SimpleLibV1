@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -53,8 +53,8 @@ public:
 	void SetValue(const CUniString& strValue);
 	int GetIntValue(int iDefault) const;
 	void SetIntValue(int iValue);
-	__int64 GetInt64Value(__int64 iDefault) const;
-	void SetInt64Value(__int64 iValue);
+	int64_t GetInt64Value(int64_t iDefault) const;
+	void SetInt64Value(int64_t iValue);
 	double GetDoubleValue(double dblDefault) const;
 	void SetDoubleValue(double dbl);
 	size_t GetItemData() const;
@@ -77,7 +77,7 @@ private:
 };
 
 // CProfileSection Class
-class CProfileSection : 
+class CProfileSection :
 	public CVector<CProfileEntry*, SOwnedPtr>,
 	public CProfileOwner
 {
@@ -103,8 +103,8 @@ public:
 
 	int GetIntValue(const wchar_t* pszName, int iDefault) const;
 	void SetIntValue(const wchar_t* pszName, int iValue);
-	__int64 GetInt64Value(const wchar_t* pszName, __int64 iDefault) const;
-	void SetInt64Value(const wchar_t* pszName, __int64 iValue);
+	int64_t GetInt64Value(const wchar_t* pszName, int64_t iDefault) const;
+	void SetInt64Value(const wchar_t* pszName, int64_t iValue);
 	double GetDoubleValue(const wchar_t* pszName, double dblDefault) const;
 	void SetDoubleValue(const wchar_t* pszName, double dblValue);
 
@@ -141,7 +141,7 @@ private:
 };
 
 // CProfileFile Class
-class CProfileFile : 
+class CProfileFile :
 		public CVector<CProfileSection*, SOwnedPtr>,
 		public CProfileOwner
 {
@@ -175,8 +175,8 @@ public:
 	const wchar_t* GetValue(const wchar_t* pszSection, const wchar_t* pszName, const wchar_t* pszDefault=NULL) const;
 	void SetIntValue(const CUniString& strSection, const CUniString& strName, int iValue);
 	int GetIntValue(const wchar_t* pszSection, const wchar_t* pszName, int iDefault=0) const;
-	void SetInt64Value(const CUniString& strSection, const CUniString& strName, __int64 iValue);
-	__int64 GetInt64Value(const wchar_t* pszSection, const wchar_t* pszName, __int64 iDefault=0) const;
+	void SetInt64Value(const CUniString& strSection, const CUniString& strName, int64_t iValue);
+	int64_t GetInt64Value(const wchar_t* pszSection, const wchar_t* pszName, int64_t iDefault=0) const;
 	void SetDoubleValue(const CUniString& strSection, const CUniString& strName, double dblValue);
 	double GetDoubleValue(const wchar_t* pszSection, const wchar_t* strName, double dblDefault=0) const;
 
@@ -218,4 +218,3 @@ protected:
 #endif	// __PROFILEFILE_H
 
 
-	
