@@ -43,6 +43,9 @@ for arg in sys.argv[1:]:
     elif arg.lower()=="x64":
         platforms.append("x64")
 
+    elif arg.lower()=="posix":
+        platforms.append("posix")
+
     elif arg.lower()=="rebuild":
         bRebuild=1
 
