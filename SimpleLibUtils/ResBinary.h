@@ -12,22 +12,24 @@
 //////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////
-// CalcCRC.h - declaration of CalcCRC
+// ResBinary.h - declaration of CResNode class
 
-#ifndef __CALCCRC_H
-#define __CALCCRC_H
+#ifndef __RESBINARY_H
+#define __RESBINARY_H
 
-#include "Platform.h"
+#include "ResNode.h"
+#include "Result.h"
+
 
 namespace Simple
 {
 
-void SIMPLEAPI CalculateCRCStart(uint32_t& dwCRC);
-void SIMPLEAPI CalculateCRCContinue(uint32_t& dwCRC, const void* pbData, int cbData);
-void SIMPLEAPI CalculateCRCFinish(uint32_t& dwCRC);
-uint32_t SIMPLEAPI CalculateCRC(const void* pbData, int cbData);
+struct IFile;
 
-}	// namespace Simple
+result_t SIMPLEAPI SaveBinaryRes(CResNode* pNode, IFile* pFile);
+result_t SIMPLEAPI LoadBinaryRes(CResNode* pDest, IFile* pFile);
 
-#endif	// __CALCCRC_H
+}
+
+#endif	// __RESBINARY_H
 

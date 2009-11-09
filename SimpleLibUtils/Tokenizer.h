@@ -86,7 +86,7 @@ class CTokenizer
 public:
 	virtual int CurrentToken()=0;;
 	virtual int NextToken()=0;;
-	virtual void SetError(const wchar_t* pszMessage)=0;;
+	virtual void SetError(const wchar_t* pszMessage, const wchar_t* pszFileName=NULL, int iLine=-1)=0;;
 	virtual const wchar_t* GetError()=0;
 	virtual const wchar_t* GetStringLiteral()=0;;
 	virtual int GetInt32Literal()=0;;
@@ -161,7 +161,7 @@ public:
 // CTokenizer
 	virtual int CurrentToken();
 	virtual int NextToken();
-	virtual void SetError(const wchar_t* pszMessage);
+	virtual void SetError(const wchar_t* pszMessage, const wchar_t* pszFileName=NULL, int iLine=-1);
 	virtual const wchar_t* GetError();
 	virtual const wchar_t* GetStringLiteral();
 	virtual int GetInt32Literal();

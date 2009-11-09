@@ -611,18 +611,21 @@ int CCppTokenizer::NextToken()
 	return m_iToken;
 }
 
-void CCppTokenizer::SetError(const wchar_t* pszMessage)
+void CCppTokenizer::SetError(const wchar_t* pszMessage, const wchar_t* pszFileName, int iLine)
 {
 	// Check if error already set
 	if (!IsEmptyString(m_strError))
 		return;
 
 	// Find file name
-	CUniString strFileName;
-	int iLineNumber=GetCurrentPosition(strFileName);
+	CUniString strFileName=pszFileName;
+	if (strFileName.IsEmpty())
+	{
+		iLine=GetCurrentPosition(strFileName);
+	}
 
 	// Store error location...
-	m_strError=Format(L"%s(%i): %s", strFileName.sz(), iLineNumber, pszMessage);
+	m_strError=Format(L"%s(%i): %s", strFileName.sz(), iLine, pszMessage);
 	m_iToken=tokenError;
 }
 

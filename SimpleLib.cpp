@@ -254,6 +254,14 @@ CString<T>::CString(const CString<T>& Other)
 
 // Constructor
 template <class T>
+CString<T>::CString(const CAnyString& Other)
+{
+	SetHeader(NULL);
+	Assign(Other.As<T>());
+}
+
+// Constructor
+template <class T>
 CString<T>::CString(const T* psz, int iLen)
 {
 	SetHeader(NULL);
@@ -708,6 +716,40 @@ CString<T> CString<T>::Mid(int iFrom, int iCount)
 	return Simple::SubStr<T>(m_psz, iFrom, iCount);
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// CAnyString
+
+inline CAnyString::CAnyString(const char* psz, int iLen)
+{
+	m_strA.Assign(psz, iLen);
+}
+inline CAnyString::CAnyString(const wchar_t* psz, int iLen)
+{
+	m_strW.Assign(psz, iLen);
+}
+inline CAnyString::CAnyString(const CAnsiString& str)
+{
+	m_strA=str;
+}
+inline CAnyString::CAnyString(const CUniString& str)
+{
+	m_strW=str;
+}
+inline CAnyString::CAnyString(const CAnyString& other)
+{
+	m_strW=other.m_strW;
+	m_strA=other.m_strA;
+}
+inline CAnyString::operator const char*() const
+{ 
+	return As<char>();
+}
+inline CAnyString::operator const wchar_t*() const
+{
+	return As<wchar_t>();
+}
+
+
 
 /////////////////////////////////////////////////////////////////////////////
 // Substring functions
@@ -763,6 +805,41 @@ CString<T> Right(const T* psz, int iLength)
 
 	return CString<T>(psz+iLen-iLength);
 }
+
+template <class T>
+CString<T> Repeat(const T* psz, int iCount)
+{
+	int iElementLen=CString<T>::len(psz);
+
+	if (iCount==0 || iElementLen==0)
+		return SChar<T>::EmptyString();
+
+
+	CString<T> strBuf;
+	T* pszStart=strBuf.GetBuffer(iElementLen*iCount);
+
+	T* p=pszStart;
+
+	memcpy(p, psz, sizeof(T)*iElementLen);
+	p+=iElementLen;
+
+	int iDone=1;
+	while (iDone*2<=iCount)
+	{
+		memcpy(p, pszStart, (p-pszStart)*sizeof(T));
+		p+=p-pszStart;
+		iDone*=2;
+	}
+
+	if (iDone<iCount)
+	{
+		memcpy(p, pszStart, (iCount-iDone)*iElementLen*sizeof(T));
+		p+=(iCount-iDone)*iElementLen;
+	}
+	
+	return strBuf;
+}
+
 
 inline bool IsEmptyString(const wchar_t* psz)
 {

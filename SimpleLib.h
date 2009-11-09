@@ -34,6 +34,14 @@
 #include <wchar.h>
 #include <ctype.h>
 #include <wctype.h>
+#include <malloc.h>
+
+#ifdef _MSC_VER
+#define SIMPLEAPI __stdcall
+#else
+#define SIMPLEAPI
+#endif
+
 
 #ifdef _MSC_VER
 typedef unsigned int uint32_t;
@@ -113,38 +121,6 @@ inline wchar_t* wcslwr(wchar_t* psz)
 #endif
 
 
-#ifdef __SUNPRO_CC
-#endif
-
-
-#if defined(_MSC_VER) && (_MSC_VER >= 1400)
-#define SIMPLEAPI __stdcall
-#include <intrin.h>
-#ifdef _M_IX86
-#pragma intrinsic(_InterlockedCompareExchange)
-#pragma warning(disable:4311)
-#pragma warning(disable:4312)
-inline void* _InterlockedCompareExchangePointer(void** volatile pDest, void* pExchange, void* pCompare)
-{
-	return (void*)_InterlockedCompareExchange((long*)pDest, (long)pExchange, (long)pCompare);
-}
-#pragma warning(default:4311)
-#pragma warning(default:4312)
-#else
-#include <intrin.h>
-#pragma intrinsic(_InterlockedCompareExchange64)
-inline void* _InterlockedCompareExchangePointer(void** volatile pDest, void* pExchange, void* pCompare)
-{
-	return (void*)_InterlockedCompareExchange64((__int64*)pDest, (__int64)pExchange, (__int64)pCompare);
-}
-#endif
-#else
-#define _SIMPLELIB_NO_COMPAREANDEXCHANGE
-#endif
-
-#ifndef SIMPLEAPI
-#define SIMPLEAPI
-#endif
 
 #if defined(_MSC_VER) && (_MSC_VER < 1300)
 #define _SIMPLELIB_NO_LINKEDLIST_MULTICHAIN
@@ -238,6 +214,8 @@ public:
 		strlwr(psz);
 		#endif
 	}
+
+	static const char* EmptyString() { return ""; }
 };
 
 template <>
@@ -262,6 +240,7 @@ public:
 		wcslwr(psz);
 		#endif
 	}
+	static const wchar_t* EmptyString() { return L""; }
 };
 
 
@@ -292,6 +271,8 @@ Also, Format for easy sprintf type formatting:
 
 */
 
+class CAnyString;
+
 template <class T>
 class CString
 {
@@ -301,6 +282,7 @@ public:
 	CString();
 	CString(const CString<T>& Other);
 	CString(const T* psz, int iLen=-1);
+	CString(const CAnyString& Other);
 	~CString();
 
 // Types
@@ -389,6 +371,48 @@ protected:
 typedef CString<char>		CAnsiString;
 typedef CString<wchar_t>	CUniString;
 
+class CAnyString
+{
+public:
+	CAnyString(const char* psz, int iLen=-1);
+	CAnyString(const wchar_t* psz, int iLen=-1);
+	CAnyString(const CAnsiString& str);
+	CAnyString(const CUniString& str);
+	CAnyString(const CAnyString& other);
+	operator const char*() const;
+	operator const wchar_t*() const;
+	template <class T>
+	CString<T> As() const;
+
+	template<>
+	inline CString<char> As<char>() const
+	{
+		if (m_strW!=NULL && m_strA==NULL)
+		{
+			m_strA.Assign(m_strW);
+		}
+		return m_strA;
+	}
+
+	template<>
+	inline CString<wchar_t> As<wchar_t>() const
+	{
+		if (m_strA!=NULL && m_strW==NULL)
+		{
+			m_strW.Assign(m_strA);
+		}
+		return m_strW;
+	}
+
+protected:
+	const wchar_t* m_pszW;
+	const char* m_pszA;
+	mutable CUniString m_strW;
+	mutable CAnsiString m_strA;
+};
+
+
+
 // Lazy man's version of wcsicmp for compilers that don't support it
 inline int lazy_wcsicmp(const wchar_t* psz1, const wchar_t* psz2)
 {
@@ -442,6 +466,9 @@ CString<T> Left(const T* psz, int iLength);
 
 template <class T>
 CString<T> Right(const T* psz, int iLength);
+
+template <class T>
+CString<T> Repeat(const T* psz, int iCount);
 
 
 bool IsEmptyString(const wchar_t* psz);
@@ -514,6 +541,7 @@ inline CAnsiString w2a(const wchar_t* psz, int iLen=-1)
 template <class TDest, class TSrc>
 CString<TDest> t2t(const TSrc* psz, int iLen=-1);
 
+
 template <> inline CString<char> t2t<char, char>(const char* psz, int iLen)
 	{ return CString<char>(psz,iLen); }
 template <> inline CString<char> t2t<char, wchar_t>(const wchar_t* psz, int iLen)
@@ -522,6 +550,12 @@ template <> inline CString<wchar_t> t2t<wchar_t, wchar_t>(const wchar_t* psz, in
 	{ return CString<wchar_t>(psz,iLen); }
 template <> inline CString<wchar_t> t2t<wchar_t, char>(const char* psz, int iLen)
 	{ return a2w(psz,iLen); }
+
+template <class TSrc>
+CUniString t2w(const TSrc* psz) { return t2t<wchar_t, TSrc>(psz); }
+
+template <class TSrc>
+CAnsiString t2a(const TSrc* psz) { return t2t<char, TSrc>(psz); }
 
 
 #if defined(_MSC_VER) && (_MSC_VER>=1400)
