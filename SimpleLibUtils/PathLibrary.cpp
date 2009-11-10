@@ -83,7 +83,13 @@ CUniString SIMPLEAPI SimplePathAppend(const wchar_t* pszPath1, const wchar_t* ps
 
 CUniString SIMPLEAPI CurrentDirectory()
 {
+#ifdef _MSC_VER
+	CUniString str;
+	_wgetcwd(str.GetBuffer(_MAX_PATH), _MAX_PATH);
+	return str;
+#else
 	return a2w(get_current_dir_name());
+#endif
 }
 
 // Fully qualify a path against the current working directory
