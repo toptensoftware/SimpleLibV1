@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////
 // ResParser.cpp - implementation of CResNode class
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "ResParser.h"
@@ -64,7 +64,7 @@ bool CResParser::Parse(CResNode* pRootNode, const wchar_t* pszFileName)
 	result_t r=LoadText(pszFileName, str);
 	if (r)
 	{
-		SetError(Format(L"Failed to load '%s' - %s", pszFileName, FormatResult(r)), L"<inputfile>", -1);
+		SetError(Format(L"Failed to load '%s' - %s", pszFileName, FormatResult(r).sz()), L"<inputfile>", -1);
 		return false;
 	}
 

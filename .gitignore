@@ -32,3 +32,5 @@ _UpgradeReport_Files
 *.depend
 *.layout
 *.log
+*.gch
+

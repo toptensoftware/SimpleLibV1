@@ -84,5 +84,34 @@ int main()
 		ASSERT(IsEqualString(StringReplace(L"$(X)texttexttext$(X)", L"$(x)", L"ZZZ", true), L"$(X)texttexttext$(X)"));
 		ASSERT(IsEqualString(StringReplace(L"$(X)texttexttext$(X)", L"$(x)", L"ZZZ", false), L"ZZZtexttexttextZZZ"));
 	}
+
+	{
+		CTest t("Path Library");
+		printf("\n");
+
+		ASSERT(IsEqualString(SimplePathAppend(L"parta", L"partb"), L"parta/partb"))
+		ASSERT(IsEqualString(SimplePathAppend(L"parta/", L"partb"), L"parta/partb"))
+		ASSERT(IsEqualString(SimplePathAppend(L"parta", L"/partb"), L"parta/partb"))
+		ASSERT(IsEqualString(SimplePathAppend(L"parta/", L"/partb"), L"parta/partb"))
+
+		ASSERT(IsEqualString(FindRelativePath(L"/home/bradr/dev2/", L"/home/bradr/dev/file.txt"), L"../dev/file.txt"))
+		ASSERT(IsEqualString(FindRelativePath(L"/home/Bradr/dev2/", L"/home/bradr/dev/file.txt"), L"../../bradr/dev/file.txt"))
+
+	CUniString stCurrent=CurrentDirectory();
+
+		printf("\tCurrent directory: %S\n", CurrentDirectory().sz());
+
+		#define show(x) printf("\t%S --> %S\n", x, QualifyPath(x).sz());
+		show(L".");
+		show(L"../../blah.txt")
+		#undef show
+
+		CUniString L, R;
+		#define show(x) L.Empty(); R.Empty(); SplitPath(x, &L, &R); printf("\t%S --> %S  and  %S\n", x, L.sz(), R.sz());
+		show(L"/var/temp/file.txt/");
+		show(L"/var/temp/file.txt");
+		#undef show
+	}
+
     return 0;
 }

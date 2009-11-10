@@ -7,14 +7,15 @@
 void ShowHelp()
 {
 	printf("Simple Resource Compiler v1.0\n");
-	printf("Copyright © 2009 Topten Software. All Rights Reserved\n\n");
-	printf("Usage:\tsrc [-?] [-i:<includepath>] [-d:<define>] [-o:<outputfile>] [-dump] [-decompile] [@<responsefile>] file \n\n");
+	printf("Copyright (C) 2009 Topten Software. All Rights Reserved\n\n");
+	printf("Usage:\tsrc [-?] [-i:<includepath>] [-d:<define>] [-o:<outputfile>] [-dump] [-decompile] [-unicode] [@<responsefile>] file \n\n");
 	printf("    file           input file\n");
 	printf("    -i:<path>      add include path\n");
 	printf("    -d:<define>    add a preprocessor define\n");
 	printf("    -o:<file>      output file\n");
 	printf("    -dump          dump decompiled or preprocessed input file to output\n");
 	printf("    -decompile     decompile binary resource to text\n");
+	printf("    -unicode       output text files in unicode\n");
 	printf("    -?             display this help\n");
 	printf("\n");
 }
@@ -33,7 +34,7 @@ int main(int argc, char* argv[])
 	CUniString strError;
 	if (!ExpandResponseFiles(args, strError))
 	{
-		wprintf(L"%s\n", strError);
+		printf("%S\n", strError.sz());
 		return 7;
 	}
 
@@ -52,6 +53,7 @@ int main(int argc, char* argv[])
 
 	bool bDecompile=false;
 	bool bDump=false;
+	bool bOutputInUnicode=false;
 
 	for (int i=0; i<args.GetSize(); i++)
 	{
@@ -83,9 +85,13 @@ int main(int argc, char* argv[])
 			{
 				bDump=true;
 			}
+			else if (IsEqualString(strSwitch, L"unicode"))
+			{
+				bOutputInUnicode=true;
+			}
 			else
 			{
-				wprintf(L"Unrecognised switch: %s\n", args[i]);
+				printf("Unrecognised switch: %S\n", args[i].sz());
 				return 7;
 			}
 		}
@@ -110,21 +116,21 @@ int main(int argc, char* argv[])
 		result_t r;
 		if ((r=file.OpenExisting(strInputFile))!=0)
 		{
-			printf("Failed to open '%S' - %S\n", strInputFile, FormatResult(r));
+			printf("Failed to open '%S' - %S\n", strInputFile.sz(), FormatResult(r).sz());
 			return 7;
 		}
 
 		// Load in binary format
 		CResNode node;
-		if (r=LoadBinaryRes(&node, &file))
+		if ((r=LoadBinaryRes(&node, &file)))
 		{
-			printf("Failed to load '%S' - %S\n", strInputFile, FormatResult(r));
+			printf("Failed to load '%S' - %S\n", strInputFile.sz(), FormatResult(r).sz());
 			return 7;
 		}
 
 		if (bDump)
 		{
-			printf("%S\n", FormatResNode(&node, false));
+			printf("%S\n", FormatResNode(&node, false).sz());
 		}
 		else
 		{
@@ -133,9 +139,18 @@ int main(int argc, char* argv[])
 				strOutputFile=ChangeFileExtension(strInputFile, L"decompiled.src");
 
 			// Save in text format
-			if (r=SaveResNode(&node, strOutputFile))
+			CUniString strNode=FormatResNode(&node, false);
+			if (bOutputInUnicode)
 			{
-				printf("Failed to save '%S' - %s\n", strOutputFile, FormatResult(r));
+				r=SaveText<wchar_t>(strOutputFile, strNode);
+			}
+			else
+			{
+				r=SaveText<char>(strOutputFile, w2a(strNode));
+			}
+			if (r)
+			{
+				printf("Failed to save '%S' - %S\n", strOutputFile.sz(), FormatResult(r).sz());
 				return 7;
 			}
 		}
@@ -154,7 +169,7 @@ int main(int argc, char* argv[])
 
 		if (bDump)
 		{
-			printf("%S\n", FormatResNode(&node, false));
+			printf("%S\n", FormatResNode(&node, false).sz());
 		}
 		else
 		{
@@ -167,14 +182,14 @@ int main(int argc, char* argv[])
 			result_t r;
 			if ((r=file.CreateNew(strOutputFile))!=0)
 			{
-				printf("Failed to create '%S' - %S\n", strOutputFile, FormatResult(r));
+				printf("Failed to create '%S' - %S\n", strOutputFile.sz(), FormatResult(r).sz());
 				return 7;
 			}
 
 			// Save in binary
-			if (r=SaveBinaryRes(&node, &file))
+			if ((r=SaveBinaryRes(&node, &file)))
 			{
-				printf("Failed to create '%S' - %S\n", strOutputFile, FormatResult(r));
+				printf("Failed to create '%S' - %S\n", strOutputFile.sz(), FormatResult(r).sz());
 				return 7;
 			}
 		}

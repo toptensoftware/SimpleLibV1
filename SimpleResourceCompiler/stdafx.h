@@ -3,7 +3,8 @@
 // are changed infrequently
 //
 
-#pragma once
+#ifndef __STDAFX_H
+#define __STDAFX_H
 
 #include <stdio.h>
 
@@ -11,3 +12,4 @@
 #include <SimpleLibUtils.h>
 using namespace Simple;
 
+#endif	// _STDAFX_H

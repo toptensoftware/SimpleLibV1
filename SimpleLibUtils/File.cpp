@@ -14,13 +14,15 @@
 //////////////////////////////////////////////////////////////////////////
 // File.cpp - implementation of IFile class
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "File.h"
 #include "PathLibrary.h"
 
+#ifdef _MSC_VER
 #include <share.h>
+#endif
 
 namespace Simple
 {
@@ -78,6 +80,8 @@ result_t CFile::Open(const CAnyString& pszFileName, uint32_t flags)
 			return e_invalidarg;
 	}
 
+#ifdef _MSC_VER
+
 	// Work out sharing flags
 	int shareflag=_SH_DENYRW;
 	switch (flags & (ffShareRead|ffShareWrite))
@@ -94,18 +98,26 @@ result_t CFile::Open(const CAnyString& pszFileName, uint32_t flags)
 			shareflag=_SH_DENYRD;
 			break;
 	}
-	
+
 	// Open file
 	m_pFile=_wfsopen(pszFileName, pszFlags, shareflag);
 	if (!m_pFile)
 		return ResultFromErrno(errno);
 
+#else
+
+	m_pFile=fopen64(pszFileName, w2a(pszFlags));
+	if (!m_pFile)
+		return ResultFromErrno(errno);
+
+#endif
+
 	// Append?
 	if ((flags & ffAppend) && (flags & ffOpen))
 	{
-		_fseeki64(m_pFile, 0, SEEK_END);
+		fseek(m_pFile, 0, SEEK_END);
 	}
-	
+
 	// Done
 	return s_ok;
 }
@@ -132,15 +144,13 @@ result_t CFile::Read(void* pBuf, uint32_t cb, uint32_t* pcb)
 	if (temp==cb)
 		return 0;
 
-	errno_t err=errno;
-
 	if (feof(m_pFile))
 	{
 		// If eof and didn't ask for return count, convert to error
 		return pcb==NULL ? e_eof : 0;
 	}
 
-	return ResultFromErrno(err);
+	return ResultFromErrno(errno);
 }
 
 // Implementation of Write
@@ -162,11 +172,21 @@ result_t CFile::Write(const void* pBuf, uint32_t cb, uint32_t* pcb)
 // Implementation of Seek
 result_t CFile::Seek(int64_t offset, FileSeekOrigin origin, uint64_t* pcb)
 {
+#ifdef _MSC_VER
+
 	if (_fseeki64(m_pFile, offset, origin)!=0)
 		return ResultFromErrno(errno);
-
 	if (pcb)
 		*pcb=_ftelli64(m_pFile);
+
+#else
+
+	if (fseeko64(m_pFile, offset, origin)!=0)
+		return ResultFromErrno(errno);
+	if (pcb)
+		*pcb=ftello64(m_pFile);
+
+#endif
 
 	return 0;
 }

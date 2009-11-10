@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 // Result.cpp - implementation of result_t
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "Result.h"
@@ -17,10 +17,14 @@ CUniString FormatResult(result_t r)
 		case RESULT_TYPE_ERRNO:
 		{
 			CUniString str;
+#ifdef _MSC_VER
 			_wcserror_s(str.GetBuffer(1024), 1024, RESULT_CODE(r));
+#else
+			CAnsiString strTemp;
+			str=a2w(strerror_r(RESULT_CODE(r), strTemp.GetBuffer(1024), 1024));
+#endif
 			str=StringReplace(str, L"\r\n", L"", false);
 			str=StringReplace(str, L"\n", L"", false);
-			return str;
 		}
 
 		case RESULT_TYPE_GENERIC:

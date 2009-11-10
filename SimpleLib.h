@@ -384,32 +384,32 @@ public:
 	template <class T>
 	CString<T> As() const;
 
-	template<>
-	inline CString<char> As<char>() const
-	{
-		if (m_strW!=NULL && m_strA==NULL)
-		{
-			m_strA.Assign(m_strW);
-		}
-		return m_strA;
-	}
-
-	template<>
-	inline CString<wchar_t> As<wchar_t>() const
-	{
-		if (m_strA!=NULL && m_strW==NULL)
-		{
-			m_strW.Assign(m_strA);
-		}
-		return m_strW;
-	}
-
 protected:
 	const wchar_t* m_pszW;
 	const char* m_pszA;
 	mutable CUniString m_strW;
 	mutable CAnsiString m_strA;
 };
+
+template<>
+inline CString<char> CAnyString::As<char>() const
+{
+	if (m_strW!=NULL && m_strA==NULL)
+	{
+		m_strA.Assign(m_strW);
+	}
+	return m_strA;
+}
+
+template<>
+inline CString<wchar_t> CAnyString::As<wchar_t>() const
+{
+	if (m_strA!=NULL && m_strW==NULL)
+	{
+		m_strW.Assign(m_strA);
+	}
+	return m_strW;
+}
 
 
 

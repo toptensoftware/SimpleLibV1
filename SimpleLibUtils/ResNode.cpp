@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////
 // ResNode.cpp - implementation of CResNode class
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "ResNode.h"
@@ -33,16 +33,16 @@ CResNode::CResNode() :
 }
 
 // Constructor
-CResNode::CResNode(const CUniString& Name) : 
-	m_pParentNode(NULL),
-	m_strName(Name)
+CResNode::CResNode(const CUniString& Name) :
+	m_strName(Name),
+	m_pParentNode(NULL)
 {
 }
 
 // Copy constructor
-CResNode::CResNode(const CResNode& other) : 
-	m_pParentNode(NULL),
-	m_strName(other.m_strName)
+CResNode::CResNode(const CResNode& other) :
+	m_strName(other.m_strName),
+	m_pParentNode(NULL)
 {
 	CopyFrom(&other);
 }
@@ -63,7 +63,7 @@ CUniString CResNode::GetFullName() const
 	if (m_pParentNode==NULL)
 		return L"";
 
-	return Format(L"%s\\%s", m_pParentNode->GetFullName());
+	return Format(L"%s\\%s", m_pParentNode->GetFullName().sz(), m_strName.sz());
 }
 
 
