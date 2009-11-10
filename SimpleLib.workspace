@@ -8,5 +8,8 @@
 		<Project filename="SimpleLibUtilsTestCases/SimpleLibUtilsTestCases.cbp" active="1">
 			<Depends filename="SimpleLibUtils/SimpleLibUtils.cbp" />
 		</Project>
+		<Project filename="SimpleResourceCompiler/SimpleResourceCompiler.cbp">
+			<Depends filename="SimpleLibUtils/SimpleLibUtils.cbp" />
+		</Project>
 	</Workspace>
 </CodeBlocks_workspace_file>
