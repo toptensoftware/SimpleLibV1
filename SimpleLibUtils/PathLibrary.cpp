@@ -81,6 +81,11 @@ CUniString SIMPLEAPI SimplePathAppend(const wchar_t* pszPath1, const wchar_t* ps
 	return str;
 }
 
+CUniString SIMPLEAPI CurrentDirectory()
+{
+	return a2w(get_current_dir_name());
+}
+
 // Fully qualify a path against the current working directory
 CUniString SIMPLEAPI QualifyPath(const wchar_t* psz)
 {
@@ -125,13 +130,17 @@ void SIMPLEAPI RemoveExtension(wchar_t* pszPath)
 
 
 // Find the last element in a path
-const wchar_t* SIMPLEAPI FindLastElement(const wchar_t* pszPath)
+const wchar_t* SIMPLEAPI FindLastElement(const wchar_t* pszPath, bool bIgnoreTrailingSlash)
 {
 	if (!pszPath)
 		return NULL;
 
 	// Get pointer to last character
 	const wchar_t* p=pszPath+CUniString::len(pszPath)-1;
+
+	// Ignore very trailing path sep
+	if (bIgnoreTrailingSlash && p>pszPath && IsPathSeparator(p[0]))
+		p--;
 
 	while (p>=pszPath)
 		{
@@ -147,7 +156,7 @@ const wchar_t* SIMPLEAPI FindLastElement(const wchar_t* pszPath)
 // Remove the last element in a file name
 void SIMPLEAPI RemoveLastElement(wchar_t* pszPath)
 {
-	wchar_t* p=const_cast<wchar_t*>(FindLastElement(pszPath));
+	wchar_t* p=const_cast<wchar_t*>(FindLastElement(pszPath, true));
 	if (p)
 	{
 		p[0]='\0';
@@ -161,7 +170,7 @@ void SIMPLEAPI RemoveLastElement(wchar_t* pszPath)
 
 bool SIMPLEAPI SplitPath(const wchar_t* pszPath, CUniString* pstrFolder, CUniString* pstrFileName)
 {
-	const wchar_t* pszLastElement=FindLastElement(pszPath);
+	const wchar_t* pszLastElement=FindLastElement(pszPath, false);
 	if (!pszLastElement || pszLastElement==pszPath)
 	{
 		if (pstrFolder)
@@ -180,7 +189,7 @@ bool SIMPLEAPI SplitPath(const wchar_t* pszPath, CUniString* pstrFolder, CUniStr
 
 CUniString SIMPLEAPI ExtractFileTitle(const wchar_t* pszPath)
 {
-	const wchar_t* pszLastElement=FindLastElement(pszPath);
+	const wchar_t* pszLastElement=FindLastElement(pszPath, false);
 	if (!pszLastElement)
 		return NULL;
 
@@ -274,6 +283,7 @@ CUniString SIMPLEAPI CanonicalPathAppend(const wchar_t* pszPath1, const wchar_t*
 
 
 // Find the end of the drive or UNC part of a path
+#ifdef _WIN32
 const wchar_t* SIMPLEAPI FindEndOfDrive(const wchar_t* pszPath)
 {
 	const wchar_t* p=pszPath;
@@ -310,12 +320,17 @@ const wchar_t* SIMPLEAPI FindEndOfDrive(const wchar_t* pszPath)
 	// Not a drive or UNC
 	return NULL;
 }
+#endif
 
 
 // Check if path contains drive or UNC part
 bool SIMPLEAPI IsFullyQualified(const wchar_t* pszPath)
 {
+#ifdef _WIN32
 	return FindEndOfDrive(pszPath)!=NULL;
+#else
+	return pszPath[0]=='/' || pszPath[0]=='~';
+#endif
 }
 
 CUniString SIMPLEAPI FindFileOnSearchPath(CVector<CUniString>& vecPath, const wchar_t* pszFileName)
@@ -410,6 +425,7 @@ CUniString SIMPLEAPI ChangeFileExtension(const wchar_t* pszFileName, const wchar
 }
 
 // Extract the drive letter or UNC machine/share part of a path
+#ifdef _WIN32
 CUniString SIMPLEAPI ExtractDrive(const wchar_t* pszPath)
 {
 	// Find end of drive
@@ -419,6 +435,7 @@ CUniString SIMPLEAPI ExtractDrive(const wchar_t* pszPath)
 
 	return CUniString(pszPath, int(pszEndOfDrive-pszPath));
 }
+#endif
 
 
 bool LenICompare(const wchar_t* psz1, int iLen1, const wchar_t* psz2, int iLen2)
@@ -430,10 +447,19 @@ bool LenICompare(const wchar_t* psz1, int iLen1, const wchar_t* psz2, int iLen2)
 	return _wcsnicmp(psz1, psz2, iLen1)==0;
 }
 
+bool LenCompare(const wchar_t* psz1, int iLen1, const wchar_t* psz2, int iLen2)
+{
+	// Same length?
+	if (iLen1!=iLen2)
+		return false;
+
+	return wcsncmp(psz1, psz2, iLen1)==0;
+}
+
 const wchar_t* SIMPLEAPI FindEndOfElement(const wchar_t* p)
 {
 	// Find end of part
-	while (p[0] && p[0]!=L'\\')
+	while (p[0] && !IsPathSeparator(p[0]))
 		p++;
 
 	return p;
@@ -454,6 +480,7 @@ CUniString SIMPLEAPI FindRelativePath(const wchar_t* pszPath1, const wchar_t* ps
 	pszPath1=strPath1;
 	pszPath2=strPath2;
 
+#ifdef _WIN32
 	// Extract drives and ensure the same
 	CUniString strDrive1=ExtractDrive(pszPath1);
 	CUniString strDrive2=ExtractDrive(pszPath2);
@@ -463,6 +490,7 @@ CUniString SIMPLEAPI FindRelativePath(const wchar_t* pszPath1, const wchar_t* ps
 	// Skip drive part of each path
 	pszPath1+=strDrive1.GetLength()+1;
 	pszPath2+=strDrive2.GetLength()+1;
+#endif
 
 	// Skip common prefix
 	while (true)
@@ -472,16 +500,21 @@ CUniString SIMPLEAPI FindRelativePath(const wchar_t* pszPath1, const wchar_t* ps
 		const wchar_t* pszNextElem2=FindEndOfElement(pszPath2);
 
 		// Different folder name?
+		#ifdef _WIN32
 		if (!LenICompare(pszPath1, int(pszNextElem1-pszPath1), pszPath2, int(pszNextElem2-pszPath2)))
 			break;
+		#else
+		if (!LenCompare(pszPath1, int(pszNextElem1-pszPath1), pszPath2, int(pszNextElem2-pszPath2)))
+			break;
+		#endif
 
 		// Move to next element
 		pszPath1=pszNextElem1;
 		pszPath2=pszNextElem2;
 
 		// Skip backslashes
-		if (pszPath1[0]==L'\\') pszPath1++;
-		if (pszPath2[0]==L'\\') pszPath2++;
+		if (IsPathSeparator(pszPath1[0])) pszPath1++;
+		if (IsPathSeparator(pszPath2[0])) pszPath2++;
 
 		// Quit if end of either path
 		if (pszPath1[0]==L'\0')
@@ -499,13 +532,13 @@ CUniString SIMPLEAPI FindRelativePath(const wchar_t* pszPath1, const wchar_t* ps
 	while (pszPath1[0])
 		{
 		// Append "..\"
-		strRelative.Append(L"..\\");
+		strRelative.Append(Format(L"..%c", PATH_SEPARATOR));
 
 		// Find end of next element in each path
 		pszPath1=FindEndOfElement(pszPath1);
 
 		// Skip backslash
-		if (pszPath1[0]==L'\\') pszPath1++;
+		if (IsPathSeparator(pszPath1[0])) pszPath1++;
 		}
 
 	// Append rest of path2

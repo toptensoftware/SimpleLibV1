@@ -23,6 +23,8 @@ namespace Simple
 
 #ifdef _MSC_VER
 typedef errno_t	error_t;
+#else
+#include <errno.h>
 #endif
 
 typedef uint32_t	result_t;

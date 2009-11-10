@@ -31,7 +31,11 @@ namespace Simple
 // Check if a character is a valid switch character
 static bool IsSwitchChar(wchar_t ch)
 {
+#ifdef _WIN32
 	return ch==L'/' || ch==L'-';
+#else
+	return ch==L'-';
+#endif
 }
 
 

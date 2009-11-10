@@ -121,7 +121,11 @@ bool SIMPLEAPI ExpandResponseFiles(CVector<CUniString>& args, CUniString& strErr
 bool SIMPLEAPI ParseArg(const wchar_t* pszArg, CUniString& strName, CUniString& strValue)
 {
 	// Is it a switch?
+#ifdef _WIN32
 	if (pszArg[0]!='/' && pszArg[0]!='-')
+#else
+	if (pszArg[0]!='-')
+#endif
 	{
 		strName=L"";
 		strValue=pszArg;

@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////
 // ResBinary.cpp - implementation of CResNode class
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "ResBinary.h"
@@ -59,7 +59,7 @@ public:
 	};
 };
 
-// Write a variable length uint32_t 
+// Write a variable length uint32_t
 static result_t WriteVarLen(IFile* pFile, uint32_t dwVal, bool bCont=false)
 {
 	// Write MSB first
@@ -125,11 +125,11 @@ static result_t ReadVarLen(IFile* pFile, uint32_t& dwVal)
 	if (dwVal & 0x80)
 		{
 		dwVal &= 0x7f;
-		do 
+		do
 			{
 			// Read next byte
 			ReturnIfFailed(pFile->Read(&c, sizeof(c), NULL));
-	
+
 			dwVal = (dwVal<<7) + (c & 0x7f);
 			} while (c & 0x80);
 		}
