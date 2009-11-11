@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////
 // CommandLineParser.cpp - implementation of CCommandLineParser
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "CommandLineParser.h"
@@ -24,12 +24,18 @@
 namespace Simple
 {
 
+#ifdef _MSC_VER
 #pragma warning(disable:4996)
+#endif
 
 // Check if a character is a valid switch character
 static bool IsSwitchChar(wchar_t ch)
 {
+#ifdef _WIN32
 	return ch==L'/' || ch==L'-';
+#else
+	return ch==L'-';
+#endif
 }
 
 
@@ -97,8 +103,8 @@ static CUniString WrapString(const wchar_t* psz, int iTabs, int iTabSize, int iW
 		const wchar_t* pszSpaces=p;
 		while (p[0]==L' ')
 			p++;
-		
-		// Append either spaces or a carriage return		
+
+		// Append either spaces or a carriage return
 		iLen=int(p-pszSpaces);
 		if (iPos+iLen>iWrapWidth)
 			{
@@ -158,7 +164,7 @@ bool CCommandLineParser::ParseFile(const wchar_t* pszFileName)
 	CUniString strResponseText;
 	if (!LoadTextFile<wchar_t>(strResponseFile, strResponseText))
 		{
-		m_strErrorMessage=Format(L"Failed to load response file '%s'", strResponseFile);
+		m_strErrorMessage=Format(L"Failed to load response file '%s'", strResponseFile.sz());
 		return false;
 		}
 	else
@@ -232,7 +238,7 @@ bool CCommandLineParser::CheckExclusive(const wchar_t* pszArgs)
 		// Multiple ones used?
 		if (strUsed)
 			{
-			m_strErrorMessage=Format(L"Inconsistant use of args: '%s' and '%s'", strUsed, pArg->m_strName);
+			m_strErrorMessage=Format(L"Inconsistant use of args: '%s' and '%s'", strUsed.sz(), pArg->m_strName.sz());
 			return false;
 			}
 
@@ -273,7 +279,7 @@ bool CCommandLineParser::MakeExclusive(const wchar_t* pszArgs)
 				pPrev=pArg;
 				}
 			}
-		else	
+		else
 			{
 			// Remember the previous
 			pPrev=pArg;
@@ -307,7 +313,7 @@ bool CCommandLineParser::CheckOneOf(const wchar_t* pszArgs)
 
 		if (strUsed)
 			{
-			m_strErrorMessage=Format(L"Inconsistant use of args: '%s' and '%s'", strUsed, pArg->m_strName);
+			m_strErrorMessage=Format(L"Inconsistant use of args: '%s' and '%s'", strUsed.sz(), pArg->m_strName.sz());
 			return false;
 			}
 
@@ -318,14 +324,14 @@ bool CCommandLineParser::CheckOneOf(const wchar_t* pszArgs)
 	if (strUsed.IsEmpty())
 		{
 		m_strErrorMessage=L"Required argument missing, please specify one of ";
-		for (int i=0; i<vec.GetSize(); i++)	
+		for (int i=0; i<vec.GetSize(); i++)
 			{
 			if (i==vec.GetSize()-1)
 				m_strErrorMessage+=L" or ";
 			else if (i>0)
 				m_strErrorMessage+=L", ";
 
-			m_strErrorMessage+=Format(L"'%s'", MapArgName(vec[i]));
+			m_strErrorMessage+=Format(L"'%s'", MapArgName(vec[i]).sz());
 			}
 		return false;
 		}
@@ -349,7 +355,7 @@ bool CCommandLineParser::GetSwitch(const wchar_t* pszArg, bool bDefault)
 		{
 		if (!HasError())
 			{
-			m_strErrorMessage=Format(L"Invalid argument - switch '%s' doesn't accept values", pArg->m_strName);
+			m_strErrorMessage=Format(L"Invalid argument - switch '%s' doesn't accept values", pArg->m_strName.sz());
 			}
 		return false;
 		}
@@ -374,7 +380,7 @@ bool CCommandLineParser::GetValue(const wchar_t* pszArg, CUniString& str, const 
 
 		if (!HasError())
 			{
-			m_strErrorMessage=Format(L"Missing required argument '%s'", MapArgName(pszArg));
+			m_strErrorMessage=Format(L"Missing required argument '%s'", MapArgName(pszArg).sz());
 			}
 		return false;
 		}
@@ -387,11 +393,11 @@ bool CCommandLineParser::GetValue(const wchar_t* pszArg, CUniString& str, const 
 		{
 		if (!HasError())
 			{
-			m_strErrorMessage=Format(L"Missing argument value - '%s'", pArg->m_strName);
+			m_strErrorMessage=Format(L"Missing argument value - '%s'", pArg->m_strName.sz());
 			}
 		return false;
 		}
-			
+
 	// If multi, either allow override and use latest one, or generate error
 	if (pArg->IsMulti())
 		{
@@ -406,7 +412,7 @@ bool CCommandLineParser::GetValue(const wchar_t* pszArg, CUniString& str, const 
 			{
 			if (!HasError())
 				{
-				m_strErrorMessage=Format(L"Multiple values specified for argument '%s'", pArg->m_strName);
+				m_strErrorMessage=Format(L"Multiple values specified for argument '%s'", pArg->m_strName.sz());
 				}
 			return false;
 			}
@@ -437,7 +443,7 @@ bool CCommandLineParser::GetMultiValue(const wchar_t* pszArg, CVector<CUniString
 		{
 		if (!HasError())
 			{
-			m_strErrorMessage=Format(L"Missing argument value - '%s'", pArg->m_strName);
+			m_strErrorMessage=Format(L"Missing argument value - '%s'", pArg->m_strName.sz());
 			}
 		return false;
 		}
@@ -457,7 +463,7 @@ bool CCommandLineParser::GetMultiValue(const wchar_t* pszArg, CVector<CUniString
 bool CCommandLineParser::GetPlacedValue(int iPlace, const wchar_t* pszName, CUniString& str)
 {
 	ASSERT(iPlace>=0);
-	
+
 	// Store arg name for GetSettings
 	m_PlacedValueNames.Add(iPlace, pszName);
 
@@ -466,7 +472,7 @@ bool CCommandLineParser::GetPlacedValue(int iPlace, const wchar_t* pszName, CUni
 		{
 		if (!HasError())
 			{
-			m_strErrorMessage=Format(L"Missing argument - '%s'", MapArgName(pszName));
+			m_strErrorMessage=Format(L"Missing argument - '%s'", MapArgName(pszName).sz());
 			}
 		return false;
 		}
@@ -530,15 +536,15 @@ int CCommandLineParser::GetOption(const wchar_t* pszArg, const wchar_t* pszOptio
 	// Check valid
 	if (iValue<0)
 		{
-		m_strErrorMessage=Format(L"Invalid value for argument '%s', please specify one of ", MapArgName(pszArg));
-		for (int i=0; i<vec.GetSize(); i++)	
+		m_strErrorMessage=Format(L"Invalid value for argument '%s', please specify one of ", MapArgName(pszArg).sz());
+		for (int i=0; i<vec.GetSize(); i++)
 			{
 			if (i==vec.GetSize()-1)
 				m_strErrorMessage+=L" or ";
 			else if (i>0)
 				m_strErrorMessage+=L", ";
 
-			m_strErrorMessage+=Format(L"'%s'", MapArgName(vec[i]));
+			m_strErrorMessage+=Format(L"'%s'", MapArgName(vec[i]).sz());
 			}
 		return false;
 		}
@@ -560,7 +566,7 @@ bool CCommandLineParser::CheckNoUnknownArgs()
 		CArg* pArg=m_Args[i].Value;
 		if (!pArg->m_bUsed)
 			{
-			m_strErrorMessage=Format(L"Unrecognised argument '%s'", pArg->m_strName);
+			m_strErrorMessage=Format(L"Unrecognised argument '%s'", pArg->m_strName.sz());
 			return false;
 			}
 		}
@@ -570,7 +576,7 @@ bool CCommandLineParser::CheckNoUnknownArgs()
 		{
 		if (!m_PlacedValueNames.HasKey(i))
 			{
-			m_strErrorMessage=Format(L"Unexpected argument - '%s'", m_vecPlacedValues[i]);
+			m_strErrorMessage=Format(L"Unexpected argument - '%s'", m_vecPlacedValues[i].sz());
 			return false;
 			}
 		}
@@ -604,8 +610,8 @@ const wchar_t* CCommandLineParser::GetErrorMessage()
 // Get a string representing all argument values...
 void CCommandLineParser::GetSettings(CUniString& buf)
 {
-	// Format all named args	
-	for (int i=0; i<m_Args.GetSize(); i++)	
+	// Format all named args
+	for (int i=0; i<m_Args.GetSize(); i++)
 		{
 		CArg* pArg=m_Args[i].Value;
 
@@ -624,7 +630,7 @@ void CCommandLineParser::GetSettings(CUniString& buf)
 				buf.Append(pArg->m_vecValues[i]);
 				}
 			}
-	
+
 		buf.Append(L"\r\n");
 		}
 
@@ -634,11 +640,11 @@ void CCommandLineParser::GetSettings(CUniString& buf)
 		CUniString strName;
 		if (m_PlacedValueNames.Find(i, strName))
 			{
-			buf+=Format(L"%s: %s\n", strName, m_vecPlacedValues[i]);
+			buf+=Format(L"%s: %s\n", strName.sz(), m_vecPlacedValues[i].sz());
 			}
 		else
 			{
-			buf+=Format(L"arg%i: %s\n", i, m_vecPlacedValues[i]);
+			buf+=Format(L"arg%i: %s\n", i, m_vecPlacedValues[i].sz());
 			}
 		}
 }
@@ -778,7 +784,7 @@ bool CCommandLineParser::AddArgs(CVector<CUniString>& Args, bool bIgnoreFirst)
 
 			continue;
 			}
-		
+
 		// Is it a switch
 		if (IsSwitchChar(pszArg[0]))
 			{
@@ -806,7 +812,7 @@ bool CCommandLineParser::AddArgs(CVector<CUniString>& Args, bool bIgnoreFirst)
 				{
 				if (pArg->IsSwitch()!=!pszValueSep)
 					{
-					m_strErrorMessage=Format(L"Conflicting use of argument '%s'", strName);
+					m_strErrorMessage=Format(L"Conflicting use of argument '%s'", strName.sz());
 					continue;
 					}
 				}
@@ -852,7 +858,7 @@ CUniString CCommandLineParser::ApplyCase(const wchar_t* psz)
 	if (!m_bCaseSensitive)
 	{
 		CUniString str(psz);
-		_wcslwr(str.GetBuffer(0));
+		wcslwr(str.GetBuffer(0));
 		return str;
 	}
 

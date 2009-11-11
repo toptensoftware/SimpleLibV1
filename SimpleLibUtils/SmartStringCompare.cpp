@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 // SmartStringCompare.cpp - implementation of SmartStringCompare
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "SmartStringCompare.h"

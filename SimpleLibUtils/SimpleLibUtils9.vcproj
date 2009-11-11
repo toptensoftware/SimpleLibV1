@@ -671,6 +671,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\File.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\FormatBinary.cpp"
 				>
 			</File>
@@ -831,7 +835,31 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Platform.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ProfileFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ResBinary.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ResNode.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ResParser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ResTemplate.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Result.cpp"
 				>
 			</File>
 			<File
@@ -1020,6 +1048,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\File.h"
+				>
+			</File>
+			<File
 				RelativePath=".\FormatBinary.h"
 				>
 			</File>
@@ -1052,7 +1084,31 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Platform.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ProfileFile.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ResBinary.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ResNode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ResParser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ResTemplate.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Result.h"
 				>
 			</File>
 			<File

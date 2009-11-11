@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////
 // ProfileFile.cpp - implementation of CProfileFile class
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "ProfileFile.h"
@@ -33,20 +33,20 @@ namespace Simple
 // CProfileEntry
 
 // Constructor
-CProfileEntry::CProfileEntry(CProfileSection* pOwner, const CUniString& strName, const CUniString& strValue) : 
-	m_pOwner(pOwner),
+CProfileEntry::CProfileEntry(CProfileSection* pOwner, const CUniString& strName, const CUniString& strValue) :
 	m_strName(strName),
 	m_strValue(strValue),
-	m_lParam(0)
+	m_lParam(0),
+	m_pOwner(pOwner)
 {
 }
 
 // Copy constructor
-CProfileEntry::CProfileEntry(CProfileSection* pOwner, const CProfileEntry& Other) : 
-	m_pOwner(pOwner),
+CProfileEntry::CProfileEntry(CProfileSection* pOwner, const CProfileEntry& Other) :
 	m_strName(Other.m_strName),
 	m_strValue(Other.m_strValue),
-	m_lParam(0)
+	m_lParam(0),
+	m_pOwner(pOwner)
 {
 }
 
@@ -88,12 +88,12 @@ void CProfileEntry::SetIntValue(int iValue)
 	SetValue(Format(L"%i", iValue));
 }
 
-__int64 CProfileEntry::GetInt64Value(__int64 iDefault) const
+int64_t CProfileEntry::GetInt64Value(int64_t iDefault) const
 {
 	if (!this)
 		return iDefault;
 
-	__int64 iValue;
+	int64_t iValue;
 	const wchar_t* psz=ParseInt64(GetValue(), &iValue);
 	if (psz && (psz[0]==' ' || psz[0]=='\t' || psz[0]=='\0' || psz[0]==';'))
 		return iValue;
@@ -101,7 +101,7 @@ __int64 CProfileEntry::GetInt64Value(__int64 iDefault) const
 	return iDefault;
 }
 
-void CProfileEntry::SetInt64Value(__int64 iValue)
+void CProfileEntry::SetInt64Value(int64_t iValue)
 {
 	SetValue(Format(L"%I64i", iValue));
 }
@@ -113,7 +113,7 @@ double CProfileEntry::GetDoubleValue(double dblDefault) const
 
 	double dblValue;
 	const wchar_t* psz=GetValue();
-	if (ReadDouble(psz, &dblValue) && psz[0]==' ' || psz[0]=='\t' || psz[0]=='\0' || psz[0]==';')
+	if (ReadDouble(psz, &dblValue) && (psz[0]==' ' || psz[0]=='\t' || psz[0]=='\0' || psz[0]==';'))
 		return dblValue;
 
 	return dblDefault;
@@ -136,8 +136,8 @@ void CProfileEntry::SetItemData(size_t lParam)
 }
 
 CProfileFile* CProfileEntry::GetOwningFile()
-{ 
-	return m_pOwner ? m_pOwner->GetOwningFile() : NULL; 
+{
+	return m_pOwner ? m_pOwner->GetOwningFile() : NULL;
 }
 
 
@@ -145,19 +145,19 @@ CProfileFile* CProfileEntry::GetOwningFile()
 // CProfileSection
 
 // Constructor
-CProfileSection::CProfileSection(CProfileOwner* pOwner, const CUniString& strName, bool bFlat) : 
+CProfileSection::CProfileSection(CProfileOwner* pOwner, const CUniString& strName, bool bFlat) :
 	m_pOwner(pOwner),
+	m_bFlat(bFlat),
 	m_strName(strName),
-	m_lParam(0),
-	m_bFlat(bFlat)
+	m_lParam(0)
 {
 }
 
 // Copy constructor
-CProfileSection::CProfileSection(CProfileOwner* pOwner, const CProfileSection& Other) : 
+CProfileSection::CProfileSection(CProfileOwner* pOwner, const CProfileSection& Other) :
 	m_pOwner(pOwner),
-	m_strName(Other.m_strName),
 	m_bFlat(Other.m_bFlat),
+	m_strName(Other.m_strName),
 	m_lParam(0)
 {
 	CopyFrom(&Other);
@@ -428,7 +428,7 @@ int CProfileSection::GetIntValue(const wchar_t* pszName, int iDefault) const
 		return pEntry->GetIntValue(iDefault);
 }
 
-__int64 CProfileSection::GetInt64Value(const wchar_t* pszName, __int64 iDefault) const
+int64_t CProfileSection::GetInt64Value(const wchar_t* pszName, int64_t iDefault) const
 {
 	CProfileEntry* pEntry=FindEntry(pszName);
 	if (!pEntry)
@@ -437,7 +437,7 @@ __int64 CProfileSection::GetInt64Value(const wchar_t* pszName, __int64 iDefault)
 		return pEntry->GetInt64Value(iDefault);
 }
 
-void CProfileSection::SetInt64Value(const wchar_t* pszName, __int64 iValue)
+void CProfileSection::SetInt64Value(const wchar_t* pszName, int64_t iValue)
 {
 	CProfileEntry* pEntry=FindEntry(pszName);
 	if (pEntry)
@@ -526,7 +526,7 @@ bool CProfileFile::ParseClassic(const wchar_t* pszContent)
 	const wchar_t* p=pszContent;
 
 	// Parse sections...
-	CProfileSection* pSection;
+	CProfileSection* pSection=NULL;
 	while (p[0])
 		{
 		// Skip leading white space
@@ -540,7 +540,7 @@ bool CProfileFile::ParseClassic(const wchar_t* pszContent)
 			const wchar_t* pszSection=p;
 			while (!IsEOL(p[0]) && p[0] && p[0]!=']')
 				p++;
-			
+
 			// End of section header?
 			if (p[0]!=']')
 				{
@@ -678,8 +678,8 @@ bool CProfileFile::ParseStructured(const wchar_t* pszContent, const wchar_t* psz
 	if (ParseStructuredContent(tokens))
 		return true;
 
-	CUniString strErrorFile;
-	int iLine=tokens.GetCurrentPosition(strErrorFile);
+//	CUniString strErrorFile;
+//	int iLine=tokens.GetCurrentPosition(strErrorFile);
 	m_strParseError=tokens.GetError();
 	return false;
 }
@@ -766,7 +766,7 @@ bool CProfileFile::ParseStructuredContent(CCppTokenizer& tokens)
 			CProfileSection* pLinkTo=FindSection(strLinkTo);
 			if (!pLinkTo)
 			{
-				tokens.SetError(Format(L"Unable to resolve link to '%s'", strLinkTo));
+				tokens.SetError(Format(L"Unable to resolve link to '%s'", strLinkTo.sz()));
 				return false;
 			}
 
@@ -849,7 +849,7 @@ bool CProfileFile::ParseStructuredContent(CCppTokenizer& tokens)
 						iValue|=tokens.GetInt32Literal();
 						tokens.NextToken();
 					}
-					
+
 					strValue=Format(L"%i", iValue);
 				}
 				break;
@@ -978,7 +978,7 @@ int CProfileFile::FindSectionIndex(const wchar_t* pszName, int iStartAfter) cons
 
 	if (!m_strMode.IsEmpty())
 	{
-		int iRetv=FindSectionIndexRaw(Format(L"%s.%s", pszName, m_strMode), iStartAfter);
+		int iRetv=FindSectionIndexRaw(Format(L"%s.%s", pszName, m_strMode.sz()), iStartAfter);
 		if (iRetv>=0)
 			return iRetv;
 	}
@@ -992,7 +992,7 @@ void CProfileFile::Merge(CProfileFile* pOther)
 {
 	for (int i=0; i<pOther->GetSize(); i++)
 	{
-		CProfileSection* pSection=pOther->GetAt(i);
+		//CProfileSection* pSection=pOther->GetAt(i);
 		Add(pOther->GetAt(i));
 	}
 }
@@ -1120,7 +1120,7 @@ void CProfileFile::WriteEntry(CUniString& buf, CProfileEntry* pEntry) const
 
 		}
 
-	
+
 	buf.Append(L"\r\n");
 
 }
@@ -1148,7 +1148,7 @@ void CProfileFile::WriteSection(CUniString& buf, CProfileSection* pSection, cons
 	// Write sub sections...
 	for (int i=0; i<pSection->m_Sections.GetSize(); i++)
 	{
-		WriteSection(buf, pSection->m_Sections[i], Format(L"%s%s\\\\", pszParent, pSection->m_strName));
+		WriteSection(buf, pSection->m_Sections[i], Format(L"%s%s\\\\", pszParent, pSection->m_strName.sz()));
 	}
 }
 
@@ -1216,7 +1216,7 @@ CUniString EscapeString(const wchar_t* psz, bool bValue)
 	}
 
 	if (bNeedQuotes)
-		str=Format(L"\"%s\"", str);
+		str=Format(L"\"%s\"", str.sz());
 
 	return str;
 }
@@ -1287,12 +1287,12 @@ int CProfileFile::GetIntValue(const wchar_t* pszSection, const wchar_t* pszName,
 		return pSection->GetIntValue(pszName, iDefault);
 }
 
-void CProfileFile::SetInt64Value(const CUniString& strSection, const CUniString& strName, __int64 iValue)
+void CProfileFile::SetInt64Value(const CUniString& strSection, const CUniString& strName, int64_t iValue)
 {
 	CreateSection(strSection)->SetInt64Value(strName, iValue);
 }
 
-__int64 CProfileFile::GetInt64Value(const wchar_t* pszSection, const wchar_t* pszName, __int64 iDefault) const
+int64_t CProfileFile::GetInt64Value(const wchar_t* pszSection, const wchar_t* pszName, int64_t iDefault) const
 {
 	CProfileSection* pSection=FindSection(pszSection);
 	if (!pSection)

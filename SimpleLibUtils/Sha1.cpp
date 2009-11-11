@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -15,7 +15,7 @@
 // sha1.cpp - implementation of sha1
 
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "Sha1.h"
@@ -415,11 +415,15 @@ CAnsiString Sha1Format(uint8_t sha[])
 {
 	CAnsiString str;
 
-	char* psz=(char*)_alloca(2*SHA1HashSize+10);
+	char* psz=(char*)alloca(2*SHA1HashSize+10);
 	char* p=psz;
 	for (int i=0; i<SHA1HashSize; i++)
 	{
+		#ifdef _MSC_VER
 		sprintf_s(p, 3, "%.2x", sha[i]);
+		#else
+		sprintf(p, "%.2x", sha[i]);
+		#endif
 		p+=2;
 	}
 
@@ -450,4 +454,3 @@ CAnsiString Sha1(const wchar_t* psz)
 
 
 }
-

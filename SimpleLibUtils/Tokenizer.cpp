@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////
 // Tokenizer.cpp - implementation of CCppTokenizer class
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "Tokenizer.h"
@@ -43,7 +43,7 @@
 namespace Simple
 {
 
-static const wchar_t* g_pszErrors[] = 
+static const wchar_t* g_pszErrors[] =
 {
 	L"No error",
 	L"Unexpected end of file found in comment",
@@ -80,7 +80,7 @@ int SIMPLEAPI ParseHexChar(wchar_t ch)
 	return -1;
 }
 
-bool SIMPLEAPI ParseHexU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverflow)
+bool SIMPLEAPI ParseHexU(const wchar_t*& p, uint64_t& iVal, bool& bOverflow)
 {
 	// Store start
 	const wchar_t* pszStart=p;
@@ -93,7 +93,7 @@ bool SIMPLEAPI ParseHexU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverf
 	while ((iNibble=ParseHexChar(p[0]))>=0)
 	{
 		// Check for overflow
-		if (iVal & 0xF000000000000000I64)
+		if (iVal & 0xF000000000000000ULL)
 			bOverflow=true;
 
 		iVal=(iVal << 4) | iNibble;
@@ -104,7 +104,7 @@ bool SIMPLEAPI ParseHexU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverf
 	return p>pszStart;
 }
 
-bool SIMPLEAPI ParseIntU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverflow)
+bool SIMPLEAPI ParseIntU(const wchar_t*& p, uint64_t& iVal, bool& bOverflow)
 {
 	// Store start
 	const wchar_t* pszStart=p;
@@ -115,7 +115,7 @@ bool SIMPLEAPI ParseIntU(const wchar_t*& p, unsigned __int64& iVal, bool& bOverf
 	iVal=0;
 	while (iswdigit(p[0]))
 	{
-		unsigned __int64 iPrev=iVal;
+		uint64_t iPrev=iVal;
 		iVal=iVal*10 + (p[0]-'0');
 
 		if (iPrev>iVal)
@@ -180,7 +180,7 @@ bool SIMPLEAPI ParseDouble(const wchar_t*& psz, double& dblVal, bool& bError)
 	// Use local ptr
 	const wchar_t* p=psz;
 
-	// Clear error 
+	// Clear error
 	bError=false;
 
 	// Handle negative
@@ -202,7 +202,7 @@ bool SIMPLEAPI ParseDouble(const wchar_t*& psz, double& dblVal, bool& bError)
 	return true;
 }
 
-bool SIMPLEAPI ParseInt64(const wchar_t*& psz, __int64& iVal, bool& bError)
+bool SIMPLEAPI ParseInt64(const wchar_t*& psz, int64_t& iVal, bool& bError)
 {
 	// Use local ptr
 	const wchar_t* p=psz;
@@ -219,7 +219,7 @@ bool SIMPLEAPI ParseInt64(const wchar_t*& psz, __int64& iVal, bool& bError)
 		return false;
 
 	// Hex?
-	unsigned __int64 uVal;
+	uint64_t uVal;
 	if (p[0]=='0' && (p[1]=='x' || p[1]=='X'))
 	{
 		p+=2;
@@ -229,7 +229,7 @@ bool SIMPLEAPI ParseInt64(const wchar_t*& psz, __int64& iVal, bool& bError)
 	{
 		ParseIntU(p, uVal, bError);
 	}
-	
+
 	// Return new position
 	psz=p;
 
@@ -240,7 +240,7 @@ bool SIMPLEAPI ParseInt64(const wchar_t*& psz, __int64& iVal, bool& bError)
 	// Apply negative
 	if (bNegative)
 	{
-		iVal=-__int64(uVal);
+		iVal=-int64_t(uVal);
 	}
 	else
 	{
@@ -264,9 +264,9 @@ bool SIMPLEAPI ParseInt64(const wchar_t*& psz, __int64& iVal, bool& bError)
 #define PPDIR_INCLUDE	8
 #define PPDIR_COUNT		9
 
-const char* g_pszPPDirs[PPDIR_COUNT] = 
+const char* g_pszPPDirs[PPDIR_COUNT] =
 {
-	"define", 
+	"define",
 	"undef",
 	"ifdef",
 	"ifndef",
@@ -337,7 +337,7 @@ int COperatorMap::Parse(const wchar_t*& p)
 	int iSub=pChar->m_mapNext.Parse(p);
 	if (iSub)
 		return iSub;
-	
+
 	// If didn't match anything and this is not a valid operator
 	// by itself, then rewind
 	if (!pChar->m_iToken)
@@ -378,7 +378,7 @@ bool COperatorChar::GetToken(int iToken, CUniString& str)
 	if (m_mapNext.GetToken(iToken, strTemp))
 	{
 		// Match, so return the following string, prefixed with this character
-		str=Format(L"%c%s", m_ch, strTemp);
+		str=Format(L"%c%s", m_ch, strTemp.sz());
 		return true;
 	}
 
@@ -404,7 +404,7 @@ CFileContentProvider::~CFileContentProvider()
 // Get the content of a file
 bool CFileContentProvider::GetFileContent(
 			const wchar_t* pszCurrentFileName,
-			const wchar_t* pszFileName, 
+			const wchar_t* pszFileName,
 			bool bSysPath,
 			CUniString& strQualifiedFileName,
 			CUniString& strContent
@@ -441,7 +441,7 @@ bool CFileContentProvider::GetFileContent(
 			strQualifiedFileName=QualifyPath(pszFileName);
 
 	}
-	
+
 	if (!DoesFileExist(strQualifiedFileName))
 	{
 		if (m_pNext)
@@ -611,18 +611,21 @@ int CCppTokenizer::NextToken()
 	return m_iToken;
 }
 
-void CCppTokenizer::SetError(const wchar_t* pszMessage)
+void CCppTokenizer::SetError(const wchar_t* pszMessage, const wchar_t* pszFileName, int iLine)
 {
 	// Check if error already set
 	if (!IsEmptyString(m_strError))
 		return;
 
 	// Find file name
-	CUniString strFileName;
-	int iLineNumber=GetCurrentPosition(strFileName);
+	CUniString strFileName=pszFileName;
+	if (strFileName.IsEmpty())
+	{
+		iLine=GetCurrentPosition(strFileName);
+	}
 
 	// Store error location...
-	m_strError=Format(L"%s(%i): %s", strFileName, iLineNumber, pszMessage);
+	m_strError=Format(L"%s(%i): %s", strFileName.sz(), iLine, pszMessage);
 	m_iToken=tokenError;
 }
 
@@ -641,13 +644,13 @@ int CCppTokenizer::GetInt32Literal()
 	return int(m_iVal);
 }
 
-__int64 CCppTokenizer::GetInt64Literal()
+int64_t CCppTokenizer::GetInt64Literal()
 {
 	return m_iVal;
 }
 
 double CCppTokenizer::GetDoubleLiteral()
-{	
+{
 	if (m_iToken==tokenInt32Literal)
 	{
 		return double(m_iVal);
@@ -698,7 +701,7 @@ StartAgain:
 		// Check if we have pushed state we can pop from
 		if (PopState())
 			goto StartAgain;
-	
+
 		// Nope, really the end of the file
 		return tokenEOF;
 	}
@@ -722,14 +725,14 @@ StartAgain:
 
 		// HTML RGB value
 		const wchar_t* psz=m_pszPos;
-		unsigned __int64 rgb;
+		uint64_t rgb;
 		bool bOverflow;
 		if (ParseHexU(psz, rgb, bOverflow))
 		{
 			if (int(psz-m_pszPos)==6)
 			{
-				m_iVal=((rgb & 0xFF)<<16) | 
-						(rgb & 0xFF00) | 
+				m_iVal=((rgb & 0xFF)<<16) |
+						(rgb & 0xFF00) |
 						((rgb >> 16) & 0xFF);
 				m_pszToken=m_pszPos-1;
 				m_pszPos=psz;
@@ -798,7 +801,7 @@ StartAgain:
 
 				CUniString strMacro;
 				if (!SkipIdentifier(m_pszPos, strMacro))
-				{	
+				{
 					FormatError(ERR_SYNTAX, L"#if[n]def expected an identifier");
 					return tokenError;
 				}
@@ -826,7 +829,7 @@ StartAgain:
 		}
 
 		// What was that?
-		FormatError(ERR_INVALIDPREPROCDIRECTIVE, strDirective);
+		FormatError(ERR_INVALIDPREPROCDIRECTIVE, strDirective.sz());
 		return tokenError;
 	}
 
@@ -839,7 +842,7 @@ StartAgain:
 		m_TypeQualifier=tqUnicodeString;
 		m_pszPos++;
 	}
-	
+
 	// String?
 	if (ParseStringLiteral(false, m_strString))
 	{
@@ -913,7 +916,7 @@ StartAgain:
 	}
 
 	// Unknown...
-	FormatError(ERR_SYNTAX, Format(L"unexpected character '%c'", m_pszPos[0]));
+	FormatError(ERR_SYNTAX, Format(L"unexpected character '%c'", m_pszPos[0]).sz());
 	return tokenError;
 }
 
@@ -933,7 +936,7 @@ void CCppTokenizer::ParseMacro()
 	// Check for duplicate
 	if (m_mapMacros.HasKey(strMacroName))
 	{
-		FormatError(ERR_DUPLICATEMACRO, strMacroName);	
+		FormatError(ERR_DUPLICATEMACRO, strMacroName.sz());
 		return;
 	}
 
@@ -964,7 +967,7 @@ void CCppTokenizer::ParseMacro()
 
 			// Skip whitespace after parameter name
 			SkipLineSpaceAndComments();
-	
+
 			// If its not a comma, we're done
 			if (m_pszPos[0]!=',')
 				break;
@@ -1107,7 +1110,7 @@ bool CCppTokenizer::ExpandMacro(CMacro* pMacro)
 					continue;
 				}
 				else if (SkipComments())
-				{	
+				{
 					continue;
 				}
 				else
@@ -1144,12 +1147,12 @@ bool CCppTokenizer::ExpandMacro(CMacro* pMacro)
 	// Check number of parameters matches...
 	if (vecParams.GetSize()<pMacro->m_vecParameters.GetSize())
 	{
-		FormatError(ERR_NOTENOUGHPARAMS, pMacro->m_strName);
+		FormatError(ERR_NOTENOUGHPARAMS, pMacro->m_strName.sz());
 		return false;
 	}
 	if (vecParams.GetSize()>pMacro->m_vecParameters.GetSize())
 	{
-		FormatError(ERR_TOOMANYPARAMS, pMacro->m_strName);
+		FormatError(ERR_TOOMANYPARAMS, pMacro->m_strName.sz());
 		return false;
 	}
 
@@ -1207,7 +1210,7 @@ void CCppTokenizer::ParseInclude()
 	}
 	else
 	{
-		FormatError(ERR_SYNTAX, L"expected #include filename as a string");		
+		FormatError(ERR_SYNTAX, L"expected #include filename as a string");
 		return;
 	}
 
@@ -1236,10 +1239,10 @@ void CCppTokenizer::ParseInclude()
 
 	// Ignore rest of line
 	CheckEndOfLine();
-	
+
 	// Quit if error
 	if (!IsEmptyString(m_strError))
-		return;	
+		return;
 
 
 	ASSERT(m_pContentProvider!=NULL);
@@ -1251,7 +1254,7 @@ void CCppTokenizer::ParseInclude()
 	{
 		if (m_strError.IsEmpty())
 		{
-			SetError(Format(L"Failed to load '%s'.", strFileName));
+			SetError(Format(L"Failed to load '%s'.", strFileName.sz()));
 		}
 		return;
 	}
@@ -1299,7 +1302,7 @@ void CCppTokenizer::HandleEndif()
 
 	m_ConditionalState.RemoveAt(0);
 	return;
-	
+
 }
 
 void CCppTokenizer::SkipExcludedConditional(int iState)
@@ -1325,7 +1328,7 @@ void CCppTokenizer::SkipExcludedConditional(int iState)
 				{
 					IgnoreToEndOfLine();
 					return;
-				}					   
+				}
 				else
 				{
 					iDepth--;
@@ -1336,8 +1339,8 @@ void CCppTokenizer::SkipExcludedConditional(int iState)
 				if (iDepth==0)
 				{
 					IgnoreToEndOfLine();
-	
-					// Already in else block?				
+
+					// Already in else block?
 					if (iState==PPDIR_ELSE)
 					{
 						FormatError(ERR_UNEXPECTEDELSE);
@@ -1394,7 +1397,7 @@ StartAgain:
 
 	// Skip more stuff
 	SkipLineSpaceAndComments();
-	
+
 	// Which conditional directive is it?
 	int iCondDir=ParsePPDir(strDirective);
 
@@ -1517,7 +1520,7 @@ bool CCppTokenizer::IsStartOfLine()
 	const wchar_t* p=m_pszPos-1;
 	while (p>m_pszScript && IsLineSpace(p[-1]))
 		p--;
-	
+
 	// Check first on line
 	if (p>m_pszScript && !IsEOL(p[-1]))
 	{
@@ -1593,7 +1596,7 @@ bool CCppTokenizer::SkipComments()
 		}
 		else
 		{
-			// Skip terminator 
+			// Skip terminator
 			m_pszPos+=2;
 		}
 
@@ -1740,7 +1743,7 @@ bool CCppTokenizer::Check(int token, const wchar_t* pszExpected)
 	{
 		CUniString strToken;
 		GetTokenDescription(token, strToken);
-		str=Format(L"expected %s", strToken);
+		str=Format(L"expected %s", strToken.sz());
 		pszExpected=str;
 	}
 
@@ -1749,7 +1752,7 @@ bool CCppTokenizer::Check(int token, const wchar_t* pszExpected)
 }
 
 bool CCppTokenizer::Skip(int token, const wchar_t* pszExpected)
-{	
+{
 	if (Check(token, pszExpected))
 	{
 		NextToken();
@@ -1766,7 +1769,7 @@ void CCppTokenizer::Unexpected(const wchar_t* pszWhen)
 	CUniString str;
 	GetTokenDescription(m_iToken, str);
 
-	FormatError(ERR_SYNTAX, Format(L"unexpected token %s- %s", pszWhen, str));
+	FormatError(ERR_SYNTAX, Format(L"unexpected token %s- %s", pszWhen, str.sz()).sz());
 }
 
 
@@ -1850,14 +1853,14 @@ bool CCppTokenizer::GetTokenDescription(int iToken, CUniString& str)
 	// Is it a keyword?
 	if (m_mapKeywordTokens.HasKey(iToken))
 	{
-		str=Format(L"Keyword: %s", m_mapKeywordTokens[iToken]);
+		str=Format(L"Keyword: %s", m_mapKeywordTokens[iToken].Value);
 		return true;
 	}
 
 	// Is it a operator?
 	if (m_OpMap.GetToken(iToken, str))
-	{						   
-		str=Format(L"Operator: %s", str);
+	{
+		str=Format(L"Operator: %s", str.sz());
 		return true;
 	}
 
@@ -1898,7 +1901,7 @@ bool CCppTokenizer::GetTokenDescription(int iToken, CUniString& str)
 	}
 
 	return false;
-	
+
 }
 
 bool CCppTokenizer::GetTokenDescription(CUniString& str)
@@ -1906,14 +1909,14 @@ bool CCppTokenizer::GetTokenDescription(CUniString& str)
 	// Is it a keyword?
 	if (m_mapKeywordTokens.HasKey(m_iToken))
 	{
-		str=Format(L"Keyword: %s", m_mapKeywordTokens[m_iToken]);
+		str=Format(L"Keyword: %s", m_mapKeywordTokens[m_iToken].Value);
 		return true;
 	}
 
 	// Is it a operator?
 	if (m_OpMap.GetToken(m_iToken, str))
-	{						   
-		str=Format(L"Operator: %s", str);
+	{
+		str=Format(L"Operator: %s", str.sz());
 		return true;
 	}
 
@@ -1941,7 +1944,7 @@ bool CCppTokenizer::GetTokenDescription(CUniString& str)
 			return true;
 
 		case tokenDoubleLiteral:
-			str=Format(L"Float literal (%s)", Format(L"%f", GetDoubleLiteral()));
+			str=Format(L"Float literal (%s)", Format(L"%f", GetDoubleLiteral()).sz());
 			return true;
 
 		case tokenInt32Literal:
@@ -1951,7 +1954,7 @@ bool CCppTokenizer::GetTokenDescription(CUniString& str)
 		case tokenInt64Literal:
 			str=Format(L"Int32 literal (%I64i)", GetInt64Literal());
 			return true;
-	}														   
+	}
 
 	return false;
 }

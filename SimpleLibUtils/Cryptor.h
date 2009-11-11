@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -56,20 +56,20 @@ protected:
 	unsigned long		m_LFSR_A_orig;
 	unsigned long		m_LFSR_B_orig;
 	unsigned long		m_LFSR_C_orig;
-	unsigned __int64	m_uiPos;
+	uint64_t			m_uiPos;
 
 public:
 // Construction
 			CCryptor();
 	virtual ~CCryptor();
 
-// Operations	
+// Operations
 	void SetKey(const CCryptorKey& Key);
 	void TransformByte(unsigned char& Target);
 	void TransformBuffer(void* pBuffer, unsigned int cbBuffer);
-	void Skip(unsigned __int64 cbBuffer);
-	void Seek(unsigned __int64 dwPos);
-	unsigned __int64 GetOffset() { return m_uiPos; }
+	void Skip(uint64_t cbBuffer);
+	void Seek(uint64_t dwPos);
+	uint64_t GetOffset() { return m_uiPos; }
 
 	static void TransformBuffer(CCryptorKey& Key, void* pBuffer, unsigned int cbBuffer);
 };

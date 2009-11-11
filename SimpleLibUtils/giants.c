@@ -25,10 +25,10 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-NEITHER THE HARDWARE NOR THE SOFTWARE PROVIDED BY PERFECTLY SCIENTIFIC, INC. IS          
-INTENDED FOR USE IN THE OPERATION OF NUCLEAR FACILITIES, AIRCRAFT NAVIGATION OR           
-COMMUNICATION SYSTEMS, AIR TRAFFIC CONTROL SYSTEMS, LIFE SUPPORT MACHINES OR OTHER        
-EQUIPMENT IN WHICH THE FAILURE OF EITHER THE HARDWARE OR  SOFTWARE COULD LEAD TO          
+NEITHER THE HARDWARE NOR THE SOFTWARE PROVIDED BY PERFECTLY SCIENTIFIC, INC. IS
+INTENDED FOR USE IN THE OPERATION OF NUCLEAR FACILITIES, AIRCRAFT NAVIGATION OR
+COMMUNICATION SYSTEMS, AIR TRAFFIC CONTROL SYSTEMS, LIFE SUPPORT MACHINES OR OTHER
+EQUIPMENT IN WHICH THE FAILURE OF EITHER THE HARDWARE OR  SOFTWARE COULD LEAD TO
 DEATH, PERSONAL INJURY, OR SEVERE PHYSICAL OR ENVIRONMENTAL DAMAGE.
 */
 
@@ -37,7 +37,7 @@ DEATH, PERSONAL INJURY, OR SEVERE PHYSICAL OR ENVIRONMENTAL DAMAGE.
  *  giants.c
  *
  *  Library for large-integer arithmetic.
- * 
+ *
  *  The large-gcd implementation is due to J. P. Buhler.
  *  Special mod routines use ideas of R. McIntosh.
  *  Contributions from G. Woltman, A. Powell acknowledged.
@@ -128,7 +128,7 @@ int				current_max_size = 0,
 double *		sinCos=NULL;
 int				checkFFTerror = 0;
 double			maxFFTerror;
-static giant	u0=NULL, u1=NULL, v0=NULL, v1=NULL;
+//static giant	u0=NULL, u1=NULL, v0=NULL, v1=NULL;
 static double	*z = NULL,
 				*z2 = NULL;
 
@@ -266,9 +266,9 @@ popg (
 )
 {
 	int i;
-	
+
 	if (current_max_size <= 0) current_max_size = MAX_SHORTS;
-	
+
 	if (cur_stack_size == 0) {
 /* Initialize the stack if we're just starting out.
  * Note that all stack giants will be whatever current_max_size is
@@ -292,12 +292,12 @@ popg (
 			free(stack[i]);
 		stack = (giant *) realloc (stack,cur_stack_size * sizeof(giant)); */
 	}
-	
+
 /* Malloc our giant. */
 	if (stack[cur_stack_elem] == NULL)
 		stack[cur_stack_elem] = malloc(stack_glen*sizeof(short)+sizeof(int));
 	stack[cur_stack_elem]->sign = 0;
-	
+
 	return(stack[cur_stack_elem++]);
 }
 
@@ -330,7 +330,7 @@ newgiant(
 	size = numshorts*sizeof(short)+sizeof(int);
 	thegiant = (giant)malloc(size);
 	thegiant->sign = 0;
-	
+
 	if (newmin(2*numshorts,MAX_SHORTS) > current_max_size)
 		current_max_size = newmin(2*numshorts,MAX_SHORTS);
 
@@ -518,7 +518,7 @@ int gcompg(a,b)
 		if (a->n[size] > b->n[size]) return(gsign(a));
 		if (a->n[size] < b->n[size]) return(-gsign(a));
 	 } while(size>0);
-	 
+
 	return(0);
 }
 #else
@@ -844,7 +844,7 @@ iaddg(
 	    addg(tmp, g);
 		pushg(1);
 		return;
-    } 
+    }
 	else
 	{
 		w = g->n[0]+i;
@@ -867,7 +867,7 @@ iaddg(
 	The basic subtract "subg()" uses the following logic table:
 
      a      b          if(b > a)           if(a > b)
-     
+
      +      +          b := b - a          b := -(a - b)
      -      +          b := b + (-a)       N.A.
      +      -          N.A.                b := -((-b) + a)
@@ -876,13 +876,13 @@ iaddg(
    The basic addition routine "addg()" uses:
 
 	  a      b          if(b > -a)          if(-a > b)
-     
-     +      +          b := b + a          N.A. 
+
+     +      +          b := b + a          N.A.
      -      +          b := b - (-a)       b := -((-a) - b)
      +      -          b := a - (-b)       b := -((-b) - a)
      -      -          N.A.                b := -((-b) + (-a))
 
-   In this way, internal routines "normal_addg," "normal_subg," 
+   In this way, internal routines "normal_addg," "normal_subg,"
 	and "reverse_subg;" each of which assumes non-negative
 	operands and a non-negative result, are now used for greater
 	efficiency.
@@ -1211,7 +1211,7 @@ binvaux(
 /* Binary inverse method. Returns zero if no inverse exists,
  * in which case x becomes GCD(x,p). */
 {
-	
+
 	giant scratch7, u0, u1, v0, v1;
 
 	if (isone(x))
@@ -1242,7 +1242,7 @@ binvaux(
 		subg(v1,scratch7);
 		gtog(scratch7, v1);
 	}
-	
+
 	pushg(1);
 
 	if (!isone(u1))
@@ -1290,15 +1290,15 @@ invaux(
 {
 
 	giant scratch7, u0, u1, v0, v1;
-	
+
 	if ((x->sign==1)&&(x->n[0]==1))
 		return(1);
-	
+
     u0 = popg();
     u1 = popg();
     v0 = popg();
     v1 = popg();
-    
+
 	itog(1,u1);
 	gtog(p, v0);
 	gtog(x, v1);
@@ -1323,7 +1323,7 @@ invaux(
 		gtog(scratch7, u1);
 	}
 	pushg(1);
-	
+
 	if ((v0->sign!=1)||(v0->n[0]!=1))
 	{
 		gtog(v0,x);
@@ -1408,7 +1408,7 @@ cgcdg(
 	v->sign = abs(v->sign);
 	if (isZero(a))
 		return;
-	
+
 	u = popg();
 	r = popg();
 	gtog(a, u);
@@ -1521,7 +1521,7 @@ powerg(
 /* g becomes m^n, NO mod performed. */
 {
 	giant scratch2 = popg();
-	
+
 	itog(1, g);
 	itog(m, scratch2);
 	while (n)
@@ -1555,7 +1555,7 @@ jtest(
 
 void
 make_recip(
-	giant 	d, 
+	giant 	d,
 	giant 	r
 )
 /* r becomes the steady-state reciprocal
@@ -1570,32 +1570,32 @@ make_recip(
 	}
 	tmp = popg();
 	tmp2 = popg();
-	itog(1, r); 
-	subg(r, d); 
-	b = bitlen(d); 
+	itog(1, r);
+	subg(r, d);
+	b = bitlen(d);
 	addg(r, d);
-	gshiftleft(b, r); 
+	gshiftleft(b, r);
 	gtog(r, tmp2);
-	while (1) 
+	while (1)
 	{
 		gtog(r, tmp);
 		squareg(tmp);
 		gshiftright(b, tmp);
 		mulg(d, tmp);
 		gshiftright(b, tmp);
-		addg(r, r); 
+		addg(r, r);
 		subg(tmp, r);
-		if (gcompg(r, tmp2) <= 0) 
+		if (gcompg(r, tmp2) <= 0)
 			break;
 		gtog(r, tmp2);
 	}
 	itog(1, tmp);
 	gshiftleft(2*b, tmp);
-	gtog(r, tmp2); 
+	gtog(r, tmp2);
 	mulg(d, tmp2);
 	subg(tmp2, tmp);
 	itog(1, tmp2);
-	while (tmp->sign < 0) 
+	while (tmp->sign < 0)
 	{
 		subg(tmp2, r);
 		addg(d, tmp);
@@ -1605,8 +1605,8 @@ make_recip(
 
 void
 divg_via_recip(
-	giant 	d, 
-	giant 	r, 
+	giant 	d,
+	giant 	r,
 	giant 	n
 )
 /* n := n/d, where r is the precalculated
@@ -1619,15 +1619,15 @@ divg_via_recip(
 	{
 		exit(SIGN);
 	}
-	
+
 	tmp = popg();
 	tmp2 = popg();
-	
+
 	n->sign = abs(n->sign);
 	itog(0, tmp2);
-	while (1) 
+	while (1)
 	{
-		gtog(n, tmp);	
+		gtog(n, tmp);
 		mulg(r, tmp);
 		gshiftright(s, tmp);
 		addg(tmp, tmp2);
@@ -1638,7 +1638,7 @@ divg_via_recip(
 			subg(d,n);
 			iaddg(1, tmp2);
 		}
-		if (gcompg(n,d) < 0) 
+		if (gcompg(n,d) < 0)
 			break;
 	}
 	gtog(tmp2, n);
@@ -1649,7 +1649,7 @@ divg_via_recip(
 #if 1
 void
 modg_via_recip(
-	giant 	d, 
+	giant 	d,
 	giant 	r,
 	giant 	n
 )
@@ -1665,27 +1665,27 @@ modg_via_recip(
 	{
 		exit(SIGN);
 	}
-	
+
 	tmp = popg();
 	tmp2 = popg();
-	
+
 	n->sign = abs(n->sign);
-	while (1) 
+	while (1)
 	{
-		gtog(n, tmp); gshiftright(s-1, tmp);	
+		gtog(n, tmp); gshiftright(s-1, tmp);
 		mulg(r, tmp);
 		gshiftright(s+1, tmp);
 		mulg(d, tmp);
 		subg(tmp, n);
-		if (gcompg(n,d) >= 0) 
+		if (gcompg(n,d) >= 0)
 			subg(d,n);
-		if (gcompg(n,d) < 0) 
+		if (gcompg(n,d) < 0)
 			break;
 	}
 	if (sign >= 0)
 		goto done;
 	if (isZero(n))
-		goto done; 
+		goto done;
 	negg(n);
 	addg(d,n);
 done:
@@ -1696,7 +1696,7 @@ done:
 #else
 void
 modg_via_recip(
-	giant 	d, 
+	giant 	d,
 	giant 	r,
 	giant 	n
 )
@@ -1713,21 +1713,21 @@ modg_via_recip(
 	tmp2 = popg()
 
 	n->sign = abs(n->sign);
-	while (1) 
+	while (1)
 	{
-		gtog(n, tmp);	
+		gtog(n, tmp);
 		mulg(r, tmp);
 		gshiftright(s, tmp);
 		mulg(d, tmp);
 		subg(tmp, n);
-		if (gcompg(n,d) >= 0) 
+		if (gcompg(n,d) >= 0)
 			subg(d,n);
-		if (gcompg(n,d) < 0) 
+		if (gcompg(n,d) < 0)
 			break;
 	}
-	if (sign >= 0) 
+	if (sign >= 0)
 		goto done;
-	if (isZero(n)) 
+	if (isZero(n))
 		goto done;
 	negg(n);
 	addg(d,n);
@@ -1778,26 +1778,26 @@ feemulmod (
 	if ((q % 16) || (k <= 0) || (k >= 65535)) {
 		return (0);
 	}
-	
+
 	carry = popg();
 	kk = popg();
 	scratch = popg();
-	
+
 	for (i=0; i<asize+bsize; i++) scratch->n[i]=0;
 
 	words = q >> 4;
-	
+
 	bptr = b->n;
 	for (i = 0; i < bsize; i++) {
 		mult = *bptr++;
 		if (mult) {
 			kpower = i/words;
-			
+
 			if (kpower >= 1) itog (kpower,kk);
 			for (j = 1; j < kpower; k++) smulg(kpower,kk);
-			
+
 			itog(0,carry);
-			
+
 			aptr = a->n;
 			for (j = 0; j < bsize; b++) {
 				gtog(kk,scratch);
@@ -1837,7 +1837,7 @@ feemulmod (
 	for (i=0; i<asize+bsize; i++) scratch->n[i]=0;
 
 	words = q >> 4;
-	
+
 	bptr = b->n;
 	for (i=0; i<bsize; ++i)
 	{
@@ -1847,7 +1847,7 @@ feemulmod (
 			kpower = i/words;
 			aptr = a->n;
 			destptr = scratch->n + i;
-			
+
 			if (kpower == 0) {
 				carry = 0;
 			} else if (kpower <= kpowerlimit) {
@@ -1859,12 +1859,12 @@ feemulmod (
 				for (j = 1; j < kpower; j++) smulg(k,scratch);
 				itog(0,scratch2);
 			}
-			
+
 			for (j = 0; j < asize; j++) {
 				if(kpower == 0) {
 					prod = *aptr++ * mult + *destptr + carry;
 					*destptr++ = (unsigned short)(prod & 0xFFFF);
-					carry = prod >> 16;					
+					carry = prod >> 16;
 				} else if (kpower < kpowerlimit) {
 					prod = kcur * *aptr++;
 					temp = prod >> 16;
@@ -1875,7 +1875,7 @@ feemulmod (
 					prod &= 0xFFFF;
 					prod += *destptr + carry;
 					carry = prod >> 16 + temp;
-					*destptr++ = (unsigned short)(prod & 0xFFFF);			
+					*destptr++ = (unsigned short)(prod & 0xFFFF);
 				} else {
 					gtog(scratch,scratch3);
 					smulg(*aptr++,scratch3);
@@ -1885,7 +1885,7 @@ feemulmod (
 					*destptr++ = scratch2->n[0];
 					memmove(scratch2->n,scratch2->n+1,2*(scratch2->size-1));
 					scratch2->sign--;
-				}				
+				}
 				if (destptr - scratch->n > words) {
 					if (kpower == 0) {
 						curk = k;
@@ -1906,7 +1906,7 @@ feemulmod (
 					destptr -= words;
 				}
 			}
-			
+
 			/* Next, deal with the carry term. Needs to be improved to
 			handle overflow carry cases. */
 			if (kpower <= kpowerlimit) {
@@ -2032,7 +2032,7 @@ fermatpowermod(
 /* x becomes x^n (mod 2^q+1). */
 {
 	giant scratch2 = popg();
-	
+
 	gtog(x, scratch2);
 	itog(1, x);
 	while (n)
@@ -2184,7 +2184,7 @@ gshiftleft(
 			g->n[k--] = carry;
 			carry = 0;
 		} while(k>=0);
-	
+
 		k = size+words;
 		if (g->n[k] == 0)
 			--k;
@@ -2222,7 +2222,7 @@ gshiftright(
 		g->sign += (g->sign < 0)?(words):(-words);
 	} else {
 		size -= words;
-	
+
 		if (size)
 		{
 			for(j=0;j<size-1;++j)
@@ -2232,10 +2232,10 @@ gshiftright(
 			}
 			g->n[size-1] = (unsigned short)(g->n[size-1+words] >> remain);
 		}
-	
+
 		if (g->n[size-1] == 0)
 			--size;
-	
+
 		if (g->sign > 0)
 			g->sign = size;
 		else
@@ -2353,7 +2353,7 @@ mersennemod (
 /* g := g (mod 2^n - 1) */
 {
         giant scratch3 = popg(), scratch4 = popg();
-        
+
         while (bitlen(g) > n) {
                 gtog(g,scratch3);
                 gshiftright(n,scratch3);
@@ -2406,7 +2406,7 @@ fer_mod (
 if available (i.e. if already allocated and set). */
 {
         giant scratch3 = popg();
-        
+
         while (bitlen(g) > n) {
                 gtog(g,scratch3);
                 gshiftright(n,scratch3);
@@ -2516,7 +2516,7 @@ auxmulg(
 					else karatmulg(a,b);
 
 			} else {
-				grammartime  = (float)sizea; 
+				grammartime  = (float)sizea;
 				grammartime *= (float)sizeb;
 			    if (grammartime < FFT_BREAK * FFT_BREAK)
 			    {
@@ -2536,7 +2536,7 @@ auxmulg(
 void
 justg(giant x) {
 	int s = x->sign, sg = 1;
-	
+
 	if(s<0) {
 		sg = -1;
 		s = -s;
@@ -2565,7 +2565,7 @@ karatmulg(giant x, giant y)
 		return;
 	}
 	w = (s + t + 2)/4; bits = 16*w;
-	a = popg(); b = popg(); c = popg(); 
+	a = popg(); b = popg(); c = popg();
     d = popg(); e = popg(); f = popg();
 	gtog(x,a); absg(a); if (w <= s) {a->sign = w; justg(a);}
 	gtog(x,b); absg(b);
@@ -2578,9 +2578,9 @@ karatmulg(giant x, giant y)
 	karatmulg(e,f);			/* f := (a + b)(c + d) */
 	karatmulg(c,a);			/* a := a c */
 	karatmulg(d,b);			/* b := b d */
-	normal_subg(a,f);			
+	normal_subg(a,f);
          /* f := (a + b)(c + d) - a c */
-	normal_subg(b,f);			
+	normal_subg(b,f);
          /* f := (a + b)(c + d) - a c - b d */
 	gshiftleft(bits, b);
 	normal_addg(f, b);
@@ -2588,7 +2588,7 @@ karatmulg(giant x, giant y)
 	normal_addg(a, b);
 	gtog(b, y); y->sign *= sg;
 	pushg(6);
-	
+
 	return;
 }
 
@@ -2680,7 +2680,7 @@ grammarsquareg (
 	int	asize = abs(a->sign), max = asize * 2 - 1;
 	unsigned short	*ptr = a->n, *ptr1, *ptr2;
 	giant scratch;
-	
+
 	if(asize == 0) {
 		itog(0,a);
 		return;
@@ -2689,12 +2689,12 @@ grammarsquareg (
 	scratch = popg();
 
 	asize--;
-	
+
 	temp = *ptr;
 	temp *= temp;
 	scratch->n[0] = temp;
 	carry = temp >> 16;
-	
+
 	for (cur_term = 1; cur_term < max; cur_term++) {
 		ptr1 = ptr2 = ptr;
 		if (cur_term <= asize) {
@@ -2723,7 +2723,7 @@ grammarsquareg (
 		scratch->n[cur_term] = carry;
 		scratch->sign = cur_term+1;
 	} else scratch->sign = cur_term;
-	
+
 	gtog(scratch,a);
 	pushg(1);
 }
@@ -3241,7 +3241,7 @@ onestep(
 	punch(s4,A);
 	mulg(x,s4);
 	subg(s4,y);
-	
+
 	pushg(1);
 }
 
@@ -3255,14 +3255,14 @@ mulvM(
 /* Multiply vector by Matrix; changes x,y. */
 {
 	giant s0 = popg(), s1 = popg();
-	
+
 	gtog(A->ur,s0);
 	gtog( A->lr,s1);
 	dotproduct(x,y,A->ul,s0);
 	dotproduct(x,y,A->ll,s1);
 	gtog(s0,x);
 	gtog(s1,y);
-	
+
 	pushg(2);
 }
 
@@ -3278,7 +3278,7 @@ mulmM(
 	giant s1 = popg();
 	giant s2 = popg();
 	giant s3 = popg();
-	
+
 	gtog(B->ul,s0);
 	gtog(B->ur,s1);
 	gtog(B->ll,s2);
@@ -3291,7 +3291,7 @@ mulmM(
 	gtog(s1,B->ur);
 	gtog(s2,B->ll);
 	gtog(s3,B->lr);
-	
+
 	pushg(4);
 }
 
@@ -3320,7 +3320,7 @@ punch(
 /* Multiply the matrix A on the left by [0,1,1,-q]. */
 {
 	giant s0 = popg();
-	
+
 	gtog(A->ll,s0);
 	mulg(q,A->ll);
 	gswap(&A->ul,&A->ll);
@@ -3351,7 +3351,7 @@ dotproduct(
 	mulg(a, s4);
 	mulg(b,d);
 	addg(s4,d);
-	
+
 	pushg(1);
 }
 
@@ -3430,7 +3430,7 @@ hgcd(
 
 	if (isZero(yy))
 		return;
-	
+
 	x = popg();
 	y = popg();
 	gtog(xx,x);

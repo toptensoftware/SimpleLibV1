@@ -145,7 +145,7 @@ STDMETHODIMP CPropertyBagOnXML::Read(LPCOLESTR pszPropName, VARIANT* pVar, IErro
 		{
 		unsigned char* pData;
 		size_t cbData;
-		if (UnformatBinaryData(bstrBinary, &pData, &cbData))
+		if (UnformatBinaryData(bstrBinary, (void**)&pData, &cbData))
 			{
 			V_VT(pVar)=VT_BSTR;
 			V_BSTR(pVar)=SysAllocStringByteLen((char*)pData, DWORD(cbData));

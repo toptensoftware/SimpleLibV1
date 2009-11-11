@@ -5,8 +5,8 @@
 // Copyright (C) 1998-2007 Topten Software.  All Rights Reserved
 // http://www.toptensoftware.com
 //
-// This code has been released for use "as is".  Any redistribution or 
-// modification however is strictly prohibited.   See the readme.txt file 
+// This code has been released for use "as is".  Any redistribution or
+// modification however is strictly prohibited.   See the readme.txt file
 // for complete terms and conditions.
 //
 //////////////////////////////////////////////////////////////////////
@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////
 // SplitCommandLine.cpp - implementation of SplitCommandLine
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SimpleLibUtilsBuild.h"
 
 #include "SplitCommandLine.h"
@@ -121,7 +121,11 @@ bool SIMPLEAPI ExpandResponseFiles(CVector<CUniString>& args, CUniString& strErr
 bool SIMPLEAPI ParseArg(const wchar_t* pszArg, CUniString& strName, CUniString& strValue)
 {
 	// Is it a switch?
+#ifdef _WIN32
 	if (pszArg[0]!='/' && pszArg[0]!='-')
+#else
+	if (pszArg[0]!='-')
+#endif
 	{
 		strName=L"";
 		strValue=pszArg;
