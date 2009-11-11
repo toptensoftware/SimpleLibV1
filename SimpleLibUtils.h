@@ -35,6 +35,7 @@
 #include "SimpleLibUtils/ResNode.h"
 #include "SimpleLibUtils/ResParser.h"
 #include "SimpleLibUtils/ResBinary.h"
+#include "SimpleLibUtils/ResTemplate.h"
 #include "SimpleLibUtils/Sha1.h"
 #include "SimpleLibUtils/SmartStringCompare.h"
 #include "SimpleLibUtils/SplitCommandLine.h"
