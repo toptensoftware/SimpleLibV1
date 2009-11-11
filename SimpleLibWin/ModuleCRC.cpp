@@ -74,6 +74,21 @@ bool CheckModuleCRC(HINSTANCE hInstanceThis)
 	return CheckModuleCRC(szModulePath);
 }
 
+bool CheckModuleCRC(void* pModuleData, unsigned int dwLen)
+{
+	// Locate control block
+	CRCCONTROLBLOCK* pControlBlock=LocateCRCControlBlock((LPBYTE)pModuleData, dwLen);
+
+	if (pControlBlock && pControlBlock->dwModuleLength<=dwLen)
+	{
+		// Calculate CRC
+		unsigned int dwCRC=CalculateModuleCRC(pModuleData, dwLen, pControlBlock);
+		return dwCRC==pControlBlock->dwCRC;
+	}
+
+	return false;
+}
+
 bool CheckModuleCRC(const wchar_t* pszModulePath)
 {
 	// Load the file
@@ -93,22 +108,10 @@ bool CheckModuleCRC(const wchar_t* pszModulePath)
 		DWORD dwBytesToRead=dwLen;
 		if (ReadFile(hFile, pModuleData, dwLen, &dwBytesToRead, NULL))
 		{
-			// Locate control block
-			CRCCONTROLBLOCK* pControlBlock=LocateCRCControlBlock(pModuleData, dwLen);
-
-			if (pControlBlock && pControlBlock->dwModuleLength<=dwLen)
+			if (CheckModuleCRC(pModuleData, dwLen))
 			{
-				// Calculate CRC
-				unsigned int dwCRC=CalculateModuleCRC(pModuleData, dwLen, pControlBlock);
-				if (dwCRC==pControlBlock->dwCRC)
-				{
-					// Close file
-					CloseHandle(hFile);
-
-					// Release memory
-					free(pModuleData);
-					return true;
-				}
+				free(pModuleData);
+				return true;
 			}
 		}
 

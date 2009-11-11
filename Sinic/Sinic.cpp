@@ -7,6 +7,66 @@
 CCommandLineParser cl;
 
 
+bool CheckModuleCRCWithErrors(const wchar_t* pszModulePath)
+{
+	// Load the file
+	HANDLE hFile=CreateFile(pszModulePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+	if (hFile)
+	{
+		wprintf(L"Opened file '%s'...\n", pszModulePath);
+
+		// Get length of file
+		unsigned int dwLen=SetFilePointer(hFile, 0, NULL, FILE_END);
+
+		wprintf(L"File length: 0x%.8x\n", dwLen);
+
+		// Move to BOF
+		SetFilePointer(hFile, 0, NULL, FILE_BEGIN);
+
+		// Allocate buffer for text
+		LPBYTE pModuleData=(LPBYTE)malloc(dwLen+1);
+
+		// Read data
+		DWORD dwBytesToRead=dwLen;
+		if (ReadFile(hFile, pModuleData, dwLen, &dwBytesToRead, NULL))
+		{
+			wprintf(L"File content loaded\n");
+			// Locate control block
+			CRCCONTROLBLOCK* pControlBlock=LocateCRCControlBlock(pModuleData, dwLen);
+
+			if (pControlBlock && pControlBlock->dwModuleLength<=dwLen)
+			{
+				wprintf(L"Control block located at offset 0x%.8x\n", ((LPBYTE)pControlBlock)-pModuleData);
+
+				// Calculate CRC
+				unsigned int dwCRC=CalculateModuleCRC(pModuleData, dwLen, pControlBlock);
+				if (dwCRC==pControlBlock->dwCRC)
+				{
+					wprintf(L"CRC Matches\n");
+
+					// Close file
+					CloseHandle(hFile);
+
+					// Release memory
+					free(pModuleData);
+					return true;
+				}
+
+				wprintf(L"CRC Mismatch: Module:0x%.8x != Calculated:0x%.8x\n", pControlBlock->dwCRC, dwCRC);
+			}
+			else
+			{
+				wprintf(L"Control block not found\n");
+			}
+		}
+
+		free(pModuleData);
+	}
+
+	return false;
+}
+
+
 int CountCRCControlBlocks(LPBYTE p, DWORD dwLen)
 {
 	int iCount=0;
@@ -32,9 +92,6 @@ int CountCRCControlBlocks(LPBYTE p, DWORD dwLen)
 // Main entry point
 int _tmain(int argc, _TCHAR* argv[])
 {
-	printf("CL:%S\n", GetCommandLine());
-	//return 0;
-
 	// Add command line alias'
 	cl.AddAlias(L"h", L"?");
 	cl.AddAlias(L"help", L"?");
@@ -83,6 +140,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		{
 			if (!CheckModuleCRC(strInputFile))
 			{
+				CheckModuleCRCWithErrors(strInputFile);
 				wprintf(L"************************************************************\n");
 				wprintf(L" Verifying %s... FAILED\n", strInputFile);
 				wprintf(L"************************************************************\n");
@@ -118,7 +176,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		FILE* pFile;
 		if (_wfopen_s(&pFile, strInputFile, L"rb")!=0)
 		{
-			printf("Error: Can't open file '%s'\n", strInputFile);
+			wprintf(L"Error: Can't open file '%s'\n", strInputFile);
 			return 7;
 		}
 
@@ -131,7 +189,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		if (dwLength==0)
 		{
 			fclose(pFile);
-			printf("Error: Zero length file\n");
+			wprintf(L"Error: Zero length file\n");
 			return 7;
 		}
 
@@ -143,7 +201,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		{
 			free(pFileData);
 			fclose(pFile);
-			printf("Error: Error reading file\n");
+			wprintf(L"Error: Error reading file\n");
 			return 7;
 		}
 
@@ -154,7 +212,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			{
 			free(pFileData);
 			fclose(pFile);
-			printf("Error: File contains multiple CRC Control blocks!\n");
+			wprintf(L"Error: File contains multiple CRC Control blocks!\n");
 			return 7;
 			}
 			
@@ -165,21 +223,34 @@ int _tmain(int argc, _TCHAR* argv[])
 		{
 			free(pFileData);
 			fclose(pFile);
-			printf("Error: File doesn't contain CRC Control block!\n");
+			wprintf(L"Error: File doesn't contain CRC Control block!\n");
 			return 7;
 		}
 
-		printf("CRC Control Block located at offset: 0x%.8x\n", reinterpret_cast<LPBYTE>(pCRCBlock)-pFileData);
+		wprintf(L"CRC Control Block located at offset: 0x%.8x\n", reinterpret_cast<LPBYTE>(pCRCBlock)-pFileData);
 
 		// Calculate the CRC upto start of control block
 		pCRCBlock->dwCRC=CalculateModuleCRC(pFileData, dwLength, pCRCBlock);
 		pCRCBlock->dwModuleLength=dwLength;
+
+		wprintf(L"Module length: 0x%.8x\n", dwLength);
+		wprintf(L"CRC: 0x%.8x\n", pCRCBlock->dwCRC);
 				
 		pFile=NULL;
 		if (_wfopen_s(&pFile, strOutputFile, L"wb")!=0)
 		{
-			printf("Error: Can't open output file '%s'\n", strOutputFile);
+			wprintf(L"Error: Can't open output file '%s'\n", strOutputFile);
 			return 7;
+		}
+
+		if (!CheckModuleCRC(pFileData, dwLength))
+		{
+			wprintf(L"Error: double check failed\n");
+			return 7;
+		}
+		else
+		{
+			wprintf(L"Double check: OK\n");
 		}
 
 		// Write CRC stamped
@@ -187,6 +258,19 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		// Clean up
 		free(pFileData);
+
+		fclose(pFile);
+
+		if (!CheckModuleCRC(strOutputFile))
+		{
+			CheckModuleCRCWithErrors(strOutputFile);
+			wprintf(L"Error: triple check failed\n");
+			return 7;
+		}
+		else
+		{
+			wprintf(L"Triple check: OK\n");
+		}
 
 		wprintf(L"CRC Stamped %s - OK\n\n", strOutputFile);
 		return 0;
@@ -239,7 +323,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		{
 			CUniString strName, strValue;
 			SplitString(vecDefines[i], L"=", strName, strValue);
-			printf("#define %S %S\n", strName, strValue);
+			wprintf(L"#define %s %s\n", strName, strValue);
 			file.Define(strName, strValue);
 		}
 

@@ -41,6 +41,7 @@ CRCCONTROLBLOCK* LocateCRCControlBlock(LPBYTE p, unsigned int dwLen);
 unsigned int CalculateModuleCRC(void* pModuleData, unsigned int dwLen, void* pCRCBlock);
 bool CheckModuleCRC(HINSTANCE hInstanceThis);
 bool CheckModuleCRC(const wchar_t* pszModulePath);
+bool CheckModuleCRC(void* pModuleData, unsigned int dwLen);
 
 
 }	// namespace Simple
