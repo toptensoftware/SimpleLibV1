@@ -75,9 +75,11 @@ void SIMPLEAPI CalculateCRCStart(uint32_t& dwCRC)
 
 void SIMPLEAPI CalculateCRCContinue(uint32_t& dwCRC, const void* pbDataIn, int cbData)
 {
-	const char* pbData=(const char*)pbDataIn;
+	const unsigned char* pbData=(const unsigned char*)pbDataIn;
 	while(cbData--)
+	{
 		dwCRC = (dwCRC >> 8) ^ g_dwCRCTable[(dwCRC & 0xFF) ^ *pbData++];
+	}
 }
 
 void SIMPLEAPI CalculateCRCFinish(uint32_t& dwCRC)

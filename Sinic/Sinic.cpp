@@ -248,10 +248,6 @@ int _tmain(int argc, _TCHAR* argv[])
 			wprintf(L"Error: double check failed\n");
 			return 7;
 		}
-		else
-		{
-			wprintf(L"Double check: OK\n");
-		}
 
 		// Write CRC stamped
 		fwrite(pFileData, dwLength, 1, pFile);
@@ -264,12 +260,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		if (!CheckModuleCRC(strOutputFile))
 		{
 			CheckModuleCRCWithErrors(strOutputFile);
-			wprintf(L"Error: triple check failed\n");
 			return 7;
-		}
-		else
-		{
-			wprintf(L"Triple check: OK\n");
 		}
 
 		wprintf(L"CRC Stamped %s - OK\n\n", strOutputFile);
