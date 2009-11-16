@@ -19,7 +19,7 @@
 	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="Debug|Win32"
+			Name="DS|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="10"
@@ -39,7 +39,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Debug|x64"
+			Name="DS|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="10"
@@ -60,7 +60,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
+			Name="RS|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="10"
@@ -81,7 +81,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|x64"
+			Name="RS|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="10"
@@ -114,7 +114,7 @@
 			RelativePath="..\SimpleLib.cpp"
 			>
 			<FileConfiguration
-				Name="Debug|Win32"
+				Name="DS|Win32"
 				ExcludedFromBuild="true"
 				>
 				<Tool
@@ -122,7 +122,7 @@
 				/>
 			</FileConfiguration>
 			<FileConfiguration
-				Name="Debug|x64"
+				Name="DS|x64"
 				ExcludedFromBuild="true"
 				>
 				<Tool
@@ -130,7 +130,7 @@
 				/>
 			</FileConfiguration>
 			<FileConfiguration
-				Name="Release|Win32"
+				Name="RS|Win32"
 				ExcludedFromBuild="true"
 				>
 				<Tool
@@ -138,7 +138,7 @@
 				/>
 			</FileConfiguration>
 			<FileConfiguration
-				Name="Release|x64"
+				Name="RS|x64"
 				ExcludedFromBuild="true"
 				>
 				<Tool
@@ -150,7 +150,7 @@
 			RelativePath="..\SimpleLib.h"
 			>
 			<FileConfiguration
-				Name="Debug|Win32"
+				Name="DS|Win32"
 				ExcludedFromBuild="true"
 				>
 				<Tool
@@ -158,7 +158,7 @@
 				/>
 			</FileConfiguration>
 			<FileConfiguration
-				Name="Debug|x64"
+				Name="DS|x64"
 				ExcludedFromBuild="true"
 				>
 				<Tool
@@ -166,7 +166,7 @@
 				/>
 			</FileConfiguration>
 			<FileConfiguration
-				Name="Release|Win32"
+				Name="RS|Win32"
 				ExcludedFromBuild="true"
 				>
 				<Tool
@@ -174,7 +174,7 @@
 				/>
 			</FileConfiguration>
 			<FileConfiguration
-				Name="Release|x64"
+				Name="RS|x64"
 				ExcludedFromBuild="true"
 				>
 				<Tool

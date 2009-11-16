@@ -17,7 +17,7 @@
 	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="Debug|Win32"
+			Name="DS|Win32"
 			OutputDirectory="..\bin"
 			IntermediateDirectory="..\BuildOutput\$(PlatformName)\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
@@ -63,6 +63,7 @@
 				LinkLibraryDependencies="false"
 				OutputFile="$(OutDir)\src.exe"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -90,7 +91,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
+			Name="RS|Win32"
 			OutputDirectory="..\bin"
 			IntermediateDirectory="..\BuildOutput\$(PlatformName)\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
@@ -137,6 +138,7 @@
 				LinkLibraryDependencies="false"
 				OutputFile="$(OutDir)\src.exe"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -182,7 +184,7 @@
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="DS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -190,7 +192,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="RS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
