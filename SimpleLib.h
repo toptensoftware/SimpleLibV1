@@ -78,6 +78,7 @@ typedef unsigned long long int uint64_t;
 #define _stricmp strcasecmp
 #define _wcsicmp Simple::lazy_wcsicmp
 #define _wcsnicmp Simple::lazy_wcsnicmp
+#define _strnicmp Simple::lazy_strnicmp
 inline char* strupr(char* psz)
 {
 	char* p=psz;
@@ -427,6 +428,20 @@ inline int lazy_wcsicmp(const wchar_t* psz1, const wchar_t* psz2)
 }
 
 inline int lazy_wcsnicmp(const wchar_t* psz1, const wchar_t* psz2, size_t len)
+{
+	while ((*psz1 || *psz2) && len)
+	{
+		int icmp=int(towupper(*psz1++))-int(towupper(*psz2++));
+		if (icmp!=0)
+			return icmp;
+
+		len--;
+	}
+
+	return 0;
+}
+
+inline int lazy_strnicmp(const char* psz1, const char* psz2, size_t len)
 {
 	while ((*psz1 || *psz2) && len)
 	{
