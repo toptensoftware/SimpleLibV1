@@ -1,0 +1,136 @@
+Loading config: z:\dev\source\bit\defaults.ini
+Loading config: bit.ini
+Loading tool gnu_gcc
+Loading tool gnu_link
+Loading tool gnu_ar
+------------------------------ Posix|Debug ------------------------------
+[config_settings]
+; 
+; From [settings]
+ProjectDirName=SimpleLibUtils
+ProjectDir=Z:\dev\source\SimpleLib\SimpleLibUtils
+; 
+; From [Defaults]
+;  From z:\dev\source\bit\defaults.ini
+Configurations=Debug;Release
+ProjectName=$(ProjectDirName)
+SrcDir=.
+ExcludeFiles=
+Precompile=StdAfx.h;stdafx.h;PreComp.h;precomp.h
+; 
+; From [OS.nt]
+;  From z:\dev\source\bit\defaults.ini
+ToolChain=msvc
+; 
+; From [Project]
+;  From z:\dev\source\bit\defaults.ini
+ProjectType=exe
+;  From Z:\dev\source\SimpleLib\SimpleLibUtils\bit.ini
+ToolChain=gnu
+; 
+; From [ToolChain.gnu]
+;  From z:\dev\source\bit\defaults.ini
+Platforms=Posix
+Tools=gnu_gcc;gnu_link;gnu_ar
+ObjFileExtension=o
+TargetFilePrefix=$(ProjectType:select:lib:lib:dll:lib)
+TargetFileSuffix=$(ProjectType:select:lib:.o:dll:.so)
+TargetFile=$(TargetFilePrefix)$(ProjectName)$(TargetFileSuffix)
+PchFile=$(IntDir)/$(ProjectName).gch
+PrecompileSourceFiles=$(Precompile)
+; 
+; From [Common]
+;  From z:\dev\source\bit\defaults.ini
+OutDir=./BuildOutput/$(PlatformName)/$(ConfigurationName)
+IntDir=$(OutDir)/$(ProjectName).int
+BaseDir=.
+SourceFiles=*.cpp;*.c
+GccSwitches+=-Wall
+MsvcClSwitches+=/MD;/EHs-c-;/GR-;/nologo;/W2
+MsvcLibSwitches=/nologo
+;  From Z:\dev\source\SimpleLib\SimpleLibUtils\bit.ini
+ProjectType=lib
+; 
+; From [Posix]
+;  From z:\dev\source\bit\defaults.ini
+CppDefines+=UNIX;POSIX
+GccSwitches+=-lstdc++
+; 
+; From [Debug]
+;  From z:\dev\source\bit\defaults.ini
+CppDefines+=_DEBUG;DEBUG
+GccSwitches+=-g
+GccLinkSwitches+=-g
+MsvcClSwitches+=/Zi
+MsvcLinkSwitches+=/INCREMENTAL:YES;/DEBUG
+PlatformName=Posix
+ConfigurationName=Debug
+
+BaseDir :
+	 .
+ConfigurationName :
+	 Debug
+Configurations :
+	 Debug;Release
+CppDefines :
+	 UNIX;POSIX;_DEBUG;DEBUG
+ExcludeFiles :
+	 
+GccLinkSwitches :
+	 -g
+GccSwitches :
+	 -Wall;-lstdc++;-g
+IntDir :
+	 $(OutDir)/$(ProjectName).int
+	 ./BuildOutput/Posix/Debug/SimpleLibUtils.int
+MsvcClSwitches :
+	 /MD;/EHs-c-;/GR-;/nologo;/W2;/Zi
+MsvcLibSwitches :
+	 /nologo
+MsvcLinkSwitches :
+	 /INCREMENTAL:YES;/DEBUG
+ObjFileExtension :
+	 o
+OutDir :
+	 ./BuildOutput/$(PlatformName)/$(ConfigurationName)
+	 ./BuildOutput/Posix/Debug
+PchFile :
+	 $(IntDir)/$(ProjectName).gch
+	 ./BuildOutput/Posix/Debug/SimpleLibUtils.int/SimpleLibUtils.gch
+PlatformName :
+	 Posix
+Platforms :
+	 Posix
+Precompile :
+	 StdAfx.h;stdafx.h;PreComp.h;precomp.h
+PrecompileSourceFiles :
+	 $(Precompile)
+	 StdAfx.h;stdafx.h;PreComp.h;precomp.h
+ProjectDir :
+	 Z:\dev\source\SimpleLib\SimpleLibUtils
+ProjectDirName :
+	 SimpleLibUtils
+ProjectName :
+	 $(ProjectDirName)
+	 SimpleLibUtils
+ProjectType :
+	 lib
+SourceFiles :
+	 *.cpp;*.c
+SrcDir :
+	 .
+TargetFile :
+	 $(TargetFilePrefix)$(ProjectName)$(TargetFileSuffix)
+	 libSimpleLibUtils.o
+TargetFilePrefix :
+	 $(ProjectType:select:lib:lib:dll:lib)
+	 lib
+TargetFileSuffix :
+	 $(ProjectType:select:lib:.o:dll:.so)
+	 .o
+ToolChain :
+	 gnu
+Tools :
+	 gnu_gcc;gnu_link;gnu_ar
+
+------------------------------ Finished ------------------------------

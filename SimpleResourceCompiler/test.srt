@@ -1,0 +1,31 @@
+class {ClassName} : public {BaseClass}
+{
+// Construction
+	{ClassName}()
+	{
+	}
+	virtual ~{ClassName}()
+	{
+	}
+
+// IDs
+	{for:node("ids").children}
+	enum IDs
+	{
+		{idname} = {idvalue};
+	};
+	{else}
+	// None
+	{/for}
+
+	BEGIN_EVENT_MAP({ClassName})
+	{for:descendants.Named("eventBinding")}
+		EVENT({idname}, C{parent.name}::{eventtype}, {handler})
+	{/for}
+	END_EVENT_MAP()
+
+	{{return x};
+};
+
+
+

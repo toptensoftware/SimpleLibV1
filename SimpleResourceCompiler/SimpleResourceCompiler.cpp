@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-
+#include "ResTemplate.h"
 
 void ShowHelp()
 {
@@ -12,9 +12,12 @@ void ShowHelp()
 	printf("    file           input file\n");
 	printf("    -i:<path>      add include path\n");
 	printf("    -d:<define>    add a preprocessor define\n");
-	printf("    -o:<file>      output file\n");
+	printf("    -t:<file>      template file\n");
+	printf("    -to:<file>	   template output file\n");
+	printf("    -o:<file>      binary output file\n");
+	printf("    -p:<file>      processed output file\n");
 	printf("    -dump          dump decompiled or preprocessed input file to output\n");
-	printf("    -decompile     decompile binary resource to text\n");
+	printf("    -decompile     load src from binary file\n");
 	printf("    -unicode       output text files in unicode\n");
 	printf("    -?             display this help\n");
 	printf("\n");
@@ -48,7 +51,10 @@ int main(int argc, char* argv[])
 
 
 	CUniString strInputFile;
-	CUniString strOutputFile;
+	CUniString strTextOutputFile;
+	CUniString strBinaryOutputFile;
+	CUniString strTemplateOutputFile;
+	CUniString strTemplateFile;
 	CResParser parser;
 
 	bool bDecompile=false;
@@ -73,9 +79,21 @@ int main(int argc, char* argv[])
 				ShowHelp();
 				return 1;
 			}
+			else if (IsEqualString(strSwitch, L"t"))
+			{
+				strTemplateFile=strValue;
+			}
+			else if (IsEqualString(strSwitch, L"to"))
+			{
+				strTemplateOutputFile=strValue;
+			}
 			else if (IsEqualString(strSwitch, L"o"))
 			{
-				strOutputFile=strValue;
+				strBinaryOutputFile=strValue;
+			}
+			else if (IsEqualString(strSwitch, L"p"))
+			{
+				strTextOutputFile=strValue;
 			}
 			else if (IsEqualString(strSwitch, L"decompile"))
 			{
@@ -109,6 +127,8 @@ int main(int argc, char* argv[])
 		return 7;
 	}
 
+	// Load input resource file
+	CResNode node;
 	if (bDecompile)
 	{
 		// Open file
@@ -121,87 +141,88 @@ int main(int argc, char* argv[])
 		}
 
 		// Load in binary format
-		CResNode node;
 		if ((r=LoadBinaryRes(&node, &file)))
 		{
 			printf("Failed to load '%S' - %S\n", strInputFile.sz(), FormatResult(r).sz());
 			return 7;
 		}
-
-		if (bDump)
-		{
-			printf("%S\n", FormatResNode(&node, false).sz());
-		}
-		else
-		{
-			// Work out output file name
-			if (IsEmptyString(strOutputFile))
-				strOutputFile=ChangeFileExtension(strInputFile, L"decompiled.src");
-
-			// Save in text format
-			CUniString strNode=FormatResNode(&node, false);
-			if (bOutputInUnicode)
-			{
-				r=SaveText<wchar_t>(strOutputFile, strNode);
-			}
-			else
-			{
-				r=SaveText<char>(strOutputFile, w2a(strNode));
-			}
-			if (r)
-			{
-				printf("Failed to save '%S' - %S\n", strOutputFile.sz(), FormatResult(r).sz());
-				return 7;
-			}
-		}
-
-		return 0;
 	}
 	else
 	{
 		// Parse it
-		CResNode node;
 		if (!parser.Parse(&node, strInputFile))
 		{
 			printf("%S\n\n", parser.GetError());
 			return 7;
 		}
+	}
 
-		if (bDump)
+	if (bDump)
+	{
+		printf("%S\n", FormatResNode(&node, false).sz());
+	}
+
+	if (!strTextOutputFile.IsEmpty())
+	{
+		// Save in text format
+		CUniString strNode=FormatResNode(&node, false);
+		result_t r;
+		if (bOutputInUnicode)
 		{
-			printf("%S\n", FormatResNode(&node, false).sz());
+			r=SaveText<wchar_t>(strTextOutputFile, strNode);
 		}
 		else
 		{
-			// Work out output file name
-			if (IsEmptyString(strOutputFile))
-				strOutputFile=ChangeFileExtension(strInputFile, L"srx");
-
-			// Open file
-			CFile file;
-			result_t r;
-			if ((r=file.CreateNew(strOutputFile))!=0)
-			{
-				printf("Failed to create '%S' - %S\n", strOutputFile.sz(), FormatResult(r).sz());
-				return 7;
-			}
-
-			// Save in binary
-			if ((r=SaveBinaryRes(&node, &file)))
-			{
-				printf("Failed to create '%S' - %S\n", strOutputFile.sz(), FormatResult(r).sz());
-				return 7;
-			}
+			r=SaveText<char>(strTextOutputFile, w2a(strNode));
 		}
-
-		// Done
-		return 0;
+		if (r)
+		{
+			printf("Failed to save '%S' - %S\n", strTextOutputFile.sz(), FormatResult(r).sz());
+			return 7;
+		}
 	}
 
 
+	if (!strBinaryOutputFile.IsEmpty())
+	{
+		// Open file
+		CFile file;
+		result_t r;
+		if ((r=file.CreateNew(strBinaryOutputFile))!=0)
+		{
+			printf("Failed to create '%S' - %S\n", strBinaryOutputFile.sz(), FormatResult(r).sz());
+			return 7;
+		}
 
-//	printf("%S\n\n", FormatResNode(&node, false));
+		// Save in binary
+		if ((r=SaveBinaryRes(&node, &file)))
+		{
+			printf("Failed to create '%S' - %S\n", strBinaryOutputFile.sz(), FormatResult(r).sz());
+			return 7;
+		}
+	}
 
+	// Load template
+	if (!strTemplateFile.IsEmpty())
+	{
+		CResTemplate t;
+		if (!t.ParseFile(strTemplateFile))
+		{
+			printf("Failed to parse template - %S\n", t.GetError());
+			return 7;
+		}
+
+		CUniString strOutput;
+		if (!t.Render(&node, strOutput))
+		{
+			printf("Failed to render template - %S\n", t.GetError());
+			return 7;
+		}
+
+		printf("%S\n", strOutput);
+	}
+
+	// Done
 	return 0;
 }
 

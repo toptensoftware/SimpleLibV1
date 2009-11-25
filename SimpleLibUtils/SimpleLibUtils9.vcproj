@@ -855,10 +855,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ResTemplate.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Result.cpp"
 				>
 			</File>
@@ -1101,10 +1097,6 @@
 			</File>
 			<File
 				RelativePath=".\ResParser.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ResTemplate.h"
 				>
 			</File>
 			<File
