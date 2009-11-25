@@ -8,8 +8,9 @@
 
 #include <stdio.h>
 
-#include "..\SimpleLib.h"
-#include "..\SimpleLibUtils.h"
+#include "../SimpleLib.h"
+#include "../SimpleLibUtils.h"
+
 using namespace Simple;
 
 #endif	// _STDAFX_H

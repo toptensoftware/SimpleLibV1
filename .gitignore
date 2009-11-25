@@ -3,6 +3,8 @@
 Build*
 Debug
 Release
+RS
+DS
 bin
 lib
 _UpgradeReport_Files
