@@ -1,0 +1,218 @@
+Executing action 'showsettings' (Z:\dev\source\SimpleLib\SimpleLibUtils\bit.ini)...
+Executing action 'showsettings' on tool 'bit_dependencies'...
+Dependencies tool bit_dependencies starting action showsettings
+Unsupported action showsettings, ignoring
+Executing action 'showsettings' on tool 'bit_configheader'...
+----------------- SimpleLibUtils - RS|Win32 -----------------
+Executing action 'showsettings' on tool 'bit_settings'...
+[config_settings]
+ProjectDirName=SimpleLibUtils
+ProjectDir=Z:\dev\source\SimpleLib\SimpleLibUtils
+; 
+; From [Defaults]
+;  From z:\dev\source\bit\defaults.ini
+Configurations=Debug;Release
+ProjectName=$(ProjectDirName)
+SrcDir=.
+ExcludeFiles=
+PrecompiledHeader=StdAfx.h;stdafx.h;PreComp.h;precomp.h
+UsePrecompiledHeader=True
+OutDir=./BuildOutput/$(PlatformName)/$(ConfigurationName)
+IntDir=$(OutDir)/$(ProjectName).int
+BaseDir=.
+SourceFiles=*.cpp;*.c
+Unicode=Yes
+StaticCRT=Yes
+Exceptions=No
+Tools=bit_dependencies;bit_configheader;bit_configfooter;bit_settings
+; 
+; From [OS.nt]
+;  From z:\dev\source\bit\defaults.ini
+ToolChain=msvc
+; 
+; From [Project]
+;  From z:\dev\source\bit\defaults.ini
+ProjectType=exe
+;  From Z:\dev\source\SimpleLib\bitSimpleLib.ini
+ProjectType=lib
+; 
+; From [ToolChain.msvc]
+;  From z:\dev\source\bit\defaults.ini
+Platforms=Win32;X64
+Tools+=msvc_cl;msvc_link;msvc_lib
+ObjFileExtension=obj
+TargetFile=$(ProjectName).$(ProjectType)
+PdbFile=$(OutDir)/$(TargetFile:chext:pdb)
+PchFile=$(IntDir)/$(ProjectName).pch
+PrecompiledSource=$(PrecompiledHeader:chext:cpp);$(PrecompiledHeader:chext:cxx);$(PrecompiledHeader:chext:c);
+MsvcClSwitches+=/nologo;/W3;/Zi;$(MsvcClExceptionSwitches);$(MsvcClUnicodeSwitches);$(MsvcClCrtSwitches)
+MsvcClExceptionSwitches=$(Exceptions:if:/EHsc:/EHs-c-)
+MsvcClUnicodeSwitches=$(Unicode:if:/D _UNICODE /D UNICODE /D _MBCS)
+MsvcClCrtSwitches=$(StaticCRT:if:/MT:/MD)$(Debug:if:d)
+MsvcLibSwitches=/nologo
+MsvcLinkSwitches+=$(ProjectType:select:dll:/DLL:)
+; 
+; From [Project.msvc]
+;  From Z:\dev\source\SimpleLib\bitSimpleLib.ini
+Configurations=DS;DD;RS;RD
+; 
+; From [Common]
+;  From z:\dev\source\bit\defaults.ini
+;  From Z:\dev\source\SimpleLib\bitSimpleLib.ini
+TargetFile=SimpleLibUtils$(ConfigurationName)9$(PlatformName:select:X64:x64:).lib
+BuildDir=../BitBuildOutput
+OutDir=$(BuildDir)/lib
+IntDir=$(BuildDir)/$(PlatformName)/$(ConfigurationName)
+; 
+; From [Win32]
+; 
+; Inherited from [WindowsCommon]
+;  From z:\dev\source\bit\defaults.ini
+CppDefines+=WIN32;_WIN32
+SourceFiles+=*.rc;*.idl
+;  From z:\dev\source\bit\defaults.ini
+; 
+; From [RS]
+; 
+; Inherited from [Release]
+;  From z:\dev\source\bit\defaults.ini
+Release=Yes
+CppDefines+=NDEBUG
+GccSwitches+=-O2
+GccLinkSwitches+=-O2
+MsvcClSwitches+=/O2;/Ob1;/GF;/Gy
+MsvcLinkSwitches+=/INCREMENTAL:NO
+;  From Z:\dev\source\SimpleLib\bitSimpleLib.ini
+StaticCRT=Yes
+PlatformName=Win32
+ConfigurationName=RS
+
+BaseDir :
+	 .
+BuildDir :
+	 ../BitBuildOutput
+ConfigurationName :
+	 RS
+Configurations :
+	 DS;DD;RS;RD
+CppDefines :
+	 WIN32;_WIN32;NDEBUG
+Exceptions :
+	 No
+ExcludeFiles :
+	 
+GccLinkSwitches :
+	 -O2
+GccSwitches :
+	 -O2
+IntDir :
+	 $(BuildDir)/$(PlatformName)/$(ConfigurationName)
+	 ../BitBuildOutput/Win32/RS
+MsvcClCrtSwitches :
+	 $(StaticCRT:if:/MT:/MD)$(Debug:if:d)
+	 /MT
+MsvcClExceptionSwitches :
+	 $(Exceptions:if:/EHsc:/EHs-c-)
+	 /EHs-c-
+MsvcClSwitches :
+	 /nologo;/W3;/Zi;$(MsvcClExceptionSwitches);$(MsvcClUnicodeSwitches);$(MsvcClCrtSwitches);/O2;/Ob1;/GF;/Gy
+	 /nologo;/W3;/Zi;/EHs-c-;/D _UNICODE /D UNICODE /D _MBCS;/MT;/O2;/Ob1;/GF;/Gy
+MsvcClUnicodeSwitches :
+	 $(Unicode:if:/D _UNICODE /D UNICODE /D _MBCS)
+	 /D _UNICODE /D UNICODE /D _MBCS
+MsvcLibSwitches :
+	 /nologo
+MsvcLinkSwitches :
+	 $(ProjectType:select:dll:/DLL:);/INCREMENTAL:NO
+	 ;/INCREMENTAL:NO
+ObjFileExtension :
+	 obj
+OutDir :
+	 $(BuildDir)/lib
+	 ../BitBuildOutput/lib
+PchFile :
+	 $(IntDir)/$(ProjectName).pch
+	 ../BitBuildOutput/Win32/RS/SimpleLibUtils.pch
+PdbFile :
+	 $(OutDir)/$(TargetFile:chext:pdb)
+	 ../BitBuildOutput/lib/SimpleLibUtilsRS9.pdb
+PlatformName :
+	 Win32
+Platforms :
+	 Win32;X64
+PrecompiledHeader :
+	 StdAfx.h;stdafx.h;PreComp.h;precomp.h
+PrecompiledSource :
+	 $(PrecompiledHeader:chext:cpp);$(PrecompiledHeader:chext:cxx);$(PrecompiledHeader:chext:c);
+	 StdAfx.cpp;stdafx.cpp;PreComp.cpp;precomp.cpp;StdAfx.cxx;stdafx.cxx;PreComp.cxx;precomp.cxx;StdAfx.c;stdafx.c;PreComp.c;precomp.c;
+ProjectDir :
+	 Z:\dev\source\SimpleLib\SimpleLibUtils
+ProjectDirName :
+	 SimpleLibUtils
+ProjectName :
+	 $(ProjectDirName)
+	 SimpleLibUtils
+ProjectType :
+	 lib
+Release :
+	 Yes
+SourceFiles :
+	 *.cpp;*.c;*.rc;*.idl
+SrcDir :
+	 .
+StaticCRT :
+	 Yes
+TargetFile :
+	 SimpleLibUtils$(ConfigurationName)9$(PlatformName:select:X64:x64:).lib
+	 SimpleLibUtilsRS9.lib
+ToolChain :
+	 msvc
+Tools :
+	 bit_dependencies;bit_configheader;bit_configfooter;bit_settings;msvc_cl;msvc_link;msvc_lib
+Unicode :
+	 Yes
+UsePrecompiledHeader :
+	 True
+
+Executing action 'showsettings' on tool 'msvc_cl'...
+Compiler tool msvc_cl starting action showsettings
+Compiler tool msvc_cl processing file StdAfx.cpp
+Compiler tool msvc_cl processing file CalcCRC.cpp
+Compiler tool msvc_cl processing file CommandLineParser.cpp
+Compiler tool msvc_cl processing file Cryptor.cpp
+Compiler tool msvc_cl processing file File.cpp
+Compiler tool msvc_cl processing file FormatBinary.cpp
+Compiler tool msvc_cl processing file GiantClass.cpp
+Compiler tool msvc_cl processing file IncrementString.cpp
+Compiler tool msvc_cl processing file LoadSaveTextFile.cpp
+Compiler tool msvc_cl processing file ParseHtmlColor.cpp
+Compiler tool msvc_cl processing file ParseUtils.cpp
+Compiler tool msvc_cl processing file PathLibrary.cpp
+Compiler tool msvc_cl processing file Platform.cpp
+Compiler tool msvc_cl processing file ProfileFile.cpp
+Compiler tool msvc_cl processing file ResBinary.cpp
+Compiler tool msvc_cl processing file ResNode.cpp
+Compiler tool msvc_cl processing file ResParser.cpp
+Compiler tool msvc_cl processing file Result.cpp
+Compiler tool msvc_cl processing file Sha1.cpp
+Compiler tool msvc_cl processing file SmartStringCompare.cpp
+Compiler tool msvc_cl processing file SplitCommandLine.cpp
+Compiler tool msvc_cl processing file SplitString.cpp
+Compiler tool msvc_cl processing file StringReplace.cpp
+Compiler tool msvc_cl processing file StringSearch.cpp
+Compiler tool msvc_cl processing file Tokenizer.cpp
+Compiler tool msvc_cl processing file TrimString.cpp
+Compiler tool msvc_cl processing file Wildcard.cpp
+Compiler tool msvc_cl processing file giants.c
+Deleting ../BitBuildOutput/lib/SimpleLibUtilsRS9.pdb
+Deleting ../BitBuildOutput/Win32/RS/SimpleLibUtils.pch
+Compiler tool msvc_cl finished action showsettings
+Executing action 'showsettings' on tool 'msvc_link'...
+Linker tool msvc_link ignored by project type
+Executing action 'showsettings' on tool 'msvc_lib'...
+Linker tool msvc_lib starting action showsettings
+OutputFile: ../BitBuildOutput/lib/SimpleLibUtilsRS9.lib
+Linker tool msvc_lib finished action showsettings
+Executing action 'showsettings' on tool 'bit_configfooter'...
+Nothing to do!
+----------------- Finished -----------------
