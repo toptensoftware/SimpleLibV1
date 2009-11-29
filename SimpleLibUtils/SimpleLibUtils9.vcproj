@@ -845,6 +845,14 @@
 			<File
 				RelativePath=".\ResBinary.cpp"
 				>
+				<FileConfiguration
+					Name="DS|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						FavorSizeOrSpeed="2"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\ResNode.cpp"
@@ -853,6 +861,14 @@
 			<File
 				RelativePath=".\ResParser.cpp"
 				>
+				<FileConfiguration
+					Name="DS|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						FavorSizeOrSpeed="2"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\Result.cpp"
