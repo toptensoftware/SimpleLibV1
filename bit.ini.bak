@@ -1,0 +1,13 @@
+#import bitSimpleLib.ini
+
+[Project]
+ProjectDependencies+=SimpleLibUtils
+ProjectType=workspace
+
+[Windows]
+ProjectDependencies+=SimpleLibWin
+ProjectDependencies+=SimpleLibAtlWin
+ProjectDependencies+=SimpleLibAtlCom
+
+
+
