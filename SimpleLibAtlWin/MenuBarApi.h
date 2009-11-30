@@ -17,8 +17,6 @@
 #ifndef __MENUBARAPI_H
 #define __MENUBARAPI_H
 
-#include "MenuBarApi.h"
-
 #ifdef __ATLWIN_H__
 
 namespace Simple
