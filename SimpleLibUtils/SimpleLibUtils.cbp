@@ -56,6 +56,8 @@
 		<Unit filename="ParseUtils.h" />
 		<Unit filename="PathLibrary.cpp" />
 		<Unit filename="PathLibrary.h" />
+		<Unit filename="Platform.cpp" />
+		<Unit filename="Platform.h" />
 		<Unit filename="ProfileFile.cpp" />
 		<Unit filename="ProfileFile.h" />
 		<Unit filename="ResBinary.cpp" />

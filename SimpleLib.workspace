@@ -4,11 +4,11 @@
 		<Project filename="TestCases/TestCases.cbp">
 			<Depends filename="SimpleLibUtils/SimpleLibUtils.cbp" />
 		</Project>
-		<Project filename="SimpleLibUtils/SimpleLibUtils.cbp" />
+		<Project filename="SimpleLibUtils/SimpleLibUtils.cbp" active="1" />
 		<Project filename="SimpleLibUtilsTestCases/SimpleLibUtilsTestCases.cbp">
 			<Depends filename="SimpleLibUtils/SimpleLibUtils.cbp" />
 		</Project>
-		<Project filename="SimpleResourceCompiler/SimpleResourceCompiler.cbp" active="1">
+		<Project filename="SimpleResourceCompiler/SimpleResourceCompiler.cbp">
 			<Depends filename="SimpleLibUtils/SimpleLibUtils.cbp" />
 		</Project>
 	</Workspace>
