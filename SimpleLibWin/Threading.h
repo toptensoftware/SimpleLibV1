@@ -31,6 +31,10 @@ public:
 	{ 
 		return HandleToULong(this->OwningThread)==GetCurrentThreadId(); 
 	};
+	bool IsLocked() 
+	{ 
+		return this->OwningThread!=NULL; 
+	};
 };
 class CEnterCriticalSection
 {
@@ -53,7 +57,10 @@ public:
 	{
 		ASSERT(m_pcs==NULL);
 		m_pcs=pcs;
-		EnterCriticalSection(pcs);
+		if (m_pcs)
+		{
+			EnterCriticalSection(pcs);
+		}
 	}
 
 	void Leave()
