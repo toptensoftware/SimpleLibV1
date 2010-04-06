@@ -630,6 +630,30 @@ void SIMPLEAPI GrayScaleDib(HBITMAP hDIB, COLORREF rgb, BYTE bBlend)
 }
 
 // Convert a DIB to grayscale
+void SIMPLEAPI AlphaBlendDibWithColor(HBITMAP hDIB, COLORREF rgb, BYTE bBlend)
+{
+	DIBSECTION dib;
+	GetObject(hDIB, sizeof(dib), &dib);
+
+	DWORD* pdw=(DWORD*)dib.dsBm.bmBits;
+	
+	ASSERT((dib.dsBm.bmWidthBytes%4)==0);
+
+	int iPixels=dib.dsBm.bmHeight * dib.dsBm.bmWidthBytes/4;
+	for (int i=0; i<iPixels; i++)
+	{
+		BYTE a=GetAValue32(*pdw);
+		BYTE r=AlphaBlendColor(GetRValue32(*pdw), GetRValue(rgb), bBlend);
+		BYTE g=AlphaBlendColor(GetGValue32(*pdw), GetGValue(rgb), bBlend);
+		BYTE b=AlphaBlendColor(GetBValue32(*pdw), GetBValue(rgb), bBlend);
+
+		*pdw=RGBA(r, g, b, a);
+		pdw++;
+	}
+
+}
+
+// Convert a DIB to grayscale
 void SIMPLEAPI ColorKeyDib(HBITMAP hDIB, COLORREF rgbColor)
 {
 	rgbColor|=0xFF000000;
