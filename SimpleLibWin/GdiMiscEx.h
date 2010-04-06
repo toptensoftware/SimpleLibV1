@@ -112,6 +112,7 @@ public:
 
 HRGN SIMPLEAPI CreateRegionFromAlphaChannel(HBITMAP hDIB, bool bConvex);
 
+HBITMAP SIMPLEAPI ExtractSubImage(HBITMAP hDIB, RECT rc);
 
 }	// namespace Simple
 

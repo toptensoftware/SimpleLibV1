@@ -1028,5 +1028,40 @@ HRGN SIMPLEAPI CreateRegionFromAlphaChannel(HBITMAP hDIB, bool bConvex)
 }
 
 
+HBITMAP SIMPLEAPI ExtractSubImage(HBITMAP hDIB, RECT rc)
+{
+	// Setup bitmap info
+	LPBITMAPINFO pbmi=(LPBITMAPINFO)_alloca(sizeof(BITMAPINFOHEADER) + sizeof(RGBQUAD)*256);
+	memset( &pbmi->bmiHeader, 0, sizeof( pbmi->bmiHeader ) );
+	pbmi->bmiHeader.biSize = sizeof( pbmi->bmiHeader );
+	pbmi->bmiHeader.biWidth = Width(rc);
+	pbmi->bmiHeader.biHeight = Height(rc);
+	pbmi->bmiHeader.biPlanes = 1;
+	pbmi->bmiHeader.biBitCount = 32;
+	pbmi->bmiHeader.biCompression = BI_RGB;
+
+	// Create the bitmap
+	DWORD* pdwDest;
+	HBITMAP hBitmapDest=CreateDIBSection(NULL, pbmi, DIB_RGB_COLORS, (void**)&pdwDest, NULL, 0);
+	if (!hBitmapDest)
+		return NULL;
+
+	// Get source bitmap stuff
+	DIBSECTION dib;
+	GetObject(hDIB, sizeof(dib), &dib);
+	DWORD* pdwSrc=(DWORD*)dib.dsBm.bmBits;
+	ASSERT((dib.dsBm.bmWidthBytes%4)==0);
+	ASSERT(dib.dsBm.bmWidthBytes==sizeof(DWORD)*dib.dsBm.bmWidth);
+
+	// Copy rows
+	for (int y=rc.top, ySrc=0; y<rc.bottom; y++, ySrc++)
+	{
+		memcpy(pdwDest + (Height(rc)-ySrc-1) * Width(rc),
+				pdwSrc + (dib.dsBm.bmHeight-y-1) * dib.dsBm.bmWidth + rc.left, 
+				sizeof(DWORD)*Width(rc));
+	}
+
+	return hBitmapDest;
+}
 
 }	// namespace Simple
