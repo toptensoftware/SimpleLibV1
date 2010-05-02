@@ -58,6 +58,7 @@ const wchar_t* CProfileEntry::GetName() const
 void CProfileEntry::SetName(const CUniString& strName)
 {
 	m_strName=strName;
+	OnModified();
 }
 
 const wchar_t* CProfileEntry::GetValue() const
@@ -68,6 +69,7 @@ const wchar_t* CProfileEntry::GetValue() const
 void CProfileEntry::SetValue(const CUniString& strValue)
 {
 	m_strValue=strValue;
+	OnModified();
 }
 
 int CProfileEntry::GetIntValue(int iDefault) const
@@ -140,6 +142,13 @@ CProfileFile* CProfileEntry::GetOwningFile()
 	return m_pOwner ? m_pOwner->GetOwningFile() : NULL;
 }
 
+void CProfileEntry::OnModified()
+{
+	if (m_pOwner)
+		m_pOwner->OnModified();
+}
+
+
 
 //////////////////////////////////////////////////////////////////////////
 // CProfileSection
@@ -176,6 +185,7 @@ const wchar_t* CProfileSection::GetName() const
 void CProfileSection::SetName(const CUniString& strName)
 {
 	m_strName=strName;
+	OnModified();
 }
 
 int CProfileSection::FindEntryIndexRaw(const wchar_t* pszName, int iStartAfter) const
@@ -236,6 +246,7 @@ CProfileEntry* CProfileSection::CreateEntry(const CUniString& strName, const CUn
 {
 	CProfileEntry* pEntry=new CProfileEntry(this, strName, strValue);
 	Add(pEntry);
+	OnModified();
 	return pEntry;
 }
 
@@ -290,6 +301,7 @@ bool CProfileSection::DeleteSection(const wchar_t* pszName)
 	if (strChild.IsEmpty())
 	{
 		m_Sections.RemoveAt(iIndex);
+		OnModified();
 	}
 	else
 	{
@@ -338,6 +350,7 @@ CProfileSection* CProfileSection::CreateSection(const wchar_t* pszName)
 		// Create new section
 		pSection=new CProfileSection(this, pszName, m_bFlat);
 		m_Sections.Add(pSection);
+		OnModified();
 	}
 
 	if (strChild.IsEmpty())
@@ -369,6 +382,8 @@ void CProfileSection::CopyFrom(const CProfileSection* pSection)
 	{
 		m_Sections.Add(new CProfileSection(this, *pSection->GetSubSection(i)));
 	}
+
+	OnModified();
 }
 
 void CProfileSection::AddSection(const CProfileSection* pSection)
@@ -385,6 +400,7 @@ bool CProfileSection::DeleteValue(const wchar_t* pszName)
 	if (iIndex>=0)
 	{
 		RemoveAt(iIndex);
+		OnModified();
 		return true;
 	}
 
@@ -490,6 +506,7 @@ void CProfileFile::Reset(bool bFlat)
 {
 	m_bFlat=bFlat;
 	RemoveAll();
+	OnModified();
 }
 
 bool IsClassicProfile(const wchar_t* p)
@@ -995,12 +1012,14 @@ void CProfileFile::Merge(CProfileFile* pOther)
 		//CProfileSection* pSection=pOther->GetAt(i);
 		Add(pOther->GetAt(i));
 	}
+	OnModified();
 }
 
 void CProfileFile::Merge(CProfileSection* pSection)
 {
 	CProfileSection* pDest=CreateSection(pSection->GetName());
 	pDest->CopyFrom(pSection);
+	OnModified();
 }
 
 
@@ -1037,6 +1056,7 @@ bool CProfileFile::DeleteSection(const wchar_t* pszName)
 	if (strChild.IsEmpty())
 	{
 		RemoveAt(iIndex);
+		OnModified();
 		return true;
 	}
 	else
@@ -1061,6 +1081,7 @@ CProfileSection* CProfileFile::CreateSection(const CUniString& strName)
 		// Create new section
 		pSection=new CProfileSection(this, strName, m_bFlat);
 		Add(pSection);
+		OnModified();
 	}
 
 	if (strChild.IsEmpty())

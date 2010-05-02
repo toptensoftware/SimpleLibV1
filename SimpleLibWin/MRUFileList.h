@@ -36,8 +36,13 @@ public:
 	void SetMaxSize(int iMax);
 
 // Save/load
+#ifndef _NO_SLX_PROFILE
 	void Save(const wchar_t* pszSubKey=L"RecentFiles", const wchar_t* pszKey=SlxGetProfileKey());
 	void Load(const wchar_t* pszSubKey=L"RecentFiles", const wchar_t* pszKey=SlxGetProfileKey());
+#else
+	void Save(const wchar_t* pszSubKey=L"RecentFiles", const wchar_t* pszKey=NULL);
+	void Load(const wchar_t* pszSubKey=L"RecentFiles", const wchar_t* pszKey=NULL);
+#endif
 	void Save(CProfileSection* pSection);
 	void Load(CProfileSection* pSection);
 

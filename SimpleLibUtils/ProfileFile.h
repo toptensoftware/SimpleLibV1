@@ -36,6 +36,7 @@ public:
 	virtual CProfileSection* AsSection() { return NULL; };
 	virtual CProfileFile* GetOwningFile() { return NULL; };
 	virtual const wchar_t* GetModeInternal()=0;
+	virtual void OnModified()=0;
 };
 
 // CProfileEntry Class
@@ -62,6 +63,7 @@ public:
 
 	CProfileSection* GetOwningSection() { return m_pOwner; };
 	CProfileFile* GetOwningFile();
+	void OnModified();
 
 protected:
 	CUniString			m_strName;
@@ -125,6 +127,7 @@ public:
 
 	virtual CProfileSection* AsSection() { return this; };
 	virtual const wchar_t* GetModeInternal() { return m_pOwner->GetModeInternal(); };
+	virtual void OnModified() { if (m_pOwner) m_pOwner->OnModified(); }
 
 protected:
 	CProfileOwner*	m_pOwner;
@@ -211,6 +214,9 @@ protected:
 		return m_strMode;
 	}
 
+	virtual void OnModified()
+	{
+	}
 };
 
 }	// namespace Simple
