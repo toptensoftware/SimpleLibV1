@@ -112,6 +112,7 @@ static void _SlxConvertProfileRegKey(const wchar_t* pszRegKey, CProfileSection* 
 CProfileSettings::CProfileSettings()
 {
 	m_bModified=false;
+	m_hCallbackTimer=NULL;
 }
 
 CProfileSettings::~CProfileSettings()
