@@ -569,6 +569,26 @@ void CCppTokenizer::AddOperators(const wchar_t* pszOperators, int iBaseToken)
 	}
 }
 
+void CCppTokenizer::AddPreprocessorDirective(const wchar_t* pszPreprocessorDirective, int iToken)
+{
+	if (m_mapPreprocessorDirectives.HasKey(pszPreprocessorDirective))
+		return;
+
+	m_mapPreprocessorDirectives.Add(pszPreprocessorDirective, iToken);
+	m_mapPreprocessorDirectiveTokens.Add(iToken, pszPreprocessorDirective);
+}
+
+void CCppTokenizer::AddPreprocessorDirectives(const wchar_t* pszPreprocessorDirectives, int iBaseToken)
+{
+	CVector<CUniString> vecPreprocessorDirectives;
+	SplitString(pszPreprocessorDirectives, L" ", vecPreprocessorDirectives);
+	for (int i=0; i<vecPreprocessorDirectives.GetSize(); i++)
+	{
+		AddPreprocessorDirective(vecPreprocessorDirectives[i], iBaseToken+i);
+	}
+}
+
+
 
 void CCppTokenizer::SetContentProvider(CContentProvider* pContentProvider)
 {
@@ -596,6 +616,36 @@ int CCppTokenizer::CurrentToken()
 		return tokenError;
 	}
 	return m_iToken;
+}
+
+bool CCppTokenizer::ScanForward(const wchar_t** ppszEndCondition, int iCount)
+{
+	const wchar_t* pszStart=m_pszPos;
+	while (m_pszPos[0])
+	{
+		for (int i=0; i<iCount; i++)
+		{
+			if (DoesMatch(m_pszPos, ppszEndCondition[i], true))
+			{
+				m_iToken=tokenScannedText;
+				m_strString=CUniString(pszStart, m_pszPos-pszStart);
+				return true;
+			}
+		}
+
+		if (IsEOL(m_pszPos[0]))
+		{
+			m_iLineNumber++;
+			SkipToNextLine(m_pszPos);
+		}
+		else
+		{
+			m_pszPos++;
+		}
+	}
+
+	FormatError(ERR_SYNTAX, Format(L"unterminated free form text, expected %s", ppszEndCondition[0]).sz());
+	return false;
 }
 
 
@@ -757,6 +807,13 @@ StartAgain:
 		{
 			FormatError(ERR_PREPROCNOTATSTARTOFLINE);
 			return tokenError;
+		}
+
+		// Check for custom preprocessor directive
+		int iPPToken=m_mapPreprocessorDirectives.Get(strDirective, -1);
+		if (iPPToken>0)
+		{
+			return iPPToken;
 		}
 
 		// Skip more stuff

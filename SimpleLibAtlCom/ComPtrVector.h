@@ -320,7 +320,7 @@ public:
 		// Check its a variant safe array
 		VARTYPE vt;
 		RETURNIFFAILED(SafeArrayGetVartype(pArray, &vt));
-		if (vt!=VT_VARIANT && vt!=VT_UNKNOWN)
+		if (vt!=VT_VARIANT && vt!=VT_UNKNOWN && vt!=VT_DISPATCH)
 			return E_UNEXPECTED;
 
 		// Check 1 dimensional

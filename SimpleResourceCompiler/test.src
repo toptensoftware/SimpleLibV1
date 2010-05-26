@@ -1,6 +1,91 @@
-Item1
+#gen ImplementDialog(className)
+template <typename T>
+class $(className)Base : public CDialog
 {
-	Apples=1;
-	Pears=2;
-	Bananas=3;
+public:
+	// Constructor
+	$(className)()
+	{
+$(constructor)
+	}
+	
+	// Destructor
+	virtual ~$(className)()
+	{
+	}
+	
+	// Control ID's
+	enum IDs
+	{
+$(ids)
+	}
+	
+	void BindControls()
+	{
+$(controlBindings)
+	}
+	
+	virtual void OnLoaded()
+	{
+		BindControls();
+	}
+	
+	virtual void OnEvent(CControl* pControl, int iEventID, void* pParam)
+	{
+$(eventDispatchers)
+	}
+
+// Implementation	
+protected:
+
+// Control variables
+$(controlVariables)
+	
+// Event Handlers
+$(eventPrototypes)
+}
+#endgen
+
+#gen DefineID(name, value)
+#target(ids)
+		$(name) = $(value),
+#endgen
+
+#gen BindControl(memberVariable)
+#target(controlBindings)
+		$(memberVariable)=(C$(nodeName)*)FindControl($(id:idname));
+#target(controlVariables)
+	C$(nodeName)*		$(memberName);
+#target(constructor)
+	$(memberName)=NULL;
+#endgen
+
+#gen BindEvent(eventType, memberFunction)
+#target(eventDispatchers)
+		if (pControl->GetID()==$(id:idname))
+			static_cast<T*>(this)->$(memberFunction)(pControl, iEventID, pParam);
+#target(eventPrototypes)
+	void $(memberFunction)(CControl* pControl, int iEventID, void* pParam) { }
+#endgen
+
+
+Dialog
+{
+	ImplementDialog(CAboutBox)
+	
+	Button
+	{
+		id=id(okButton);
+		Caption="OK";
+		BindEvent(onClickOK)
+		BindControl(m_pOKButton)
+	}
+	
+	Button
+	{
+		id=id(okCancel)
+		Caption="Cancel";
+		BindEvent(onCancelClick)
+		BindControl(m_pCancelButton)
+	}
 }

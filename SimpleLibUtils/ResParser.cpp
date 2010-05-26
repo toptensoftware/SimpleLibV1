@@ -36,6 +36,9 @@ enum
 	tokenSemiColon,
 	tokenPointer,
 	tokenOr,
+	tokenGen,
+	tokenEndGen,
+	tokenTarget,
 };
 
 
@@ -50,6 +53,9 @@ CResParser::CResParser()
 	AddOperator(L";", tokenSemiColon);
 	AddOperator(L"->", tokenPointer);
 	AddOperator(L"|", tokenOr);
+	AddPreprocessorDirective(L"gen", tokenGen);
+	AddPreprocessorDirective(L"endgen", tokenEndGen);
+	AddPreprocessorDirective(L"target", tokenTarget);
 }
 
 // Destructor
@@ -102,6 +108,28 @@ bool CResParser::Parse(CResNode* pRootNode, const wchar_t* pszContent, const wch
 				return false;
 			}
 
+			continue;
+		}
+
+		// Generate definition?
+		if (CurrentToken()==tokenGen)
+		{
+			while (true)
+			{
+				// Yes, find the end of the generator block (or, a new target definition)
+				const wchar_t* pszEndScan[]={L"#endgen", L"#target"};
+				if (!ScanForward(pszEndScan, _countof(pszEndScan)))
+					return false;
+
+
+				NextToken();
+
+				if (CurrentToken()!=tokenTarget)
+					break;
+
+			}
+
+			Skip(tokenEndGen);
 			continue;
 		}
 

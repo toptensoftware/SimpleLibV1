@@ -42,9 +42,11 @@ enum Token
 	tokenDoubleLiteral,
 	tokenInt32Literal,
 	tokenInt64Literal,
+	tokenScannedText,
 
 	tokenOperatorBase=1000,
 	tokenKeywordBase=2000,
+	tokenPreprocessorBase=3000,
 };
 
 class COperatorChar;
@@ -148,6 +150,8 @@ public:
 	void AddKeywords(const wchar_t* pszKeywords, int iBaseToken=tokenKeywordBase);
 	void AddOperator(const wchar_t* pszOperator, int iToken);
 	void AddOperators(const wchar_t* pszOperators, int iBaseToken=tokenOperatorBase);
+	void AddPreprocessorDirective(const wchar_t* pszDirective, int iToken);
+	void AddPreprocessorDirectives(const wchar_t* pszDirectives, int iBaseToken=tokenPreprocessorBase);
 	void SetContentProvider(CContentProvider* pContentProvider);
 	CFileContentProvider* GetDefaultContentProvider();
 	void ReportLineBreaks(bool bNewVal);
@@ -172,6 +176,8 @@ public:
 	bool Check(int token, const wchar_t* pszError=NULL);
 	bool Skip(int token, const wchar_t* pszError=NULL);
 	void Unexpected(const wchar_t* pszWhen=NULL);
+
+	bool ScanForward(const wchar_t** ppszEndCondition, int iCount);
 
 // Implementation
 protected:
@@ -214,6 +220,8 @@ protected:
 	CIndex<const wchar_t*, CMacro*, SValue, SOwnedPtr >	m_mapMacros;
 	CIndex<const wchar_t*, int>							m_mapKeywords;
 	CIndex<int, const wchar_t*>							m_mapKeywordTokens;
+	CIndex<const wchar_t*, int>							m_mapPreprocessorDirectives;
+	CIndex<int, const wchar_t*>							m_mapPreprocessorDirectiveTokens;
 	CVector<CState*, SOwnedPtr>						m_vecStateStack;
 	COperatorMap		m_OpMap;
 	bool				m_bReportLineBreaks;
