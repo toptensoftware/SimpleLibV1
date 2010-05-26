@@ -39,7 +39,10 @@ public:
 	static bool IsPlacesBarSupported();
 
 	void SetInitialDirKey(const wchar_t* pszKey, const wchar_t* pszValue, const wchar_t* pszDefault);
+#ifndef _NO_SLX_PROFILE
 	void SetInitialDir(const wchar_t* pszSection, const wchar_t* pszEntry, const wchar_t* pszDefault);
+#endif
+	void SetInitialDir(CProfileFile& file, const wchar_t* pszSection, const wchar_t* pszEntry, const wchar_t* pszDefault);
 	void SetInitialDir(const wchar_t* pszInitialDir);
 
 	const wchar_t* GetFilePath();
@@ -57,6 +60,7 @@ public:
 	wchar_t*		m_pszFilter;
 	wchar_t			m_szFileName[MAX_PATH*10];
 	bool			m_bInitialDirProfile;
+	CProfileFile*	m_pProfileFile;
 	CUniString		m_strInitialDirKey;
 	CUniString		m_strInitialDirValue;
 	CUniString		m_strInitialDir;

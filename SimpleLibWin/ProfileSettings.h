@@ -17,8 +17,36 @@
 #ifndef __PROFILESETTINGS_H
 #define __PROFILESETTINGS_H
 
+#include "CallbackTimer.h"
+
 namespace Simple
 {
+
+class CProfileSettings : public CProfileFile
+{
+public:
+// Construction
+			CProfileSettings();
+	virtual ~CProfileSettings();
+
+// Initialisation
+	void Init(const wchar_t* pszFileName);
+	bool Upgrade(const wchar_t* pszFileName);
+
+// Change flushing
+	void SetModified();
+	void Flush();
+
+protected:
+	bool			m_bModified;
+	HCALLBACKTIMER	m_hCallbackTimer;
+
+	virtual void OnModified();
+};
+
+CUniString SlxGetProfileFileName(const wchar_t* pszCompanyName, const wchar_t* pszAppName, bool bCreate);
+
+#ifndef _NO_SLX_PROFILE
 
 const wchar_t* SIMPLEAPI SlxGetCompanyName();
 const wchar_t* SIMPLEAPI SlxGetAppName();
@@ -33,12 +61,13 @@ void SIMPLEAPI SlxDeleteProfileSection(const wchar_t* pszSection);
 void SIMPLEAPI SlxDeleteProfileValue(const wchar_t* pszSection, const wchar_t* pszEntry);
 bool SIMPLEAPI SlxEnumProfileValues(const wchar_t* pszSection, CVector<CUniString>& vec);
 bool SIMPLEAPI SlxEnumProfileSections(const wchar_t* pszSection, CVector<CUniString>& vec);
-void SIMPLEAPI SlxProfileFileSetModified();
 bool SIMPLEAPI SlxFlushProfileFile();
 CProfileSection* SIMPLEAPI SlxGetProfileSection(const wchar_t* pszSection);
 CProfileSection* SIMPLEAPI SlxCreateProfileSection(const wchar_t* pszSection);
 CUniString SIMPLEAPI SlxGetProfileFileName();
 CUniString SIMPLEAPI SlxGetProfileFolderName();
+
+#endif
 
 }	// namespace Simple
 

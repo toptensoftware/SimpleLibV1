@@ -32,76 +32,12 @@
 namespace Simple
 {
 
-static CUniString		g_strCompanyName;
-static CUniString		g_strAppName;
-static CProfileFile		g_ProfileFile;
-static bool				g_bFileBased=false;
-static bool				g_bProfileFileDirty=false;
-static HCALLBACKTIMER	g_hCallbackTimer=NULL;
-
-static class CAutoFlush
-{
-public:
-	CAutoFlush()
-	{
-	};
-	~CAutoFlush()
-	{
-		SlxFlushProfileFile();
-	}
-} g_AutoFlush;
-
-
-
-const wchar_t* SIMPLEAPI SlxGetCompanyName()
-{
-	return g_strCompanyName;
-}
-
-const wchar_t* SIMPLEAPI SlxGetAppName()
-{
-	return g_strAppName;
-}
-
-CUniString _SlxGetProfileFileName(const wchar_t* pszCompanyName, const wchar_t* pszAppName, bool bCreate)
+CUniString SlxGetProfileFileName(const wchar_t* pszCompanyName, const wchar_t* pszAppName, bool bCreate)
 {
 	CUniString str;
 	GetSpecialFolderLocation(CSIDL_APPDATA, Format(L"%s\\%s", pszCompanyName, pszAppName), bCreate, str);
 	return SimplePathAppend(str, L"settings.ini");
 }
-
-void SIMPLEAPI SlxInitProfile(const wchar_t* pszCompanyName, const wchar_t* pszAppName, bool bFileBased)
-{
-	g_strCompanyName=pszCompanyName;
-	g_strAppName=pszAppName;
-	g_bFileBased=bFileBased;
-	ASSERT(!IsEmptyString(g_strCompanyName));
-	ASSERT(!IsEmptyString(g_strAppName));
-
-	if (g_bFileBased)
-	{
-		// Work out profile file name
-		CUniString strSettingsFile=_SlxGetProfileFileName(pszCompanyName, pszAppName, true);
-
-		// Load settings
-		if (!g_ProfileFile.Load(strSettingsFile))
-		{
-			// Save immediately to attach file name with CProfileFile
-			g_ProfileFile.Reset(false);
-			g_ProfileFile.SetFileName(strSettingsFile);
-
-			if (DoesFileExist(strSettingsFile))
-			{
-				SlxMessageBox(Format(L"Failed to load settings, resetting everything to default (%s)", g_ProfileFile.GetParseError()), MB_OK|MB_ICONWARNING);
-				g_ProfileFile.Reset(false);
-			}
-		}
-
-		// Not modified
-		g_bProfileFileDirty=false;
-	}
-}
-
 
 static void _SlxConvertProfileRegKey(const wchar_t* pszRegKey, CProfileSection* pSection)
 {
@@ -172,6 +108,134 @@ static void _SlxConvertProfileRegKey(const wchar_t* pszRegKey, CProfileSection* 
 
 }
 
+
+CProfileSettings::CProfileSettings()
+{
+	m_bModified=false;
+	m_hCallbackTimer=NULL;
+}
+
+CProfileSettings::~CProfileSettings()
+{
+	Flush();
+}
+
+void CProfileSettings::Init(const wchar_t* pszFileName)
+{
+	// Load
+	m_bModified=true;
+
+	// Load settings
+	if (!CProfileFile::Load(pszFileName))
+	{
+		// Save immediately to attach file name with CProfileFile
+		CProfileFile::Reset(false);
+		CProfileFile::SetFileName(pszFileName);
+
+		if (DoesFileExist(pszFileName))
+		{
+			SlxMessageBox(Format(L"Failed to load settings file '%s', resetting everything to default (%s)", pszFileName, CProfileFile::GetParseError()), MB_OK|MB_ICONWARNING);
+			CProfileFile::Reset(false);
+		}
+	}
+
+	m_bModified=false;
+}
+
+bool CProfileSettings::Upgrade(const wchar_t* pszFileName)
+{
+	// Quit if file already exists
+	if (GetSize()!=0)
+		return false;
+
+	// Load old data
+	CUniString strOldName=GetFileName();
+	CProfileFile::Load(pszFileName);
+	CProfileFile::SetFileName(strOldName);
+	return true; 
+}
+
+
+void CALLBACK ProfileSettingsFlushProc(LPARAM lParam)
+{
+	CProfileSettings* pThis=(CProfileSettings*)lParam;
+	pThis->Flush();
+}
+
+
+void CProfileSettings::SetModified()
+{
+	// Quit if already dirty
+	if (m_bModified)
+		return;
+
+	m_bModified=true;
+
+	if (m_hCallbackTimer==NULL)
+	{
+		m_hCallbackTimer=SetCallbackTimer(10, 0, ProfileSettingsFlushProc, (LPARAM)this);
+	}
+}
+
+void CProfileSettings::Flush()
+{
+	if (m_hCallbackTimer)
+	{
+		KillCallbackTimer(m_hCallbackTimer);
+		m_hCallbackTimer=NULL;
+	}
+
+	if (!m_bModified)
+		return;
+
+	Save(NULL, true, true);
+
+	m_bModified=false;
+}
+
+void CProfileSettings::OnModified()
+{
+	SetModified();
+}
+
+
+
+
+static CUniString		g_strCompanyName;
+static CUniString		g_strAppName;
+static CProfileSettings	g_ProfileFile;
+static bool				g_bFileBased=false;
+
+
+const wchar_t* SIMPLEAPI SlxGetCompanyName()
+{
+	return g_strCompanyName;
+}
+
+const wchar_t* SIMPLEAPI SlxGetAppName()
+{
+	return g_strAppName;
+}
+
+void SIMPLEAPI SlxInitProfile(const wchar_t* pszCompanyName, const wchar_t* pszAppName, bool bFileBased)
+{
+	g_strCompanyName=pszCompanyName;
+	g_strAppName=pszAppName;
+	g_bFileBased=bFileBased;
+	ASSERT(!IsEmptyString(g_strCompanyName));
+	ASSERT(!IsEmptyString(g_strAppName));
+
+	if (g_bFileBased)
+	{
+		// Work out profile file name
+		CUniString strSettingsFile=SlxGetProfileFileName(pszCompanyName, pszAppName, true);
+
+		// Load settings
+		g_ProfileFile.Init(strSettingsFile);
+	}
+}
+
+
 bool SIMPLEAPI SlxUpgradeProfile(const wchar_t* pszOldCompanyName, const wchar_t* pszOldAppName, bool bOldFileBased)
 {
 	if (!g_bFileBased)
@@ -222,14 +286,9 @@ bool SIMPLEAPI SlxUpgradeProfile(const wchar_t* pszOldCompanyName, const wchar_t
 		{
 			// Load old data
 			CUniString strOldName=g_ProfileFile.GetFileName();
-			g_ProfileFile.Load(_SlxGetProfileFileName(pszOldCompanyName, pszOldAppName, false));
+			g_ProfileFile.Load(SlxGetProfileFileName(pszOldCompanyName, pszOldAppName, false));
 			g_ProfileFile.SetFileName(strOldName);
-
 		}
-
-
-		// Save it
-		SlxProfileFileSetModified();
 
 		return true;
 	}
@@ -260,7 +319,6 @@ bool SIMPLEAPI SlxSetProfileInt(const wchar_t* pszSection, const wchar_t* pszEnt
 	if (g_bFileBased)
 	{
 		g_ProfileFile.SetIntValue(pszSection, pszEntry, nValue);
-		SlxProfileFileSetModified();
 	}
 	else
 	{
@@ -299,7 +357,6 @@ bool SIMPLEAPI SlxSetProfileString(const wchar_t* pszSection, const wchar_t* psz
 	if (g_bFileBased)
 	{
 		g_ProfileFile.SetValue(pszSection, pszEntry, pszValue);
-		SlxProfileFileSetModified();
 	}
 	else
 	{
@@ -320,7 +377,6 @@ void SIMPLEAPI SlxDeleteProfileSection(const wchar_t* pszSection)
 	if (g_bFileBased)
 	{
 		g_ProfileFile.DeleteSection(pszSection);
-		SlxProfileFileSetModified();
 	}
 	else
 	{
@@ -338,8 +394,6 @@ void SIMPLEAPI SlxDeleteProfileValue(const wchar_t* pszSection, const wchar_t* p
 		// If exists, delete value
 		if (pSection)
 			pSection->DeleteValue(pszEntry);
-
-		SlxProfileFileSetModified();
 	}
 	else
 	{
@@ -418,7 +472,6 @@ CProfileSection* SIMPLEAPI SlxCreateProfileSection(const wchar_t* pszSection)
 {
 	ASSERT(g_bFileBased);
 	CProfileSection* pSection=g_ProfileFile.CreateSection(pszSection);
-	SlxProfileFileSetModified();
 	return pSection;
 }
 
@@ -429,36 +482,10 @@ void CALLBACK ProfileFlushProc(LPARAM lUnused)
 }
 
 
-void SIMPLEAPI SlxProfileFileSetModified()
-{
-	// Quit if already dirty
-	if (g_bProfileFileDirty)
-		return;
-
-	g_bProfileFileDirty=true;
-
-	if (g_hCallbackTimer==NULL)
-	{
-		g_hCallbackTimer=SetCallbackTimer(10, 0, ProfileFlushProc, 0);
-	}
-}
-
 
 bool SIMPLEAPI SlxFlushProfileFile()
 {
-	if (g_hCallbackTimer)
-	{
-		KillCallbackTimer(g_hCallbackTimer);
-		g_hCallbackTimer=NULL;
-	}
-
-	if (!g_bFileBased || !g_bProfileFileDirty)
-		return false;
-
-	g_ProfileFile.Save(NULL, true, true);
-
-	g_bProfileFileDirty=false;
-
+	g_ProfileFile.Flush();
 	return true;
 }
 

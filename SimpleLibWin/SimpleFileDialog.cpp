@@ -34,6 +34,7 @@ CSimpleFileDialog::CSimpleFileDialog(bool bSave, const wchar_t* pszFilter, const
 {
 
 	m_bInitialDirProfile=false;
+	m_pProfileFile=NULL;
 
 	// Initialise OPENFILENAME
 #if (_WIN32_WINNT < 0x0500)
@@ -112,6 +113,22 @@ void CSimpleFileDialog::SetInitialDir(const wchar_t* pszSection, const wchar_t* 
 		SetInitialDir(strFolder);
 }
 
+void CSimpleFileDialog::SetInitialDir(CProfileFile& file, const wchar_t* pszSection, const wchar_t* pszEntry, const wchar_t* pszDefault)
+{
+	// Store key
+	m_bInitialDirProfile=true;
+	m_strInitialDirKey=pszSection;
+	m_strInitialDirValue=pszEntry;
+	m_pProfileFile=&file;
+
+	// Get last folder
+	CUniString strFolder=m_pProfileFile->GetValue(pszSection, pszEntry, pszDefault);
+
+	// Set it
+	if (!IsEmptyString(strFolder))
+		SetInitialDir(strFolder);
+}
+
 
 void CSimpleFileDialog::SetInitialDir(const wchar_t* pszInitialDir)
 {
@@ -171,7 +188,14 @@ int CSimpleFileDialog::DoModal(HWND hWndParent)
 
 		if (m_bInitialDirProfile)
 		{
-			SlxSetProfileString(m_strInitialDirKey, m_strInitialDirValue, strFolder);
+			if (m_pProfileFile)
+			{
+				m_pProfileFile->SetValue(m_strInitialDirKey, m_strInitialDirValue, strFolder);
+			}
+			else
+			{
+				SlxSetProfileString(m_strInitialDirKey, m_strInitialDirValue, strFolder);
+			}
 		}
 		else
 		{

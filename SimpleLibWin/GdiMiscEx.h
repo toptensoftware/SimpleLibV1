@@ -70,6 +70,9 @@ void SIMPLEAPI PreMultiplyDib(HBITMAP hDIB);
 // Convert a dib to gray scale
 void SIMPLEAPI GrayScaleDib(HBITMAP hDIB, COLORREF rgb=RGB(255,255,255), BYTE bBlend=0);
 
+// Blend a dib with a solid color
+void SIMPLEAPI AlphaBlendDibWithColor(HBITMAP hDIB, COLORREF rgb, BYTE bBlend);
+
 // Color key a dib, changing all of one color to alpha 0
 void SIMPLEAPI ColorKeyDib(HBITMAP hDIB, COLORREF rgbColor);
 
@@ -109,6 +112,7 @@ public:
 
 HRGN SIMPLEAPI CreateRegionFromAlphaChannel(HBITMAP hDIB, bool bConvex);
 
+HBITMAP SIMPLEAPI ExtractSubImage(HBITMAP hDIB, RECT rc);
 
 }	// namespace Simple
 
